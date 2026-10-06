@@ -6,6 +6,9 @@ import { useProducts } from "../data/ProductsContext";
 import { STORE_CONFIG } from "../data/config";
 import ProductCard from "../components/ProductCard";
 import TiltCard from "../components/TiltCard";
+import Reveal from "../components/Reveal";
+import StaggerGrid from "../components/StaggerGrid";
+import ScrollReveal from "../components/ScrollReveal";
 import { pName, pDesc } from "../lib/product";
 import { money } from "../lib/format";
 
@@ -60,14 +63,14 @@ export default function Product() {
           <Link to="/">{t("nav.home")}</Link> / <Link to={`/shop?cat=${p.category}`}>{catLabel}</Link> / {pName(p, lang)}
         </p>
         <div className="pdp">
-          <div className="product-stage">
+          <Reveal className="product-stage" y={28}>
             <div className="stage-glow" />
             <TiltCard className="gallery">
               {p.image ? <img src={p.image} alt={pName(p, lang)} /> : <span>{p.emoji || "🎁"}</span>}
               {disc > 0 && !out && <span className="disc">-{disc}%</span>}
             </TiltCard>
-          </div>
-          <div className="info">
+          </Reveal>
+          <Reveal className="info" y={28} delay={0.1}>
             <span className="cat-tag" style={{ color: "var(--primary)", fontWeight: 700 }}>{catLabel}</span>
             <h1>{pName(p, lang)}</h1>
             <div className="price">
@@ -94,17 +97,21 @@ export default function Product() {
                 <button className="btn btn-accent btn-lg" onClick={handleBuy} disabled={out}>{t("pdp.buy")}</button>
               </div>
             )}
-          </div>
+          </Reveal>
         </div>
-        <div className="section-sm" />
-        <div className="section-head" style={{ textAlign: "start", marginBottom: 18 }}>
-          <h2 style={{ fontSize: "1.4rem" }}>{t("pdp.related")}</h2>
-        </div>
-        <div className="products-grid">
-          {related.map((r) => (
-            <ProductCard key={r.id} product={r} />
-          ))}
-        </div>
+        {related.length > 0 && (
+          <>
+            <div className="section-sm" />
+            <ScrollReveal className="section-head section-head-start" y={20}>
+              <h2 style={{ fontSize: "1.4rem" }}>{t("pdp.related")}</h2>
+            </ScrollReveal>
+            <StaggerGrid className="products-grid">
+              {related.map((r) => (
+                <ProductCard key={r.id} product={r} />
+              ))}
+            </StaggerGrid>
+          </>
+        )}
       </div>
     </section>
   );

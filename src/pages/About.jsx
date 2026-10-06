@@ -17,7 +17,7 @@ export default function About() {
       <PageHead title={t("about.head_t")} subtitle={t("about.head_s")} />
       <section className="section">
         <div className="wrap">
-          <div className="prose">
+          <Reveal className="prose" y={24}>
             <p><Trans k="about.p1" /></p>
             <h2>{t("about.h_mission")}</h2>
             <p>{t("about.mission")}</p>
@@ -31,7 +31,7 @@ export default function About() {
             </ul>
             <h2>{t("about.h_commit")}</h2>
             <p>{t("about.commit")}</p>
-          </div>
+          </Reveal>
 
           <div className="section-sm" />
           <div className="info-grid">

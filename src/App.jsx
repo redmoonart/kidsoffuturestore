@@ -3,6 +3,8 @@ import { useEffect, lazy, Suspense } from "react";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import CartDrawer from "./components/CartDrawer";
+import ScrollProgressBar from "./components/ScrollProgressBar";
+import BackToTop from "./components/BackToTop";
 import { useCart } from "./cart/CartContext";
 import Home from "./pages/Home";
 import Shop from "./pages/Shop";
@@ -54,6 +56,7 @@ export default function App() {
 
   return (
     <>
+      <ScrollProgressBar />
       <ScrollToTop />
       <Header />
       <Routes>
@@ -66,6 +69,7 @@ export default function App() {
       </Routes>
       <Footer />
       <CartDrawer />
+      <BackToTop />
     </>
   );
 }

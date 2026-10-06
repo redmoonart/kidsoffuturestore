@@ -1,3 +1,5 @@
+import { motion } from "framer-motion";
+
 export default function PageHead({ title, subtitle, chips }) {
   return (
     <section className="page-head">
@@ -9,8 +11,22 @@ export default function PageHead({ title, subtitle, chips }) {
         </div>
       )}
       <div className="wrap">
-        <h1>{title}</h1>
-        {subtitle && <p>{subtitle}</p>}
+        <motion.h1
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ type: "spring", stiffness: 260, damping: 24 }}
+        >
+          {title}
+        </motion.h1>
+        {subtitle && (
+          <motion.p
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ type: "spring", stiffness: 260, damping: 24, delay: 0.08 }}
+          >
+            {subtitle}
+          </motion.p>
+        )}
       </div>
     </section>
   );

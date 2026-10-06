@@ -5,6 +5,8 @@ import { useCart } from "../cart/CartContext";
 import { WILAYAS } from "../data/wilayas";
 import { STORE_CONFIG } from "../data/config";
 import PageHead from "../components/PageHead";
+import Reveal from "../components/Reveal";
+import StaggerGrid from "../components/StaggerGrid";
 import { pName, wName } from "../lib/product";
 import { money } from "../lib/format";
 import { saveOrder, makeOrderRef } from "../lib/orders";
@@ -83,13 +85,13 @@ export default function Cart() {
         <PageHead title={t("cart.head_title")} subtitle={t("cart.head_sub")} chips={["💵", "🚚", "✅", "📦"]} />
         <section className="section">
           <div className="wrap">
-            <div className="empty-state order-success">
+            <Reveal className="empty-state order-success" y={28}>
               <div className="em">✅</div>
               <h3>{t("cart.ok_t")}</h3>
               <p>{t("cart.ok_p")}</p>
               <p className="order-ref">{t("cart.ok_ref")}: <strong dir="ltr">{placedRef}</strong></p>
               <Link className="btn btn-primary btn-lg" to="/shop">{t("cart.ok_btn")}</Link>
-            </div>
+            </Reveal>
           </div>
         </section>
       </>
@@ -102,12 +104,12 @@ export default function Cart() {
         <PageHead title={t("cart.head_title")} subtitle={t("cart.head_sub")} chips={["💵", "🚚", "✅", "📦"]} />
         <section className="section">
           <div className="wrap">
-            <div className="empty-state">
+            <Reveal className="empty-state" y={28}>
               <div className="em">🛒</div>
               <h3>{t("cart.empty_t")}</h3>
               <p>{t("cart.empty_p")}</p>
               <Link className="btn btn-primary btn-lg" to="/shop">{t("cart.empty_btn")}</Link>
-            </div>
+            </Reveal>
           </div>
         </section>
       </>
@@ -121,35 +123,37 @@ export default function Cart() {
         <div className="wrap">
           <div className="cart-layout">
             <div>
-              <div className="cart-list">
-                {cart.map((i) => {
-                  const p = byId(i.id);
-                  if (!p) return null;
-                  return (
-                    <div className="cart-row" key={i.id}>
-                      <Link to={`/product/${p.id}`} className="thumb">
-                        {p.image ? <img src={p.image} alt={pName(p, lang)} /> : <span>{p.emoji || "🎁"}</span>}
-                      </Link>
-                      <div>
-                        <h4>{pName(p, lang)}</h4>
-                        <div className="unit">{money(p.price, STORE_CONFIG.currency)} {t("cart.per_piece")}</div>
-                        <div className="qty" style={{ marginTop: 8 }}>
-                          <button type="button" onClick={() => setQty(p.id, i.qty - 1)}>−</button>
-                          <input type="text" value={i.qty} readOnly />
-                          <button type="button" onClick={() => setQty(p.id, i.qty + 1)}>+</button>
+              <StaggerGrid className="cart-list">
+                {cart
+                  .map((i) => {
+                    const p = byId(i.id);
+                    if (!p) return null;
+                    return (
+                      <div className="cart-row" key={i.id}>
+                        <Link to={`/product/${p.id}`} className="thumb">
+                          {p.image ? <img src={p.image} alt={pName(p, lang)} /> : <span>{p.emoji || "🎁"}</span>}
+                        </Link>
+                        <div>
+                          <h4>{pName(p, lang)}</h4>
+                          <div className="unit">{money(p.price, STORE_CONFIG.currency)} {t("cart.per_piece")}</div>
+                          <div className="qty" style={{ marginTop: 8 }}>
+                            <button type="button" onClick={() => setQty(p.id, i.qty - 1)}>−</button>
+                            <input type="text" value={i.qty} readOnly />
+                            <button type="button" onClick={() => setQty(p.id, i.qty + 1)}>+</button>
+                          </div>
+                        </div>
+                        <div className="right">
+                          <span className="line-total">{money(p.price * i.qty, STORE_CONFIG.currency)}</span>
+                          <button className="remove" onClick={() => removeFromCart(p.id)}>{t("cart.remove")}</button>
                         </div>
                       </div>
-                      <div className="right">
-                        <span className="line-total">{money(p.price * i.qty, STORE_CONFIG.currency)}</span>
-                        <button className="remove" onClick={() => removeFromCart(p.id)}>{t("cart.remove")}</button>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
+                    );
+                  })
+                  .filter(Boolean)}
+              </StaggerGrid>
             </div>
 
-            <div className="summary">
+            <Reveal className="summary" y={24} delay={0.1}>
               <h3>{t("cart.summary")}</h3>
               <div className="line">
                 <span>{t("cart.subtotal")}</span>
@@ -217,7 +221,7 @@ export default function Cart() {
                   <p style={{ textAlign: "center", color: "var(--muted)", fontSize: ".82rem", marginTop: 10 }}>{t("cart.cod_note")}</p>
                 </form>
               </div>
-            </div>
+            </Reveal>
           </div>
         </div>
       </section>

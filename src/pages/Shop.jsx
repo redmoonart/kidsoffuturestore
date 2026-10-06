@@ -5,6 +5,8 @@ import { useProducts } from "../data/ProductsContext";
 import { useSubcategories, subcatLabel } from "../data/SubcategoriesContext";
 import ProductCard from "../components/ProductCard";
 import PageHead from "../components/PageHead";
+import Reveal from "../components/Reveal";
+import StaggerGrid from "../components/StaggerGrid";
 import { pName } from "../lib/product";
 
 export default function Shop() {
@@ -67,7 +69,7 @@ export default function Shop() {
       <PageHead title={t("shop.head_title")} subtitle={t("shop.head_sub")} chips={["🧸", "🎒", "🚗", "✏️"]} />
       <section className="section">
         <div className="wrap">
-          <div className="shop-toolbar">
+          <Reveal className="shop-toolbar">
             <div className="chips">
               <button className={`chip${cat === "all" ? " active" : ""}`} onClick={() => handleCat("all")}>
                 {t("shop.chip_all")}
@@ -110,16 +112,16 @@ export default function Shop() {
                 </select>
               </div>
             </div>
-          </div>
+          </Reveal>
           <p style={{ color: "var(--muted)", marginBottom: 16 }}>
             <span>{list.length} {t("shop.count_unit")}</span>
           </p>
           {list.length ? (
-            <div className="products-grid">
+            <StaggerGrid className="products-grid">
               {list.map((p) => (
                 <ProductCard key={p.id} product={p} />
               ))}
-            </div>
+            </StaggerGrid>
           ) : (
             <div className="empty-state" style={{ gridColumn: "1/-1" }}>
               <div className="em">🔍</div>
