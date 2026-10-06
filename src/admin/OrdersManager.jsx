@@ -62,6 +62,32 @@ export default function OrdersManager({ refreshSignal = 0, onChanged }) {
     }
   }
 
+  // تصدير CSV بصيغة مبسّطة تصلح للاستيراد اليدوي في منصّة شركة التوصيل
+  // (الأعمدة شائعة الاستخدام — تحقّق من أسماء الأعمدة الدقيقة التي تطلبها ZR Express عند فتح حسابك التجاري معهم)
+  function exportCsv() {
+    const header = ["الاسم", "الهاتف", "الولاية", "البلدية/العنوان", "نوع التوصيل", "سعر التوصيل", "المبلغ الإجمالي", "ملاحظات"];
+    const rows = filtered.map((o) => [
+      o.customer_name,
+      o.phone,
+      o.wilaya,
+      o.address || "",
+      o.delivery_type === "office" ? "مكتب" : "منزل",
+      o.delivery_price ?? "",
+      o.total,
+      o.notes || "",
+    ]);
+    const csv = [header, ...rows]
+      .map((r) => r.map((cell) => `"${String(cell ?? "").replace(/"/g, '""')}"`).join(","))
+      .join("\r\n");
+    const blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `طلبات-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
   async function handleDelete(o) {
     if (!window.confirm(`حذف الطلب ${o.ref || "#" + o.id}؟ لا يمكن التراجع.`)) return;
     setBusy(o.id);
@@ -86,6 +112,7 @@ export default function OrdersManager({ refreshSignal = 0, onChanged }) {
           className="admin-search"
         />
         <button className="btn btn-ghost" onClick={() => { load(); onChanged?.(); }} disabled={loading}>🔄 تحديث</button>
+        <button className="btn btn-ghost" onClick={exportCsv} disabled={!filtered.length}>⬇️ تصدير CSV</button>
       </div>
 
       <div className="admin-order-filters">
@@ -178,6 +205,7 @@ function FragmentRow({ o, isOpen, onToggle, onStatus, onDelete, busy }) {
               🚚 {o.delivery_type === "office" ? "توصيل للمكتب" : "توصيل للمنزل"}
               {o.delivery_price != null ? ` — ${o.delivery_price} دج` : ""}
             </p>
+            {o.coupon_code && <p>🏷️ كود خصم: {o.coupon_code} (−{o.discount} دج)</p>}
             {o.address && <p>📍 {o.address}</p>}
             {o.notes && <p>📝 {o.notes}</p>}
           </td>

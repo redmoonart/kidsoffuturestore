@@ -13,6 +13,7 @@ export default function ProductCard({ product }) {
   const [pulse, setPulse] = useState(false);
   const disc = product.oldPrice ? Math.round((1 - product.price / product.oldPrice) * 100) : 0;
   const out = product.stock === false;
+  const lowStock = !out && typeof product.stockQty === "number" && product.stockQty > 0 && product.stockQty <= 5;
   const catLabel = t(product.category === "toys" ? "card.toys" : "card.school");
 
   function handleAdd() {
@@ -29,7 +30,8 @@ export default function ProductCard({ product }) {
         ) : (
           <span>{product.emoji || "🎁"}</span>
         )}
-        {product.badge && !out && <span className="badge">{product.badge}</span>}
+        {product.badge && !out && !lowStock && <span className="badge">{product.badge}</span>}
+        {lowStock && <span className="badge low-stock">{t("pdp.low_stock", { v: product.stockQty })}</span>}
         {out && <span className="badge out">{t("card.out")}</span>}
         {disc > 0 && !out && <span className="disc">-{disc}%</span>}
       </Link>

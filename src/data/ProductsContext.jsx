@@ -10,6 +10,8 @@ function fromRow(row) {
     subCategory: row.sub_category || undefined,
     emoji: row.emoji || undefined,
     image: row.image || undefined,
+    images: Array.isArray(row.images) ? row.images : [],
+    stockQty: row.stock_qty ?? undefined,
     name: row.name,
     nameFr: row.name_fr || undefined,
     nameEn: row.name_en || undefined,

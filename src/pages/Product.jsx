@@ -22,9 +22,11 @@ export default function Product() {
   const [qty, setQty] = useState(1);
 
   const p = products.find((x) => x.id === Number(id));
+  const [activeImg, setActiveImg] = useState(null);
 
   useEffect(() => {
     setQty(1);
+    setActiveImg(null);
   }, [id]);
 
   if (!p) {
@@ -47,6 +49,9 @@ export default function Product() {
   const disc = p.oldPrice ? Math.round((1 - p.price / p.oldPrice) * 100) : 0;
   const out = p.stock === false;
   const related = products.filter((x) => x.category === p.category && x.id !== p.id).slice(0, 4);
+  const gallery = [p.image, ...(p.images || [])].filter(Boolean);
+  const shownImg = activeImg || gallery[0];
+  const lowStock = !out && typeof p.stockQty === "number" && p.stockQty > 0 && p.stockQty <= 5;
 
   const productJsonLd = {
     "@context": "https://schema.org",
@@ -87,9 +92,23 @@ export default function Product() {
           <Reveal className="product-stage" y={28}>
             <div className="stage-glow" />
             <TiltCard className="gallery">
-              {p.image ? <img src={p.image} alt={pName(p, lang)} /> : <span>{p.emoji || "🎁"}</span>}
+              {shownImg ? <img src={shownImg} alt={pName(p, lang)} /> : <span>{p.emoji || "🎁"}</span>}
               {disc > 0 && !out && <span className="disc">-{disc}%</span>}
             </TiltCard>
+            {gallery.length > 1 && (
+              <div className="gallery-thumbs">
+                {gallery.map((src, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    className={`gallery-thumb${(activeImg || gallery[0]) === src ? " active" : ""}`}
+                    onClick={() => setActiveImg(src)}
+                  >
+                    <img src={src} alt="" />
+                  </button>
+                ))}
+              </div>
+            )}
           </Reveal>
           <Reveal className="info" y={28} delay={0.1}>
             <span className="cat-tag" style={{ color: "var(--primary)", fontWeight: 700 }}>{catLabel}</span>
@@ -106,6 +125,7 @@ export default function Product() {
             </div>
             <p>
               {out ? <span className="out-stock">{t("pdp.out_stock")}</span> : <span className="in-stock">{t("pdp.in_stock")}</span>}
+              {lowStock && <span className="low-stock-badge">{t("pdp.low_stock", { v: p.stockQty })}</span>}
             </p>
             {!out && (
               <div className="pdp-actions">

@@ -5,6 +5,7 @@ import Footer from "./components/Footer";
 import CartDrawer from "./components/CartDrawer";
 import ScrollProgressBar from "./components/ScrollProgressBar";
 import BackToTop from "./components/BackToTop";
+import WhatsAppButton from "./components/WhatsAppButton";
 import { useCart } from "./cart/CartContext";
 import Home from "./pages/Home";
 import Shop from "./pages/Shop";
@@ -70,6 +71,7 @@ export default function App() {
       <Footer />
       <CartDrawer />
       <BackToTop />
+      <WhatsAppButton />
     </>
   );
 }

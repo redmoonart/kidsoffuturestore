@@ -6,6 +6,7 @@ import { supabase } from "../lib/supabaseClient";
 import ProductForm from "../admin/ProductForm";
 import SubcategoriesManager from "../admin/SubcategoriesManager";
 import OrdersManager from "../admin/OrdersManager";
+import CouponsManager from "../admin/CouponsManager";
 import { useNewOrdersAlert } from "../admin/useNewOrdersAlert";
 import { onInstallAvailable, promptInstall, isStandalone } from "../admin/pwa";
 
@@ -96,12 +97,20 @@ export default function AdminDashboard() {
         >
           الأصناف
         </button>
+        <button
+          className={`admin-tab${tab === "coupons" ? " active" : ""}`}
+          onClick={() => { setTab("coupons"); setEditing(null); }}
+        >
+          أكواد الخصم
+        </button>
       </div>
 
       {tab === "orders" ? (
         <OrdersManager refreshSignal={tick} onChanged={recheck} />
       ) : tab === "categories" ? (
         <SubcategoriesManager />
+      ) : tab === "coupons" ? (
+        <CouponsManager />
       ) : editing ? (
         <ProductForm
           initial={editing === "new" ? null : editing}

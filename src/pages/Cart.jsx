@@ -10,6 +10,7 @@ import StaggerGrid from "../components/StaggerGrid";
 import { pName, wName } from "../lib/product";
 import { money } from "../lib/format";
 import { saveOrder, makeOrderRef } from "../lib/orders";
+import { checkCoupon } from "../lib/coupons";
 
 export default function Cart() {
   const { t, lang } = useI18n();
@@ -24,11 +25,45 @@ export default function Cart() {
   const [errors, setErrors] = useState({});
 
   const wilaya = WILAYAS.find((w) => w.code === Number(wilayaCode));
+  const officeAvailable = !!(wilaya && wilaya.office != null);
+  const effectiveType = deliveryType === "office" && !officeAvailable ? "home" : deliveryType;
   const isFree = STORE_CONFIG.freeShippingThreshold && subtotal >= STORE_CONFIG.freeShippingThreshold;
-  const deliveryPrice = wilaya ? (deliveryType === "office" ? wilaya.office : wilaya.home) : 0;
+  const deliveryPrice = wilaya ? (effectiveType === "office" ? wilaya.office : wilaya.home) : 0;
   const finalDelivery = isFree ? 0 : deliveryPrice;
-  const total = subtotal + (wilaya ? finalDelivery : 0);
+
+  const [couponCode, setCouponCode] = useState("");
+  const [coupon, setCoupon] = useState(null);
+  const [couponBusy, setCouponBusy] = useState(false);
+  const [couponError, setCouponError] = useState("");
+  const discount = coupon
+    ? coupon.type === "percent"
+      ? Math.round((subtotal * coupon.value) / 100)
+      : Math.min(coupon.value, subtotal)
+    : 0;
+
+  const total = subtotal + (wilaya ? finalDelivery : 0) - discount;
   const remain = STORE_CONFIG.freeShippingThreshold ? STORE_CONFIG.freeShippingThreshold - subtotal : 0;
+
+  async function handleApplyCoupon() {
+    const code = couponCode.trim();
+    if (!code) return;
+    setCouponBusy(true);
+    setCouponError("");
+    const result = await checkCoupon(code, subtotal);
+    setCouponBusy(false);
+    if (!result.ok) {
+      setCoupon(null);
+      setCouponError(t(result.reason, { v: result.minOrder }));
+      return;
+    }
+    setCoupon(result.coupon);
+  }
+
+  function handleRemoveCoupon() {
+    setCoupon(null);
+    setCouponCode("");
+    setCouponError("");
+  }
 
   const [sending, setSending] = useState(false);
   const [saveError, setSaveError] = useState(false);
@@ -38,13 +73,13 @@ export default function Cart() {
     e.preventDefault();
     const phoneOk = /^0[5-7]\d{8}$/.test(phone.replace(/\s/g, ""));
     const nameOk = name.trim().length > 1;
-    const wilayaOk = !!wilaya;
+    const wilayaOk = !!wilaya && wilaya.available !== false;
     setErrors({ name: !nameOk, phone: !phoneOk, wilaya: !wilayaOk });
     if (!nameOk || !phoneOk || !wilayaOk || sending) return;
 
-    const price = deliveryType === "office" ? wilaya.office : wilaya.home;
+    const price = effectiveType === "office" ? wilaya.office : wilaya.home;
     const delFinal = isFree ? 0 : price;
-    const grandTotal = subtotal + delFinal;
+    const grandTotal = subtotal + delFinal - discount;
     const ref = makeOrderRef();
     const items = cart
       .map((i) => {
@@ -62,11 +97,13 @@ export default function Cart() {
       phone: phone.replace(/\s/g, ""),
       wilaya: `${wilaya.code} - ${wilaya.name}`,
       address: city.trim() || null,
-      delivery_type: deliveryType,
+      delivery_type: effectiveType,
       delivery_price: delFinal,
       items,
       total: grandTotal,
       notes: notes.trim() || null,
+      coupon_code: coupon ? coupon.code : null,
+      discount,
     });
     setSending(false);
 
@@ -163,6 +200,12 @@ export default function Cart() {
                 <span>{t("cart.delivery")} {wilaya ? `(${wName(wilaya, lang)})` : ""}</span>
                 <span>{isFree ? t("cart.free") : wilaya ? money(finalDelivery, STORE_CONFIG.currency) : t("cart.by_wilaya")}</span>
               </div>
+              {coupon && (
+                <div className="line coupon-line">
+                  <span>{t("cart.coupon_applied")} ({coupon.code})</span>
+                  <span>−{money(discount, STORE_CONFIG.currency)}</span>
+                </div>
+              )}
               <div className="line total">
                 <span>{t("cart.total")}</span>
                 <span className="amount-flash">{money(total, STORE_CONFIG.currency)}</span>
@@ -173,6 +216,28 @@ export default function Cart() {
                 </div>
               ) : null}
               {isFree ? <div className="free-note">{t("cart.free_congrats")}</div> : null}
+
+              <div className="coupon-box">
+                {coupon ? (
+                  <div className="coupon-applied">
+                    <span>🏷️ {coupon.code}</span>
+                    <button type="button" className="btn btn-ghost btn-sm" onClick={handleRemoveCoupon}>{t("cart.coupon_remove")}</button>
+                  </div>
+                ) : (
+                  <div className="coupon-input-row">
+                    <input
+                      type="text"
+                      placeholder={t("cart.coupon_ph")}
+                      value={couponCode}
+                      onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                    />
+                    <button type="button" className="btn btn-ghost btn-sm" onClick={handleApplyCoupon} disabled={couponBusy || !couponCode.trim()}>
+                      {couponBusy ? "..." : t("cart.coupon_apply")}
+                    </button>
+                  </div>
+                )}
+                {couponError && <div className="field-error show">{couponError}</div>}
+              </div>
 
               <div style={{ marginTop: 20 }}>
                 <h3 style={{ fontSize: "1.1rem" }}>{t("cart.info_title")}</h3>
@@ -192,10 +257,14 @@ export default function Cart() {
                     <select value={wilayaCode} onChange={(e) => setWilayaCode(e.target.value)}>
                       <option value="">{t("cart.choose_wilaya")}</option>
                       {WILAYAS.map((w) => (
-                        <option key={w.code} value={w.code}>{w.code} - {wName(w, lang)}</option>
+                        <option key={w.code} value={w.code} disabled={w.available === false}>
+                          {w.code} - {wName(w, lang)}{w.available === false ? ` (${t("cart.wilaya_unavailable")})` : ""}
+                        </option>
                       ))}
                     </select>
-                    <div className={`field-error${errors.wilaya ? " show" : ""}`}>{t("cart.err_wilaya")}</div>
+                    <div className={`field-error${errors.wilaya ? " show" : ""}`}>
+                      {wilaya && wilaya.available === false ? t("cart.wilaya_unavailable_note") : t("cart.err_wilaya")}
+                    </div>
                   </div>
                   <div className="form-row">
                     <label>{t("cart.f_city")}</label>
@@ -204,12 +273,14 @@ export default function Cart() {
                   <div className="form-row">
                     <label>{t("cart.dtype")}</label>
                     <div className="radio-cards">
-                      <div className={`radio-card${deliveryType === "home" ? " active" : ""}`} onClick={() => setDeliveryType("home")}>
+                      <div className={`radio-card${effectiveType === "home" ? " active" : ""}`} onClick={() => setDeliveryType("home")}>
                         {t("cart.dtype_home")}
                       </div>
-                      <div className={`radio-card${deliveryType === "office" ? " active" : ""}`} onClick={() => setDeliveryType("office")}>
-                        {t("cart.dtype_office")}
-                      </div>
+                      {officeAvailable && (
+                        <div className={`radio-card${effectiveType === "office" ? " active" : ""}`} onClick={() => setDeliveryType("office")}>
+                          {t("cart.dtype_office")}
+                        </div>
+                      )}
                     </div>
                   </div>
                   <div className="form-row">

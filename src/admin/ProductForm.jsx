@@ -8,6 +8,7 @@ const BLANK = {
   subCategory: "",
   emoji: "",
   image: "",
+  images: [],
   name: "",
   nameFr: "",
   nameEn: "",
@@ -19,6 +20,7 @@ const BLANK = {
   badge: "",
   ageGroup: "",
   stock: true,
+  stockQty: "",
 };
 
 function toRow(f) {
@@ -28,6 +30,7 @@ function toRow(f) {
     sub_category: f.subCategory || null,
     emoji: f.emoji || null,
     image: f.image || null,
+    images: f.images || [],
     name: f.name,
     name_fr: f.nameFr || null,
     name_en: f.nameEn || null,
@@ -39,6 +42,7 @@ function toRow(f) {
     badge: f.badge || null,
     age_group: f.ageGroup || null,
     stock: !!f.stock,
+    stock_qty: f.stockQty === "" || f.stockQty == null ? null : Number(f.stockQty),
   };
 }
 
@@ -75,6 +79,29 @@ export default function ProductForm({ initial, nextId, onCancel, onSaved }) {
     const { data } = supabase.storage.from("product-images").getPublicUrl(path);
     setF((prev) => ({ ...prev, image: data.publicUrl }));
     setUploading(false);
+  }
+
+  async function handleGalleryFileChange(e) {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    setError("");
+    setUploading(true);
+    const ext = file.name.split(".").pop();
+    const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+    const { error: upErr } = await supabase.storage.from("product-images").upload(path, file);
+    if (upErr) {
+      setUploading(false);
+      setError("فشل رفع الصورة: " + upErr.message);
+      return;
+    }
+    const { data } = supabase.storage.from("product-images").getPublicUrl(path);
+    setF((prev) => ({ ...prev, images: [...(prev.images || []), data.publicUrl] }));
+    setUploading(false);
+  }
+
+  function removeGalleryImage(i) {
+    setF((prev) => ({ ...prev, images: prev.images.filter((_, idx) => idx !== i) }));
   }
 
   async function handleSubmit(e) {
@@ -154,6 +181,21 @@ export default function ProductForm({ initial, nextId, onCancel, onSaved }) {
             </div>
           </div>
         </label>
+        <label className="admin-span-2">
+          صور إضافية (معرض المنتج — اختياري)
+          <div className="admin-gallery-row">
+            {(f.images || []).map((src, i) => (
+              <div key={i} className="admin-gallery-item">
+                <img src={src} alt="" className="admin-thumb" />
+                <button type="button" className="admin-gallery-remove" onClick={() => removeGalleryImage(i)} aria-label="إزالة">×</button>
+              </div>
+            ))}
+            <label className="admin-gallery-add">
+              <input type="file" accept="image/*" onChange={handleGalleryFileChange} disabled={uploading} hidden />
+              + صورة
+            </label>
+          </div>
+        </label>
       </div>
 
       <div className="admin-form-grid">
@@ -202,6 +244,10 @@ export default function ProductForm({ initial, nextId, onCancel, onSaved }) {
         <label>
           الفئة العمرية (اختياري)
           <input type="text" value={f.ageGroup} onChange={set("ageGroup")} placeholder="3+" />
+        </label>
+        <label>
+          الكمية المتبقية (اختياري — لعرض "باقي X فقط")
+          <input type="number" value={f.stockQty} onChange={set("stockQty")} min="0" placeholder="بدون تتبّع كمية" />
         </label>
         <label className="admin-checkbox">
           <input type="checkbox" checked={f.stock} onChange={set("stock")} />
