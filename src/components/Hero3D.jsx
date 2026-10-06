@@ -31,17 +31,17 @@ export default function Hero3D() {
     let cancelled = false;
     async function waveLoop() {
       while (!cancelled) {
-        await animateHand(handRef.current, { rotate: -9, scale: 0.95 }, { type: "spring", stiffness: 520, damping: 14, mass: 0.5 });
+        await animateHand(handRef.current, { rotate: -9, scale: 0.95 }, { type: "spring", stiffness: 520, damping: 16, mass: 0.5 });
         if (cancelled) break;
-        await animateHand(handRef.current, { rotate: 31, scale: 1.08 }, { type: "spring", stiffness: 180, damping: 7, mass: 0.6 });
+        await animateHand(handRef.current, { rotate: 28, scale: 1.07 }, { type: "spring", stiffness: 190, damping: 10, mass: 0.6 });
         if (cancelled) break;
-        await animateHand(handRef.current, { rotate: -23, scale: 0.98 }, { type: "spring", stiffness: 220, damping: 8, mass: 0.6 });
+        await animateHand(handRef.current, { rotate: -20, scale: 0.98 }, { type: "spring", stiffness: 230, damping: 11, mass: 0.6 });
         if (cancelled) break;
-        await animateHand(handRef.current, { rotate: 17, scale: 1.04 }, { type: "spring", stiffness: 240, damping: 9, mass: 0.6 });
+        await animateHand(handRef.current, { rotate: 15, scale: 1.03 }, { type: "spring", stiffness: 250, damping: 12, mass: 0.6 });
         if (cancelled) break;
-        await animateHand(handRef.current, { rotate: -7, scale: 1 }, { type: "spring", stiffness: 260, damping: 11 });
+        await animateHand(handRef.current, { rotate: -6, scale: 1 }, { type: "spring", stiffness: 270, damping: 14 });
         if (cancelled) break;
-        await animateHand(handRef.current, { rotate: 0 }, { type: "spring", stiffness: 240, damping: 16 });
+        await animateHand(handRef.current, { rotate: 0 }, { type: "spring", stiffness: 250, damping: 18 });
         if (cancelled) break;
         await new Promise((resolve) => setTimeout(resolve, 1200));
       }
