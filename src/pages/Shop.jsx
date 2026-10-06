@@ -7,6 +7,7 @@ import ProductCard from "../components/ProductCard";
 import PageHead from "../components/PageHead";
 import Reveal from "../components/Reveal";
 import StaggerGrid from "../components/StaggerGrid";
+import SEO from "../components/SEO";
 import { pName } from "../lib/product";
 
 export default function Shop() {
@@ -66,6 +67,7 @@ export default function Shop() {
 
   return (
     <>
+      <SEO title={`${t("shop.head_title")} — Kids of the Future`} description={t("shop.head_sub")} path="shop" />
       <PageHead title={t("shop.head_title")} subtitle={t("shop.head_sub")} chips={["🧸", "🎒", "🚗", "✏️"]} />
       <section className="section">
         <div className="wrap">

@@ -9,6 +9,7 @@ import TiltCard from "../components/TiltCard";
 import Reveal from "../components/Reveal";
 import StaggerGrid from "../components/StaggerGrid";
 import ScrollReveal from "../components/ScrollReveal";
+import SEO from "../components/SEO";
 import { pName, pDesc } from "../lib/product";
 import { money } from "../lib/format";
 
@@ -24,8 +25,7 @@ export default function Product() {
 
   useEffect(() => {
     setQty(1);
-    if (p) document.title = `${pName(p, lang)} — ${STORE_CONFIG.name}`;
-  }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [id]);
 
   if (!p) {
     if (loading) return null;
@@ -48,6 +48,21 @@ export default function Product() {
   const out = p.stock === false;
   const related = products.filter((x) => x.category === p.category && x.id !== p.id).slice(0, 4);
 
+  const productJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: pName(p, lang),
+    description: pDesc(p, lang),
+    image: p.image || `${STORE_CONFIG.siteUrl}/og-image.webp`,
+    offers: {
+      "@type": "Offer",
+      priceCurrency: "DZD",
+      price: p.price,
+      availability: out ? "https://schema.org/OutOfStock" : "https://schema.org/InStock",
+      url: `${STORE_CONFIG.siteUrl}/product/${p.id}`,
+    },
+  };
+
   function handleAdd() {
     addToCart(p.id, qty);
   }
@@ -58,6 +73,12 @@ export default function Product() {
 
   return (
     <section className="section">
+      <SEO
+        title={`${pName(p, lang)} — ${STORE_CONFIG.name}`}
+        description={pDesc(p, lang)}
+        path={`product/${p.id}`}
+        jsonLd={productJsonLd}
+      />
       <div className="wrap">
         <p className="breadcrumb">
           <Link to="/">{t("nav.home")}</Link> / <Link to={`/shop?cat=${p.category}`}>{catLabel}</Link> / {pName(p, lang)}

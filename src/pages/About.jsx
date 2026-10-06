@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useI18n, Trans } from "../i18n/I18nContext";
 import PageHead from "../components/PageHead";
 import Reveal from "../components/Reveal";
+import SEO from "../components/SEO";
 
 const CARDS = [
   ["🚚", "about.c1_t", "about.c1_d"],
@@ -14,6 +15,7 @@ export default function About() {
   const { t } = useI18n();
   return (
     <>
+      <SEO title={`${t("about.head_t")} — Kids of the Future`} description={t("about.head_s")} path="about" />
       <PageHead title={t("about.head_t")} subtitle={t("about.head_s")} />
       <section className="section">
         <div className="wrap">

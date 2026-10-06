@@ -3,6 +3,7 @@ import { STORE_CONFIG } from "../data/config";
 import PageHead from "../components/PageHead";
 import Reveal from "../components/Reveal";
 import FAQItem from "../components/FAQItem";
+import SEO from "../components/SEO";
 
 export default function Contact() {
   const { t } = useI18n();
@@ -10,6 +11,7 @@ export default function Contact() {
 
   return (
     <>
+      <SEO title={`${t("contact.head_t")} — Kids of the Future`} description={t("contact.head_s")} path="contact" />
       <PageHead title={t("contact.head_t")} subtitle={t("contact.head_s")} />
       <section className="section">
         <div className="wrap">

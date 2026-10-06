@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+
+Sitemap: https://redmoonart.github.io/kidsoffuturestore/sitemap.xml
