@@ -81,8 +81,8 @@ export default function Hero3D() {
         <motion.div className="hero-dani-shadow" style={{ scale: shadowScale }} aria-hidden="true" />
         <motion.div
           className="hero-dani-figure"
-          animate={reduceMotion ? {} : { y: [0, -9, 0] }}
-          transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+          animate={reduceMotion ? {} : { y: [0, -13, 0] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
         >
           <img
             className="hero-dani-body-img"
@@ -103,17 +103,17 @@ export default function Hero3D() {
               reduceMotion
                 ? {}
                 : {
-                    // ترقّب خفيف (التفاف عكسي بسيط) ثم لوحة كبيرة تتلاشى تدريجياً — نفس منطق تحريك اليد الحقيقية
-                    rotate: [0, -5, 26, -19, 13, -8, 3, 0],
-                    scale: [1, 0.97, 1.07, 1, 1.03, 1, 1, 1],
+                    // ترقّب خفيف ثم تلويح حماسي بعدة لوحات واضحة قبل أن تخفت تدريجياً
+                    rotate: [0, -10, 32, -26, 30, -22, 24, -14, 6, 0],
+                    scale: [1, 0.95, 1.1, 0.96, 1.08, 0.98, 1.05, 1, 1, 1],
                   }
             }
             transition={{
-              duration: 1.35,
-              times: [0, 0.09, 0.27, 0.44, 0.58, 0.72, 0.87, 1],
-              ease: ["easeIn", "easeOut", "easeInOut", "easeInOut", "easeInOut", "easeInOut", "easeOut"],
+              duration: 2,
+              times: [0, 0.06, 0.2, 0.32, 0.44, 0.55, 0.66, 0.78, 0.9, 1],
+              ease: ["easeIn", "easeOut", "easeInOut", "easeInOut", "easeInOut", "easeInOut", "easeInOut", "easeInOut", "easeOut"],
               repeat: Infinity,
-              repeatDelay: 3.3,
+              repeatDelay: 1.4,
             }}
           />
         </motion.div>
