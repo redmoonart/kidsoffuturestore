@@ -85,9 +85,24 @@ export default function Hero3D() {
           fetchPriority="high"
           width="755"
           height="1165"
-          animate={reduceMotion ? {} : { y: [0, -9, 0] }}
-          transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+          animate={
+            reduceMotion
+              ? {}
+              : { y: [0, -9, 0], rotate: [0, 0, -5, 6, -5, 6, -2, 0, 0] }
+          }
+          transition={{
+            y: { duration: 4.5, repeat: Infinity, ease: "easeInOut" },
+            rotate: { duration: 7, repeat: Infinity, repeatDelay: 2.5, ease: "easeInOut" },
+          }}
         />
+        <motion.div
+          className="hero-dani-bubble"
+          initial={{ opacity: 0, scale: 0.4, y: 10 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ type: "spring", stiffness: 300, damping: 18, delay: reduceMotion ? 0.3 : 1.1 }}
+        >
+          {t("hero.dani_greeting")}
+        </motion.div>
       </motion.div>
 
       <motion.div className="hero-foreground-grass" style={{ y: foreY }} aria-hidden="true" />

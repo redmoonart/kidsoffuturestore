@@ -22,6 +22,7 @@ export const STR = {
       "hero.cta_shop": "🛍️ تسوّق الآن", "hero.cta_school": "🎒 الأدوات المدرسية",
       "hero.badge_delivery": "توصيل لكل 58 ولاية", "hero.badge_cod": "الدفع عند الاستلام", "hero.badge_guarantee": "منتجات مضمونة",
       "hero.float_toys": "ألعاب", "hero.float_school": "مدرسة", "hero.float_smart": "ذكاء",
+      "hero.dani_greeting": "أهلاً! أنا داني 👋",
       // المزايا
       "feat.delivery_t": "توصيل سريع", "feat.delivery_d": "إلى جميع ولايات الجزائر",
       "feat.cod_t": "الدفع عند الاستلام", "feat.cod_d": "ادفع بعد أن تستلم طلبك",
@@ -122,6 +123,7 @@ export const STR = {
       "hero.cta_shop": "🛍️ Acheter maintenant", "hero.cta_school": "🎒 Fournitures scolaires",
       "hero.badge_delivery": "Livraison dans les 58 wilayas", "hero.badge_cod": "Paiement à la livraison", "hero.badge_guarantee": "Produits garantis",
       "hero.float_toys": "Jouets", "hero.float_school": "École", "hero.float_smart": "Éveil",
+      "hero.dani_greeting": "Salut ! Je suis Dani 👋",
       "feat.delivery_t": "Livraison rapide", "feat.delivery_d": "Vers toutes les wilayas d'Algérie",
       "feat.cod_t": "Paiement à la livraison", "feat.cod_d": "Payez après réception de votre commande",
       "feat.exchange_t": "Échange facile", "feat.exchange_d": "Sous 48 h après réception",
@@ -209,6 +211,7 @@ export const STR = {
       "hero.cta_shop": "🛍️ Shop now", "hero.cta_school": "🎒 School Supplies",
       "hero.badge_delivery": "Delivery to all 58 wilayas", "hero.badge_cod": "Cash on delivery", "hero.badge_guarantee": "Guaranteed products",
       "hero.float_toys": "Toys", "hero.float_school": "School", "hero.float_smart": "Learning",
+      "hero.dani_greeting": "Hi! I'm Dani 👋",
       "feat.delivery_t": "Fast delivery", "feat.delivery_d": "To every wilaya in Algeria",
       "feat.cod_t": "Cash on delivery", "feat.cod_d": "Pay after you receive your order",
       "feat.exchange_t": "Easy exchange", "feat.exchange_d": "Within 48 hours of delivery",
