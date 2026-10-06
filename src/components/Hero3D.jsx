@@ -99,8 +99,22 @@ export default function Hero3D() {
             aria-hidden="true"
             width="755"
             height="1165"
-            animate={reduceMotion ? {} : { rotate: [0, 0, -14, 18, -14, 18, -6, 0, 0] }}
-            transition={{ duration: 7, repeat: Infinity, repeatDelay: 2.5, ease: "easeInOut" }}
+            animate={
+              reduceMotion
+                ? {}
+                : {
+                    // ترقّب خفيف (التفاف عكسي بسيط) ثم لوحة كبيرة تتلاشى تدريجياً — نفس منطق تحريك اليد الحقيقية
+                    rotate: [0, -5, 26, -19, 13, -8, 3, 0],
+                    scale: [1, 0.97, 1.07, 1, 1.03, 1, 1, 1],
+                  }
+            }
+            transition={{
+              duration: 1.35,
+              times: [0, 0.09, 0.27, 0.44, 0.58, 0.72, 0.87, 1],
+              ease: ["easeIn", "easeOut", "easeInOut", "easeInOut", "easeInOut", "easeInOut", "easeOut"],
+              repeat: Infinity,
+              repeatDelay: 3.3,
+            }}
           />
         </motion.div>
         <motion.div
