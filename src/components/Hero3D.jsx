@@ -1,6 +1,6 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
+import { motion, useScroll, useTransform, useReducedMotion, useAnimate } from "framer-motion";
 import { useI18n, Trans } from "../i18n/I18nContext";
 import { isNarrowViewport } from "../lib/deviceCapability";
 import heroBgScene from "../assets/hero-bg-scene.webp";
@@ -22,6 +22,35 @@ export default function Hero3D() {
   const [narrow] = useState(isNarrowViewport);
   const reduceMotion = useReducedMotion();
   const amp = reduceMotion ? 0.35 : narrow ? 0.55 : 1;
+  const [handRef, animateHand] = useAnimate();
+
+  // تلويح حقيقي — كل مرحلة نابض فيزيائي حقيقي (overshoot/settle طبيعي)
+  // بدل keyframes يدوية، بما يطابق مبدأ "spring-physics" للحركة الاحترافية
+  useEffect(() => {
+    if (reduceMotion || !handRef.current) return undefined;
+    let cancelled = false;
+    async function waveLoop() {
+      while (!cancelled) {
+        await animateHand(handRef.current, { rotate: -9, scale: 0.95 }, { type: "spring", stiffness: 520, damping: 14, mass: 0.5 });
+        if (cancelled) break;
+        await animateHand(handRef.current, { rotate: 31, scale: 1.08 }, { type: "spring", stiffness: 180, damping: 7, mass: 0.6 });
+        if (cancelled) break;
+        await animateHand(handRef.current, { rotate: -23, scale: 0.98 }, { type: "spring", stiffness: 220, damping: 8, mass: 0.6 });
+        if (cancelled) break;
+        await animateHand(handRef.current, { rotate: 17, scale: 1.04 }, { type: "spring", stiffness: 240, damping: 9, mass: 0.6 });
+        if (cancelled) break;
+        await animateHand(handRef.current, { rotate: -7, scale: 1 }, { type: "spring", stiffness: 260, damping: 11 });
+        if (cancelled) break;
+        await animateHand(handRef.current, { rotate: 0 }, { type: "spring", stiffness: 240, damping: 16 });
+        if (cancelled) break;
+        await new Promise((resolve) => setTimeout(resolve, 1200));
+      }
+    }
+    waveLoop();
+    return () => {
+      cancelled = true;
+    };
+  }, [reduceMotion, animateHand, handRef]);
 
   const { scrollYProgress: heroScroll } = useScroll({ target: sectionRef, offset: ["start start", "end start"] });
 
@@ -93,28 +122,13 @@ export default function Hero3D() {
             height="1165"
           />
           <motion.img
+            ref={handRef}
             className="hero-dani-hand-img"
             src={heroDaniHand}
             alt=""
             aria-hidden="true"
             width="755"
             height="1165"
-            animate={
-              reduceMotion
-                ? {}
-                : {
-                    // ترقّب خفيف ثم تلويح حماسي بعدة لوحات واضحة قبل أن تخفت تدريجياً
-                    rotate: [0, -10, 32, -26, 30, -22, 24, -14, 6, 0],
-                    scale: [1, 0.95, 1.1, 0.96, 1.08, 0.98, 1.05, 1, 1, 1],
-                  }
-            }
-            transition={{
-              duration: 2,
-              times: [0, 0.06, 0.2, 0.32, 0.44, 0.55, 0.66, 0.78, 0.9, 1],
-              ease: ["easeIn", "easeOut", "easeInOut", "easeInOut", "easeInOut", "easeInOut", "easeInOut", "easeInOut", "easeOut"],
-              repeat: Infinity,
-              repeatDelay: 1.4,
-            }}
           />
         </motion.div>
         <motion.div
