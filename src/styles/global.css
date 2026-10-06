@@ -317,12 +317,7 @@ ul { list-style: none; }
   width: clamp(180px, 26vw, 420px);
   transform-origin: 50% 100%;
 }
-.hero-dani-figure { position: relative; filter: drop-shadow(0 18px 20px rgba(17,24,39,.22)); }
-.hero-dani-body-img, .hero-dani-hand-img { width: 100%; height: auto; display: block; }
-.hero-dani-hand-img {
-  position: absolute; inset: 0; height: 100%;
-  transform-origin: 82% 41%; /* معصم داني — محور حركة التلويح */
-}
+.hero-dani-img { width: 100%; height: auto; display: block; filter: drop-shadow(0 18px 20px rgba(17,24,39,.22)); }
 .hero-dani-shadow {
   position: absolute; left: 50%; bottom: 2%; width: 62%; height: 8%;
   transform: translateX(-50%); border-radius: 50%;
