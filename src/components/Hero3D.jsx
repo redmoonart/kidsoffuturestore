@@ -4,7 +4,8 @@ import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion
 import { useI18n, Trans } from "../i18n/I18nContext";
 import { isNarrowViewport } from "../lib/deviceCapability";
 import heroBgScene from "../assets/hero-bg-scene.webp";
-import heroDani from "../assets/hero-dani.webp";
+import heroDaniBody from "../assets/hero-dani-body.webp";
+import heroDaniHand from "../assets/hero-dani-hand.webp";
 
 const container = {
   hidden: {},
@@ -78,23 +79,30 @@ export default function Hero3D() {
         style={{ y: daniY, scale: daniScale, rotate: daniRotate, opacity: daniOpacity }}
       >
         <motion.div className="hero-dani-shadow" style={{ scale: shadowScale }} aria-hidden="true" />
-        <motion.img
-          className="hero-dani-img"
-          src={heroDani}
-          alt="Dani"
-          fetchPriority="high"
-          width="755"
-          height="1165"
-          animate={
-            reduceMotion
-              ? {}
-              : { y: [0, -9, 0], rotate: [0, 0, -5, 6, -5, 6, -2, 0, 0] }
-          }
-          transition={{
-            y: { duration: 4.5, repeat: Infinity, ease: "easeInOut" },
-            rotate: { duration: 7, repeat: Infinity, repeatDelay: 2.5, ease: "easeInOut" },
-          }}
-        />
+        <motion.div
+          className="hero-dani-figure"
+          animate={reduceMotion ? {} : { y: [0, -9, 0] }}
+          transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <img
+            className="hero-dani-body-img"
+            src={heroDaniBody}
+            alt="Dani"
+            fetchPriority="high"
+            width="755"
+            height="1165"
+          />
+          <motion.img
+            className="hero-dani-hand-img"
+            src={heroDaniHand}
+            alt=""
+            aria-hidden="true"
+            width="755"
+            height="1165"
+            animate={reduceMotion ? {} : { rotate: [0, 0, -14, 18, -14, 18, -6, 0, 0] }}
+            transition={{ duration: 7, repeat: Infinity, repeatDelay: 2.5, ease: "easeInOut" }}
+          />
+        </motion.div>
         <motion.div
           className="hero-dani-bubble"
           initial={{ opacity: 0, scale: 0.4, y: 10 }}
