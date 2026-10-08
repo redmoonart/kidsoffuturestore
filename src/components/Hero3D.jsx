@@ -102,19 +102,6 @@ export default function Hero3D() {
       <motion.div className="hero-foreground-grass" style={{ y: foreY }} aria-hidden="true" />
 
       <motion.div
-        className="hero-brand-badge"
-        initial={{ opacity: 0, scale: 0.7, y: -14 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ type: "spring", stiffness: 240, damping: 20, delay: reduceMotion ? 0.35 : 0.9 }}
-      >
-        <span className="hbb-rocket" aria-hidden="true">🚀</span>
-        <span className="hbb-text">
-          <strong>Kids</strong>
-          <em>of the Future</em>
-        </span>
-      </motion.div>
-
-      <motion.div
         className="hero-chip"
         initial={{ opacity: 0, scale: 0.7, y: 10 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}

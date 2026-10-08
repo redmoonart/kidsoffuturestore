@@ -14,13 +14,6 @@ import Hero3D from "../components/Hero3D";
 import { AGE_BANDS, inBand } from "../lib/ages";
 import { getRecent } from "../lib/recent";
 
-const FEATURES = [
-  ["🚚", "feat.delivery_t", "feat.delivery_d"],
-  ["💵", "feat.cod_t", "feat.cod_d"],
-  ["🔄", "feat.exchange_t", "feat.exchange_d"],
-  ["📞", "feat.support_t", "feat.support_d"],
-];
-
 export default function Home() {
   const { t, lang, meta } = useI18n();
   const { products } = useProducts();
@@ -40,14 +33,10 @@ export default function Home() {
   const [recentIds] = useState(getRecent);
   const recent = recentIds.map((id) => products.find((p) => p.id === id)).filter(Boolean).slice(0, 4);
 
-  const catsRef = useRef(null);
-  const { scrollYProgress: catsScroll } = useScroll({ target: catsRef, offset: ["start 85%", "end 30%"] });
 
   const schoolRef = useRef(null);
   const { scrollYProgress: schoolScroll } = useScroll({ target: schoolRef, offset: ["start 90%", "end 20%"] });
 
-  const ctaRef = useRef(null);
-  const { scrollYProgress: ctaScroll } = useScroll({ target: ctaRef, offset: ["start 90%", "end 40%"] });
 
   return (
     <>
@@ -72,24 +61,8 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="section-sm">
-        <div className="wrap">
-          <div className="features">
-            {FEATURES.map(([ic, tt, dd], i) => (
-              <Reveal key={tt} className="feature" delay={i * 0.06}>
-                <div className="ic">{ic}</div>
-                <h3>{t(tt)}</h3>
-                <p>{t(dd)}</p>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* الفئات — أول محطة سردية بعد الهيرو: العالم يستمر بالتحرك */}
-      <section className="section icon-stage" ref={catsRef}>
-        <FloatIcon emoji="🚗" scrollYProgress={catsScroll} range={[50, -50]} axis="y" depth="mid"
-          top="8%" left="4%" size="2.4rem" className="decor-icon-extra" />
+      <section className="section">
         <div className="wrap">
           <ScrollReveal className="section-head" scale={0.94}>
             <span className="kicker">{t("cats.kicker")}</span>
@@ -195,7 +168,6 @@ export default function Home() {
         </section>
       )}
 
-      {/* CTA نهائي — محطة الوصول: صاروخ، نجمة، هدية، ثم الدعوة الكبيرة */}
       {recent.length >= 2 && (
         <section className="section-sm">
           <div className="wrap">
@@ -211,13 +183,8 @@ export default function Home() {
         </section>
       )}
 
-      <section className="section-sm icon-stage" ref={ctaRef}>
-        <FloatIcon emoji="⭐" scrollYProgress={ctaScroll} range={[20, -30]} depth="bg"
-          top="0%" left="8%" size="1.8rem" delay={0.1} className="decor-icon-extra" />
-        <FloatIcon emoji="🎁" scrollYProgress={ctaScroll} range={[15, -15]} depth="fg"
-          bottom="4%" right="6%" size="2.2rem" delay={0.25} />
-        <FloatIcon emoji="🚀" scrollYProgress={ctaScroll} range={[80, -20]} depth="fg"
-          bottom="-4%" left="6%" size="2.4rem" delay={0} />
+      {/* CTA نهائي */}
+      <section className="section-sm">
         <div className="wrap">
           <Reveal className="cod-banner" delay={0.4}>
             <span className="em">💵</span>

@@ -898,7 +898,7 @@ body::before {
 /* ملخص الطلب / لوحات — عمق زجاجي */
 .summary { box-shadow: 0 24px 50px rgba(17,24,39,.14); background: linear-gradient(180deg, #fff, #fcfbff); }
 .cod-banner { box-shadow: 0 24px 50px rgba(14,169,154,.35); position: relative; overflow: hidden; }
-.cod-banner::after { content: "🎈"; position: absolute; font-size: 7rem; opacity: .18; inset-inline-end: 12px; bottom: -18px; transform: rotate(-10deg); }
+/* (أزيل البالون الزخرفي: كان يغطي زر الدعوة) */
 .prose { box-shadow: 0 18px 40px rgba(17,24,39,.10); }
 
 .page-head { position: relative; overflow: hidden; }
@@ -1467,3 +1467,36 @@ main:focus { outline: none; }
 .not-found h1 { font-size: 1.8rem; margin: 8px 0; }
 .order-summary li span:last-child { white-space: nowrap; font-weight: 700; color: var(--ink); }
 .skip-link:not(:focus) { clip-path: inset(50%); }
+
+/* ============================================================
+   صقل بصري: ترتيب، توازن، ومساحات أنظف
+   ============================================================ */
+.hero-copy h1 { text-wrap: balance; }
+.section-head h2, .section-head p { text-wrap: balance; }
+
+/* شبكة الأعمار تتمدّد حسب عدد الفئات بدل ترك فراغ */
+.age-grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 104px), 1fr)); gap: 16px; }
+@media (max-width: 760px) { .age-grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 96px), 1fr)); gap: 10px; } }
+.age-card { padding: 26px 12px; }
+@media (max-width: 760px) {
+  .age-card { padding: 18px 6px; }
+  .age-card .age-emoji { font-size: 2rem; }
+  .age-card .age-range { font-size: 1rem; }
+}
+
+/* بطاقة المنتج: عنوان بسطرين كحد أقصى، سعر واضح، زر أسهل للّمس */
+.pcard h3 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.pcard .price .now { font-size: 1.25rem; font-weight: 900; }
+.pcard .actions .btn { min-height: 42px; font-size: .92rem; }
+.pcard .price .old { white-space: nowrap; }
+
+/* فئات الشريط: نص لا ينكسر بشكل غريب */
+.cat-chip h3 { text-wrap: balance; }
+
+/* زر الرجوع للأعلى أصغر على الموبايل كي لا يغطي أزرار البطاقات */
+@media (max-width: 760px) {
+  .back-to-top { width: 42px; height: 42px; bottom: 14px; inset-inline-end: 12px; font-size: 1.15rem; opacity: .92; }
+}
+
+/* شريط الدفع عند الاستلام: زر أوضح */
+.cod-banner .btn { min-height: 48px; padding-inline: 26px; font-weight: 800; }
