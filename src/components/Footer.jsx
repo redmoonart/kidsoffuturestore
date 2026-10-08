@@ -35,7 +35,10 @@ export default function Footer() {
             <Link to="/about">{t("nav.about")}</Link>
             <Link to="/contact">{t("nav.contact")}</Link>
             <Link to="/contact#faq">{t("footer.faq")}</Link>
-            <a href={`${import.meta.env.BASE_URL}privacy-policy.html`}>{t("footer.privacy")}</a>
+            <Link to="/policies#delivery">{t("footer.delivery")}</Link>
+            <Link to="/policies#returns">{t("footer.returns")}</Link>
+            <Link to="/policies#terms">{t("footer.terms")}</Link>
+            <Link to="/policies#privacy">{t("footer.privacy")}</Link>
           </div>
           <div>
             <h4>{t("footer.contact_us")}</h4>

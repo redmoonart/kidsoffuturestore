@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, useCallback, useMemo } from "react";
-import { supabase } from "../lib/supabaseClient";
+import { restSelect } from "../lib/rest";
 
 const ProductsContext = createContext(null);
 
@@ -33,9 +33,9 @@ export function ProductsProvider({ children }) {
 
   const refresh = useCallback(async () => {
     setLoading(true);
-    const { data, error: err } = await supabase.from("products").select("*").order("id");
+    const { data, error: err } = await restSelect("products", "select=*&order=id.asc");
     if (err) {
-      setError(err.message);
+      setError(err);
     } else {
       setError(null);
       setProducts(data.map(fromRow));

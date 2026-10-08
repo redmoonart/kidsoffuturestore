@@ -10,6 +10,23 @@ import StaggerGrid from "../components/StaggerGrid";
 import SEO from "../components/SEO";
 import { pName } from "../lib/product";
 
+const AGE_BANDS = [
+  { id: "0-2", min: 0, max: 2 },
+  { id: "3-5", min: 3, max: 5 },
+  { id: "6-8", min: 6, max: 8 },
+  { id: "9+", min: 9, max: 99 },
+];
+const PRICE_BANDS = [
+  { id: "lt1000", min: 0, max: 999 },
+  { id: "1000-2500", min: 1000, max: 2500 },
+  { id: "2500-5000", min: 2501, max: 5000 },
+  { id: "gt5000", min: 5001, max: Infinity },
+];
+const minAge = (p) => {
+  const m = /(\d+)/.exec(p.ageGroup || "");
+  return m ? Number(m[1]) : null;
+};
+
 export default function Shop() {
   const { t, lang } = useI18n();
   const { products } = useProducts();
@@ -17,25 +34,53 @@ export default function Shop() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [cat, setCat] = useState(searchParams.get("cat") || "all");
   const subcat = searchParams.get("subcat") || "";
+  const age = searchParams.get("age") || "";
+  const price = searchParams.get("price") || "";
+  const onlySale = searchParams.get("sale") === "1";
+  const onlyStock = searchParams.get("instock") === "1";
   const [q, setQ] = useState("");
+
+  // تحديث فلتر واحد في الرابط مع الإبقاء على الباقي (حتى يمكن مشاركة رابط المتجر مفلتراً)
+  function setFilter(key, value) {
+    const next = new URLSearchParams(searchParams);
+    if (value) next.set(key, value);
+    else next.delete(key);
+    setSearchParams(next, { replace: true });
+  }
+  function clearFilters() {
+    const next = new URLSearchParams(searchParams);
+    ["age", "price", "sale", "instock"].forEach((k) => next.delete(k));
+    setSearchParams(next, { replace: true });
+  }
+  const hasFilters = !!(age || price || onlySale || onlyStock);
   const [sort, setSort] = useState("default");
 
   useEffect(() => {
     setCat(searchParams.get("cat") || "all");
   }, [searchParams]);
 
+  // تغيير الفئة/الصنف يحافظ على فلاتر العمر والسعر المختارة
+  function withFilters(base) {
+    const next = new URLSearchParams(base);
+    ["age", "price", "sale", "instock"].forEach((k) => {
+      const v = searchParams.get(k);
+      if (v) next.set(k, v);
+    });
+    return next;
+  }
+
   function handleCat(c) {
     setCat(c);
-    setSearchParams(c === "all" ? {} : { cat: c });
+    setSearchParams(withFilters(c === "all" ? {} : { cat: c }));
   }
 
   function handleSub(slug) {
     if (!slug) {
-      setSearchParams(cat === "all" ? {} : { cat });
+      setSearchParams(withFilters(cat === "all" ? {} : { cat }));
       return;
     }
     const sub = subcategories.find((s) => s.slug === slug);
-    setSearchParams(sub ? { cat: sub.category, subcat: slug } : { subcat: slug });
+    setSearchParams(withFilters(sub ? { cat: sub.category, subcat: slug } : { subcat: slug }));
   }
 
   // الأصناف الظاهرة: أصناف الفئة المختارة (أو كل الأصناف)، مع إخفاء الأصناف الفارغة
@@ -53,6 +98,16 @@ export default function Shop() {
     let l = products.slice();
     if (cat !== "all") l = l.filter((p) => p.category === cat);
     if (subcat) l = l.filter((p) => p.subCategory === subcat);
+    if (age) {
+      const b = AGE_BANDS.find((x) => x.id === age);
+      if (b) l = l.filter((p) => { const a = minAge(p); return a != null && a >= b.min && a <= b.max; });
+    }
+    if (price) {
+      const b = PRICE_BANDS.find((x) => x.id === price);
+      if (b) l = l.filter((p) => p.price >= b.min && p.price <= b.max);
+    }
+    if (onlySale) l = l.filter((p) => p.oldPrice && p.oldPrice > p.price);
+    if (onlyStock) l = l.filter((p) => p.stock !== false);
     if (q) {
       const qq = q.trim().toLowerCase();
       l = l.filter((p) =>
@@ -63,7 +118,9 @@ export default function Shop() {
     else if (sort === "price-desc") l.sort((a, b) => b.price - a.price);
     else if (sort === "name") l.sort((a, b) => pName(a, lang).localeCompare(pName(b, lang), lang));
     return l;
-  }, [products, cat, subcat, q, sort, lang]);
+  }, [products, cat, subcat, q, sort, lang, age, price, onlySale, onlyStock]);
+
+  const hasAges = useMemo(() => products.some((p) => minAge(p) != null), [products]);
 
   return (
     <>
@@ -99,6 +156,31 @@ export default function Shop() {
                 ))}
               </div>
             )}
+            <div className="filter-rows">
+              {hasAges && (
+                <div className="filter-row" role="group" aria-label={t("shop.f_age")}>
+                  <span className="filter-label">👶 {t("shop.f_age")}</span>
+                  {AGE_BANDS.map((b) => (
+                    <button key={b.id} className={`chip chip-sm${age === b.id ? " active" : ""}`} aria-pressed={age === b.id} onClick={() => setFilter("age", age === b.id ? "" : b.id)}>
+                      {t("shop.age_band", { v: b.id })}
+                    </button>
+                  ))}
+                </div>
+              )}
+              <div className="filter-row" role="group" aria-label={t("shop.f_price")}>
+                <span className="filter-label">💰 {t("shop.f_price")}</span>
+                {PRICE_BANDS.map((b) => (
+                  <button key={b.id} className={`chip chip-sm${price === b.id ? " active" : ""}`} aria-pressed={price === b.id} onClick={() => setFilter("price", price === b.id ? "" : b.id)}>
+                    {t(`shop.price_${b.id}`)}
+                  </button>
+                ))}
+              </div>
+              <div className="filter-row">
+                <button className={`chip chip-sm${onlySale ? " active" : ""}`} aria-pressed={onlySale} onClick={() => setFilter("sale", onlySale ? "" : "1")}>🏷️ {t("shop.f_sale")}</button>
+                <button className={`chip chip-sm${onlyStock ? " active" : ""}`} aria-pressed={onlyStock} onClick={() => setFilter("instock", onlyStock ? "" : "1")}>✅ {t("shop.f_instock")}</button>
+                {hasFilters && <button className="filter-clear" onClick={clearFilters}>✕ {t("shop.f_clear")}</button>}
+              </div>
+            </div>
             <div className="toolbar-tools">
               <div className="search-box">
                 <input type="search" placeholder={t("shop.search_ph")} value={q} onChange={(e) => setQ(e.target.value)} />
@@ -129,6 +211,7 @@ export default function Shop() {
               <div className="em">🔍</div>
               <h3>{t("shop.no_results_t")}</h3>
               <p>{t("shop.no_results_p")}</p>
+              {hasFilters && <button className="btn btn-ghost" style={{ marginTop: 12 }} onClick={clearFilters}>✕ {t("shop.f_clear")}</button>}
             </div>
           )}
         </div>

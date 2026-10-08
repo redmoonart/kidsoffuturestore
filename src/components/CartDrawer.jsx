@@ -6,6 +6,7 @@ import { useCart } from "../cart/CartContext";
 import { STORE_CONFIG } from "../data/config";
 import { pName } from "../lib/product";
 import { money } from "../lib/format";
+import ProductImage from "./ProductImage";
 
 export default function CartDrawer() {
   const { t, lang, meta } = useI18n();
@@ -64,7 +65,7 @@ export default function CartDrawer() {
                     return (
                       <div className="cart-drawer-row" key={i.id}>
                         <Link to={`/product/${p.id}`} className="thumb" onClick={closeDrawer}>
-                          {p.image ? <img src={p.image} alt={pName(p, lang)} /> : <span>{p.emoji || "🎁"}</span>}
+                          <ProductImage src={p.image} emoji={p.emoji} alt={pName(p, lang)} />
                         </Link>
                         <div className="cart-drawer-info">
                           <h4>{pName(p, lang)}</h4>

@@ -5,6 +5,7 @@ import { useI18n, Trans } from "../i18n/I18nContext";
 import { isNarrowViewport } from "../lib/deviceCapability";
 import heroBgScene from "../assets/hero-bg-scene.webp";
 import heroDani from "../assets/hero-dani.webp";
+import heroDani420 from "../assets/hero-dani-420.webp";
 
 const container = {
   hidden: {},
@@ -81,6 +82,8 @@ export default function Hero3D() {
         <img
           className="hero-dani-img"
           src={heroDani}
+          srcSet={`${heroDani420} 420w, ${heroDani} 755w`}
+          sizes="(max-width: 1024px) 40vw, 26vw"
           alt="Dani"
           fetchPriority="high"
           width="755"

@@ -11,20 +11,35 @@ import { pName, wName } from "../lib/product";
 import { money } from "../lib/format";
 import { saveOrder, makeOrderRef } from "../lib/orders";
 import { burstConfetti } from "../lib/cartFx";
+import { getSavedWilaya, saveWilaya } from "../lib/wilayaPref";
+import ProductImage from "../components/ProductImage";
 
 export default function Cart() {
   const { t, lang } = useI18n();
   const { cart, byId, setQty, removeFromCart, clearCart, subtotal } = useCart();
 
   const [deliveryType, setDeliveryType] = useState("home");
-  const [wilayaCode, setWilayaCode] = useState("");
+  const [wilayaCode, setWilayaCode] = useState(() => {
+    const saved = getSavedWilaya();
+    return WILAYAS.some((w) => String(w.code) === saved && w.available !== false) ? saved : "";
+  });
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [city, setCity] = useState("");
+  const [commune, setCommune] = useState("");
+  const [communes, setCommunes] = useState(null);
+
+  // قائمة البلديات (1541 بلدية) تُحمَّل فقط عند فتح السلة
+  useEffect(() => {
+    let alive = true;
+    import("../data/communes.json").then((m) => alive && setCommunes(m.default)).catch(() => {});
+    return () => { alive = false; };
+  }, []);
   const [notes, setNotes] = useState("");
   const [errors, setErrors] = useState({});
 
   const wilaya = WILAYAS.find((w) => w.code === Number(wilayaCode));
+  const wilayaCommunes = (wilaya && communes?.[String(wilaya.code)]) || [];
   const officeAvailable = !!(wilaya && wilaya.office != null);
   const effectiveType = deliveryType === "office" && !officeAvailable ? "home" : deliveryType;
   const isFree = STORE_CONFIG.freeShippingThreshold && subtotal >= STORE_CONFIG.freeShippingThreshold;
@@ -53,8 +68,9 @@ export default function Cart() {
     const phoneOk = /^0[5-7]\d{8}$/.test(phone.replace(/\s/g, ""));
     const nameOk = name.trim().length > 1;
     const wilayaOk = !!wilaya && wilaya.available !== false;
-    setErrors({ name: !nameOk, phone: !phoneOk, wilaya: !wilayaOk });
-    if (!nameOk || !phoneOk || !wilayaOk || sending) return;
+    const communeOk = !wilayaOk || !wilayaCommunes.length || !!commune;
+    setErrors({ name: !nameOk, phone: !phoneOk, wilaya: !wilayaOk, commune: !communeOk });
+    if (!nameOk || !phoneOk || !wilayaOk || !communeOk || sending) return;
 
     const price = effectiveType === "office" ? wilaya.office : wilaya.home;
     const delFinal = isFree ? 0 : price;
@@ -75,7 +91,7 @@ export default function Cart() {
       customer_name: name.trim(),
       phone: phone.replace(/\s/g, ""),
       wilaya: `${wilaya.code} - ${wilaya.name}`,
-      address: city.trim() || null,
+      address: [commune, city.trim()].filter(Boolean).join(" — ") || null,
       delivery_type: effectiveType,
       delivery_price: delFinal,
       items,
@@ -145,7 +161,7 @@ export default function Cart() {
                     return (
                       <div className="cart-row" key={i.id}>
                         <Link to={`/product/${p.id}`} className="thumb">
-                          {p.image ? <img src={p.image} alt={pName(p, lang)} /> : <span>{p.emoji || "🎁"}</span>}
+                          <ProductImage src={p.image} emoji={p.emoji} alt={pName(p, lang)} />
                         </Link>
                         <div>
                           <h4>{pName(p, lang)}</h4>
@@ -203,7 +219,7 @@ export default function Cart() {
                   </div>
                   <div className="form-row">
                     <label>{t("cart.f_wilaya")} <span className="req">*</span></label>
-                    <select value={wilayaCode} onChange={(e) => setWilayaCode(e.target.value)}>
+                    <select value={wilayaCode} onChange={(e) => { setWilayaCode(e.target.value); saveWilaya(e.target.value); setCommune(""); }}>
                       <option value="">{t("cart.choose_wilaya")}</option>
                       {WILAYAS.map((w) => (
                         <option key={w.code} value={w.code} disabled={w.available === false}>
@@ -216,8 +232,18 @@ export default function Cart() {
                     </div>
                   </div>
                   <div className="form-row">
-                    <label>{t("cart.f_city")}</label>
-                    <input type="text" placeholder={t("cart.ph_city")} value={city} onChange={(e) => setCity(e.target.value)} />
+                    <label>{t("cart.f_commune")} {wilayaCommunes.length > 0 && <span className="req">*</span>}</label>
+                    <select value={commune} onChange={(e) => { setCommune(e.target.value); setErrors((er) => ({ ...er, commune: false })); }} disabled={!wilayaCommunes.length}>
+                      <option value="">{wilaya ? t("cart.choose_commune") : t("cart.choose_wilaya_first")}</option>
+                      {wilayaCommunes.map(([ar, latin]) => (
+                        <option key={latin} value={ar}>{lang === "ar" ? ar : latin}</option>
+                      ))}
+                    </select>
+                    <div className={`field-error${errors.commune ? " show" : ""}`}>{t("cart.err_commune")}</div>
+                  </div>
+                  <div className="form-row">
+                    <label>{t("cart.f_address")}</label>
+                    <input type="text" placeholder={t("cart.ph_address")} value={city} onChange={(e) => setCity(e.target.value)} autoComplete="street-address" />
                   </div>
                   <div className="form-row">
                     <label>{t("cart.dtype")}</label>
@@ -239,6 +265,9 @@ export default function Cart() {
                   {saveError && <p className="field-error show" role="alert" style={{ marginBottom: 10 }}>{t("cart.save_err")}</p>}
                   <button type="submit" className="btn btn-primary btn-block btn-lg" disabled={sending}>{sending ? t("cart.sending") : t("cart.submit")}</button>
                   <p style={{ textAlign: "center", color: "var(--muted)", fontSize: ".82rem", marginTop: 10 }}>{t("cart.cod_note")}</p>
+                  <p className="checkout-policies">
+                    {t("cart.agree_pre")} <Link to="/policies#terms">{t("footer.terms")}</Link> · <Link to="/policies#returns">{t("footer.returns")}</Link>
+                  </p>
                 </form>
               </div>
             </Reveal>

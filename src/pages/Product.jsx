@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useI18n } from "../i18n/I18nContext";
 import { useCart } from "../cart/CartContext";
@@ -10,8 +10,12 @@ import Reveal from "../components/Reveal";
 import StaggerGrid from "../components/StaggerGrid";
 import ScrollReveal from "../components/ScrollReveal";
 import SEO from "../components/SEO";
+import DeliveryEstimate from "../components/DeliveryEstimate";
+import StickyBuyBar from "../components/StickyBuyBar";
+import ShareButtons from "../components/ShareButtons";
 import { pName, pDesc } from "../lib/product";
 import { money } from "../lib/format";
+import ProductImage from "../components/ProductImage";
 
 export default function Product() {
   const { id } = useParams();
@@ -23,6 +27,7 @@ export default function Product() {
 
   const p = products.find((x) => x.id === Number(id));
   const [activeImg, setActiveImg] = useState(null);
+  const actionsRef = useRef(null);
 
   useEffect(() => {
     setQty(1);
@@ -92,7 +97,7 @@ export default function Product() {
           <Reveal className="product-stage" y={28}>
             <div className="stage-glow" />
             <TiltCard className="gallery">
-              {shownImg ? <img src={shownImg} alt={pName(p, lang)} /> : <span>{p.emoji || "🎁"}</span>}
+              <ProductImage src={shownImg} emoji={p.emoji} alt={pName(p, lang)} />
               {disc > 0 && !out && <span className="disc">-{disc}%</span>}
             </TiltCard>
             {gallery.length > 1 && (
@@ -122,13 +127,14 @@ export default function Product() {
               {p.ageGroup && <span className="tag">{t("pdp.age", { v: p.ageGroup })}</span>}
               <span className="tag">{t("pdp.cod_tag")}</span>
               <span className="tag">{t("pdp.delivery_tag")}</span>
+              <span className="tag">{t("pdp.exchange_tag")}</span>
             </div>
             <p>
               {out ? <span className="out-stock">{t("pdp.out_stock")}</span> : <span className="in-stock">{t("pdp.in_stock")}</span>}
               {lowStock && <span className="low-stock-badge">{t("pdp.low_stock", { v: p.stockQty })}</span>}
             </p>
             {!out && (
-              <div className="pdp-actions">
+              <div className="pdp-actions" ref={actionsRef}>
                 <div className="qty">
                   <button type="button" onClick={() => setQty((v) => Math.max(1, v - 1))}>−</button>
                   <input type="text" value={qty} inputMode="numeric" readOnly />
@@ -138,8 +144,11 @@ export default function Product() {
                 <button className="btn btn-accent btn-lg" onClick={handleBuy} disabled={out}>{t("pdp.buy")}</button>
               </div>
             )}
+            {!out && <DeliveryEstimate />}
+            <ShareButtons title={pName(p, lang)} />
           </Reveal>
         </div>
+        {!out && <StickyBuyBar targetRef={actionsRef} price={p.price * qty} onAdd={handleAdd} onBuy={handleBuy} />}
         {related.length > 0 && (
           <>
             <div className="section-sm" />

@@ -1,4 +1,4 @@
-import { supabase } from "./supabaseClient";
+import { restInsert } from "./rest";
 
 // رقم طلب قصير يظهر للزبون بعد الطلب وفي تطبيق "إدارة متجري" (مثال: KF-M3X9A7-4Q)
 export function makeOrderRef() {
@@ -10,17 +10,12 @@ export function makeOrderRef() {
 // يحفظ الطلب في جدول orders. لا نطلب .select() لأن الزائر لا يملك صلاحية القراءة.
 // يرجع true عند النجاح و false عند الفشل (لا يرمي خطأ).
 export async function saveOrder(order) {
-  try {
-    const { error } = await supabase.from("orders").insert(order);
-    if (error) {
-      console.error("Order save failed:", error.message);
-      return false;
-    }
-    return true;
-  } catch (err) {
-    console.error("Order save failed:", err);
+  const { error } = await restInsert("orders", order);
+  if (error) {
+    console.error("Order save failed:", error);
     return false;
   }
+  return true;
 }
 
 export const ORDER_STATUSES = [

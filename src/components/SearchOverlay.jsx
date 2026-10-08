@@ -6,6 +6,7 @@ import { useProducts } from "../data/ProductsContext";
 import { STORE_CONFIG } from "../data/config";
 import { pName } from "../lib/product";
 import { fmt } from "../lib/format";
+import ProductImage from "./ProductImage";
 
 export default function SearchOverlay({ open, onClose }) {
   const { t, lang } = useI18n();
@@ -87,7 +88,7 @@ export default function SearchOverlay({ open, onClose }) {
                   results.map((p) => (
                     <button key={p.id} className="search-result-row" onClick={() => goToProduct(p.id)}>
                       <span className="thumb">
-                        {p.image ? <img src={p.image} alt={pName(p, lang)} /> : <span>{p.emoji || "🎁"}</span>}
+                        <ProductImage src={p.image} emoji={p.emoji} alt={pName(p, lang)} />
                       </span>
                       <span className="info">
                         <span className="name">{pName(p, lang)}</span>

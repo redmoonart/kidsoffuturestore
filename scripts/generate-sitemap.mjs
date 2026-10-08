@@ -4,7 +4,7 @@
 import { writeFileSync } from "node:fs";
 import { STORE_CONFIG } from "../src/data/config.js";
 
-const STATIC_PATHS = ["", "shop", "about", "contact"];
+const STATIC_PATHS = ["", "shop", "about", "contact", "policies"];
 
 async function fetchProductIds() {
   const url = process.env.VITE_SUPABASE_URL;

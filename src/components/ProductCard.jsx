@@ -6,6 +6,7 @@ import { useCart } from "../cart/CartContext";
 import { STORE_CONFIG } from "../data/config";
 import { pName } from "../lib/product";
 import { fmt } from "../lib/format";
+import ProductImage from "./ProductImage";
 
 export default function ProductCard({ product }) {
   const { t, lang } = useI18n();
@@ -25,11 +26,7 @@ export default function ProductCard({ product }) {
   return (
     <TiltCard className="pcard" as="article">
       <Link to={`/product/${product.id}`} className="thumb">
-        {product.image ? (
-          <img src={product.image} alt={pName(product, lang)} loading="lazy" />
-        ) : (
-          <span>{product.emoji || "🎁"}</span>
-        )}
+        <ProductImage src={product.image} emoji={product.emoji} alt={pName(product, lang)} loading="lazy" />
         {product.badge && !out && !lowStock && <span className="badge">{product.badge}</span>}
         {lowStock && <span className="badge low-stock">{t("pdp.low_stock", { v: product.stockQty })}</span>}
         {out && <span className="badge out">{t("card.out")}</span>}

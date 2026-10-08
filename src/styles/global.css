@@ -401,10 +401,10 @@ ul { list-style: none; }
 
 /* صورة الشعار (رأس الثعلب) بدل الإيموجي */
 .brand .logo.logo-img {
-  background-image: url("../assets/hero.webp");
+  background-image: url("../assets/logo-dani.webp");
   background-repeat: no-repeat;
-  background-size: 300%;
-  background-position: 18% 30%;
+  background-size: cover;
+  background-position: center;
   font-size: 0;
 }
 .footer .brand .logo.logo-img { box-shadow: 0 4px 12px rgba(0,0,0,.3); }
@@ -1337,3 +1337,84 @@ select.select:focus-visible {
   border-radius: 999px; background: var(--bg); color: var(--muted); font-size: .75rem; line-height: 18px;
 }
 .chip.active .chip-count { background: rgba(255,255,255,.25); color: #fff; }
+
+/* ============================================================
+   صفحة السياسات
+   ============================================================ */
+.policies { max-width: 860px; }
+.policy-tabs {
+  display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;
+  position: sticky; top: calc(var(--header-h, 70px) + 8px); z-index: 5;
+  background: rgba(255,255,255,.92); backdrop-filter: blur(8px);
+  padding: 8px; border-radius: 999px; border: 1px solid var(--line); box-shadow: 0 6px 18px rgba(17,24,39,.06);
+}
+.policy-tabs a { padding: 8px 14px; border-radius: 999px; font-weight: 700; font-size: .88rem; color: var(--ink); }
+.policy-tabs a:hover { background: var(--primary-light); color: var(--primary-text); }
+.policy-block { margin-bottom: 16px; }
+.policy-block h2 { margin-top: 0; scroll-margin-top: calc(var(--header-h, 70px) + 80px); }
+.legal-dl { display: grid; gap: 0; margin: 0; }
+.legal-dl > div { display: grid; grid-template-columns: minmax(120px, 34%) 1fr; gap: 12px; padding: 10px 0; border-bottom: 1px dashed var(--line); }
+.legal-dl > div:last-child { border-bottom: 0; }
+.legal-dl dt { color: var(--muted); font-weight: 700; font-size: .9rem; }
+.legal-dl dd { margin: 0; font-weight: 700; color: var(--ink); overflow-wrap: anywhere; }
+.policy-updated { color: var(--muted); font-size: .82rem; margin-top: 14px; }
+@media (max-width: 560px) {
+  .policy-tabs { border-radius: 18px; }
+  .policy-tabs a { flex: 1 1 calc(50% - 8px); text-align: center; }
+}
+.checkout-policies { text-align: center; color: var(--muted); font-size: .78rem; margin-top: 6px; }
+.checkout-policies a { color: var(--primary-text); font-weight: 700; text-decoration: underline; text-underline-offset: 2px; }
+
+/* ============================================================
+   صفحة المنتج: تقدير التوصيل، المشاركة، شريط الشراء الثابت
+   ============================================================ */
+.delivery-est {
+  margin-top: 18px; border: 1.5px solid var(--line); border-radius: 16px; padding: 14px 16px; background: #fff;
+}
+.delivery-est-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; font-weight: 800; font-size: .95rem; }
+.delivery-est-head select {
+  flex: 1 1 180px; max-width: 260px; border: 1.5px solid var(--line); border-radius: 10px; padding: 8px 10px;
+  font-family: inherit; font-size: .9rem; background: var(--bg); color: var(--ink); outline: none;
+}
+.delivery-est-head select:focus { border-color: var(--primary); }
+.delivery-est-rows { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 6px; }
+.delivery-est-rows li { display: flex; justify-content: space-between; gap: 12px; font-size: .9rem; color: var(--muted); }
+.delivery-est-rows strong { color: var(--ink); }
+.delivery-est-na { color: var(--danger); font-size: .85rem; margin-top: 10px; font-weight: 700; }
+.delivery-est-free { margin-top: 10px; font-size: .82rem; color: var(--ok); font-weight: 700; }
+
+.share-row { display: flex; align-items: center; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
+.share-label { color: var(--muted); font-size: .85rem; font-weight: 700; }
+.share-btn {
+  width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; cursor: pointer;
+  background: #fff; border: 1.5px solid var(--line); color: var(--ink); font-size: 1rem; font-weight: 800;
+  transition: transform .15s ease, border-color .15s ease;
+}
+.share-btn:hover { transform: translateY(-2px); border-color: var(--primary); }
+.share-btn.wa { color: #1fb959; }
+.share-btn.fb { color: #1877f2; font-family: Arial, sans-serif; }
+.share-copied { font-size: .8rem; color: var(--ok); font-weight: 700; }
+
+.sticky-buybar { display: none; }
+@media (max-width: 760px) {
+  .sticky-buybar {
+    display: flex; align-items: center; gap: 8px;
+    position: fixed; inset-inline: 0; bottom: 0; z-index: 70;
+    padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+    background: rgba(255,255,255,.96); backdrop-filter: blur(10px);
+    border-top: 1px solid var(--line); box-shadow: 0 -10px 26px rgba(17,24,39,.1);
+  }
+  .sticky-buybar-price { font-weight: 900; color: var(--primary); font-size: 1.05rem; white-space: nowrap; margin-inline-end: auto; }
+  .sticky-buybar .btn { padding: 11px 14px; font-size: .88rem; white-space: nowrap; }
+  body.buybar-open .whatsapp-fab, body.buybar-open .back-to-top { bottom: 84px; }
+}
+.whatsapp-fab, .back-to-top { transition: bottom .25s ease; }
+
+/* فلاتر المتجر */
+.filter-rows { display: grid; gap: 8px; width: 100%; }
+.filter-row { display: flex; align-items: center; gap: 6px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
+.filter-row::-webkit-scrollbar { display: none; }
+.filter-row .chip { flex: 0 0 auto; }
+.filter-label { flex: 0 0 auto; font-size: .8rem; font-weight: 800; color: var(--muted); margin-inline-end: 4px; }
+.filter-clear { flex: 0 0 auto; border: 0; background: none; color: var(--danger); font-weight: 800; font-size: .82rem; cursor: pointer; font-family: inherit; padding: 6px 8px; }
+.route-loading { min-height: 70vh; }

@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, useCallback, useMemo } from "react";
-import { supabase } from "../lib/supabaseClient";
+import { restSelect } from "../lib/rest";
 
 const SubcategoriesContext = createContext(null);
 
@@ -22,9 +22,9 @@ export function SubcategoriesProvider({ children }) {
 
   const refresh = useCallback(async () => {
     setLoading(true);
-    const { data, error: err } = await supabase.from("subcategories").select("*").order("sort_order");
+    const { data, error: err } = await restSelect("subcategories", "select=*&order=sort_order.asc");
     if (err) {
-      setError(err.message);
+      setError(err);
     } else {
       setError(null);
       setSubcategories(data.map(fromRow));

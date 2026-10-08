@@ -8,17 +8,14 @@ import BackToTop from "./components/BackToTop";
 import WhatsAppButton from "./components/WhatsAppButton";
 import { useCart } from "./cart/CartContext";
 import Home from "./pages/Home";
-import Shop from "./pages/Shop";
-import Product from "./pages/Product";
-import Cart from "./pages/Cart";
-import About from "./pages/About";
-import Contact from "./pages/Contact";
-import { AdminAuthProvider } from "./admin/AdminAuthContext";
-import RequireAdmin from "./admin/RequireAdmin";
-import { setupAdminPwa } from "./admin/pwa";
 
-const AdminLogin = lazy(() => import("./pages/AdminLogin"));
-const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
+const Shop = lazy(() => import("./pages/Shop"));
+const Product = lazy(() => import("./pages/Product"));
+const Cart = lazy(() => import("./pages/Cart"));
+const About = lazy(() => import("./pages/About"));
+const Contact = lazy(() => import("./pages/Contact"));
+const Policies = lazy(() => import("./pages/Policies"));
+const AdminApp = lazy(() => import("./admin/AdminApp"));
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -35,23 +32,10 @@ export default function App() {
   const isAdmin = pathname.startsWith("/admin");
 
   if (isAdmin) {
-    setupAdminPwa(); // تطبيق "إدارة متجري" (مرة واحدة فقط)
     return (
-      <AdminAuthProvider>
-        <Suspense fallback={null}>
-          <Routes>
-            <Route path="/admin/login" element={<AdminLogin />} />
-            <Route
-              path="/admin"
-              element={
-                <RequireAdmin>
-                  <AdminDashboard />
-                </RequireAdmin>
-              }
-            />
-          </Routes>
-        </Suspense>
-      </AdminAuthProvider>
+      <Suspense fallback={null}>
+        <AdminApp />
+      </Suspense>
     );
   }
 
@@ -60,6 +44,7 @@ export default function App() {
       <ScrollProgressBar />
       <ScrollToTop />
       <Header />
+      <Suspense fallback={<div className="route-loading" aria-hidden="true" />}>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/shop" element={<Shop />} />
@@ -67,7 +52,9 @@ export default function App() {
         <Route path="/cart" element={<Cart />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/policies" element={<Policies />} />
       </Routes>
+      </Suspense>
       <Footer />
       <CartDrawer />
       <BackToTop />
