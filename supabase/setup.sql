@@ -171,8 +171,6 @@ create table if not exists public.orders (
 alter table public.orders add column if not exists ref text unique check (char_length(ref) <= 20);
 alter table public.orders add column if not exists delivery_type text check (delivery_type in ('home','office'));
 alter table public.orders add column if not exists delivery_price integer check (delivery_price >= 0);
-alter table public.orders add column if not exists coupon_code text;
-alter table public.orders add column if not exists discount integer not null default 0 check (discount >= 0);
 
 alter table public.orders enable row level security;
 
@@ -195,35 +193,3 @@ create policy "Admins can delete orders" on public.orders
   for delete to authenticated using ((auth.jwt() ->> 'email') = 'aimen.bouss96@gmail.com');
 
 create index if not exists orders_created_at_idx on public.orders (created_at desc);
-
--- ============================================================
--- أكواد الخصم (coupons): يقرأها أي زائر عند إدخال الكود في السلة،
--- والمدير وحده يُنشئها/يعدّلها/يحذفها من لوحة الإدارة
--- ============================================================
-create table if not exists public.coupons (
-  code text primary key check (char_length(code) between 2 and 30),
-  type text not null check (type in ('percent','fixed')),
-  value integer not null check (value > 0),
-  active boolean not null default true,
-  min_order integer check (min_order >= 0),
-  expires_at timestamptz,
-  created_at timestamptz not null default now()
-);
-
-alter table public.coupons enable row level security;
-
-drop policy if exists "Public read coupons" on public.coupons;
-create policy "Public read coupons" on public.coupons
-  for select using (true);
-
-drop policy if exists "Admins can insert coupons" on public.coupons;
-create policy "Admins can insert coupons" on public.coupons
-  for insert to authenticated with check (true);
-
-drop policy if exists "Admins can update coupons" on public.coupons;
-create policy "Admins can update coupons" on public.coupons
-  for update to authenticated using (true) with check (true);
-
-drop policy if exists "Admins can delete coupons" on public.coupons;
-create policy "Admins can delete coupons" on public.coupons
-  for delete to authenticated using (true);

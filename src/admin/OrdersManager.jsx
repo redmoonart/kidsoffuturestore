@@ -205,7 +205,6 @@ function FragmentRow({ o, isOpen, onToggle, onStatus, onDelete, busy }) {
               🚚 {o.delivery_type === "office" ? "توصيل للمكتب" : "توصيل للمنزل"}
               {o.delivery_price != null ? ` — ${o.delivery_price} دج` : ""}
             </p>
-            {o.coupon_code && <p>🏷️ كود خصم: {o.coupon_code} (−{o.discount} دج)</p>}
             {o.address && <p>📍 {o.address}</p>}
             {o.notes && <p>📝 {o.notes}</p>}
           </td>

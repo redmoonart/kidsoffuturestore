@@ -10,7 +10,6 @@ import StaggerGrid from "../components/StaggerGrid";
 import { pName, wName } from "../lib/product";
 import { money } from "../lib/format";
 import { saveOrder, makeOrderRef } from "../lib/orders";
-import { checkCoupon } from "../lib/coupons";
 
 export default function Cart() {
   const { t, lang } = useI18n();
@@ -31,39 +30,8 @@ export default function Cart() {
   const deliveryPrice = wilaya ? (effectiveType === "office" ? wilaya.office : wilaya.home) : 0;
   const finalDelivery = isFree ? 0 : deliveryPrice;
 
-  const [couponCode, setCouponCode] = useState("");
-  const [coupon, setCoupon] = useState(null);
-  const [couponBusy, setCouponBusy] = useState(false);
-  const [couponError, setCouponError] = useState("");
-  const discount = coupon
-    ? coupon.type === "percent"
-      ? Math.round((subtotal * coupon.value) / 100)
-      : Math.min(coupon.value, subtotal)
-    : 0;
-
-  const total = subtotal + (wilaya ? finalDelivery : 0) - discount;
+  const total = subtotal + (wilaya ? finalDelivery : 0);
   const remain = STORE_CONFIG.freeShippingThreshold ? STORE_CONFIG.freeShippingThreshold - subtotal : 0;
-
-  async function handleApplyCoupon() {
-    const code = couponCode.trim();
-    if (!code) return;
-    setCouponBusy(true);
-    setCouponError("");
-    const result = await checkCoupon(code, subtotal);
-    setCouponBusy(false);
-    if (!result.ok) {
-      setCoupon(null);
-      setCouponError(t(result.reason, { v: result.minOrder }));
-      return;
-    }
-    setCoupon(result.coupon);
-  }
-
-  function handleRemoveCoupon() {
-    setCoupon(null);
-    setCouponCode("");
-    setCouponError("");
-  }
 
   const [sending, setSending] = useState(false);
   const [saveError, setSaveError] = useState(false);
@@ -79,7 +47,7 @@ export default function Cart() {
 
     const price = effectiveType === "office" ? wilaya.office : wilaya.home;
     const delFinal = isFree ? 0 : price;
-    const grandTotal = subtotal + delFinal - discount;
+    const grandTotal = subtotal + delFinal;
     const ref = makeOrderRef();
     const items = cart
       .map((i) => {
@@ -102,8 +70,6 @@ export default function Cart() {
       items,
       total: grandTotal,
       notes: notes.trim() || null,
-      coupon_code: coupon ? coupon.code : null,
-      discount,
     });
     setSending(false);
 
@@ -200,12 +166,6 @@ export default function Cart() {
                 <span>{t("cart.delivery")} {wilaya ? `(${wName(wilaya, lang)})` : ""}</span>
                 <span>{isFree ? t("cart.free") : wilaya ? money(finalDelivery, STORE_CONFIG.currency) : t("cart.by_wilaya")}</span>
               </div>
-              {coupon && (
-                <div className="line coupon-line">
-                  <span>{t("cart.coupon_applied")} ({coupon.code})</span>
-                  <span>−{money(discount, STORE_CONFIG.currency)}</span>
-                </div>
-              )}
               <div className="line total">
                 <span>{t("cart.total")}</span>
                 <span className="amount-flash">{money(total, STORE_CONFIG.currency)}</span>
@@ -216,28 +176,6 @@ export default function Cart() {
                 </div>
               ) : null}
               {isFree ? <div className="free-note">{t("cart.free_congrats")}</div> : null}
-
-              <div className="coupon-box">
-                {coupon ? (
-                  <div className="coupon-applied">
-                    <span>🏷️ {coupon.code}</span>
-                    <button type="button" className="btn btn-ghost btn-sm" onClick={handleRemoveCoupon}>{t("cart.coupon_remove")}</button>
-                  </div>
-                ) : (
-                  <div className="coupon-input-row">
-                    <input
-                      type="text"
-                      placeholder={t("cart.coupon_ph")}
-                      value={couponCode}
-                      onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
-                    />
-                    <button type="button" className="btn btn-ghost btn-sm" onClick={handleApplyCoupon} disabled={couponBusy || !couponCode.trim()}>
-                      {couponBusy ? "..." : t("cart.coupon_apply")}
-                    </button>
-                  </div>
-                )}
-                {couponError && <div className="field-error show">{couponError}</div>}
-              </div>
 
               <div style={{ marginTop: 20 }}>
                 <h3 style={{ fontSize: "1.1rem" }}>{t("cart.info_title")}</h3>

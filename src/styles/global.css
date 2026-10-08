@@ -610,13 +610,6 @@ select.select:hover, select.select:focus { color: var(--primary-text); backgroun
 .radio-card { border: 2px solid var(--line); border-radius: 12px; padding: 12px; cursor: pointer; font-weight: 700; font-size: .9rem; text-align: center; }
 .radio-card.active { border-color: var(--primary); background: var(--primary-light); color: var(--primary-text); }
 .field-error { color: var(--danger); font-size: .82rem; margin-top: 4px; display: none; }
-
-.summary .line.coupon-line { color: var(--ok); font-weight: 700; }
-.coupon-box { margin-top: 14px; }
-.coupon-input-row { display: flex; gap: 8px; }
-.coupon-input-row input { flex: 1; border: 2px solid var(--line); border-radius: 12px; padding: 10px 12px; font-family: inherit; outline: none; background: #fff; text-transform: uppercase; }
-.coupon-input-row input:focus { border-color: var(--primary); }
-.coupon-applied { display: flex; align-items: center; justify-content: space-between; background: #eafaf1; color: var(--ok); border-radius: 10px; padding: 8px 12px; font-weight: 700; }
 .field-error.show { display: block; }
 
 .empty-state { text-align: center; padding: 60px 20px; }
