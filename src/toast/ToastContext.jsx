@@ -16,10 +16,12 @@ export function ToastProvider({ children }) {
   return (
     <ToastContext.Provider value={showToast}>
       {children}
+      <div className="sr-only" role="status" aria-live="polite">{msg || ""}</div>
       <AnimatePresence>
         {msg && (
           <motion.div
             className="toast show"
+            aria-hidden="true"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}

@@ -1,20 +1,12 @@
 import { motion } from "framer-motion";
 import { useI18n } from "../i18n/I18nContext";
 import { STORE_CONFIG } from "../data/config";
-
-// يحوّل رقماً محلياً (يبدأ بـ 0) إلى صيغة دولية لرابط wa.me (بدون + أو أصفار أو فراغات)
-function toWaNumber(local) {
-  const digits = local.replace(/\D/g, "");
-  return digits.startsWith("0") ? `213${digits.slice(1)}` : digits;
-}
+import { storeWaLink } from "../lib/whatsapp";
 
 export default function WhatsAppButton() {
   const { t } = useI18n();
-  if (!STORE_CONFIG.whatsapp) return null;
-
-  const href = `https://wa.me/${toWaNumber(STORE_CONFIG.whatsapp)}?text=${encodeURIComponent(
-    t("wa.generic", { store: STORE_CONFIG.name })
-  )}`;
+  const href = storeWaLink(t("wa.generic", { store: STORE_CONFIG.name }));
+  if (!href) return null;
 
   return (
     <motion.a

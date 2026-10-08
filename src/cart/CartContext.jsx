@@ -4,6 +4,7 @@ import { useI18n } from "../i18n/I18nContext";
 import { useToast } from "../toast/ToastContext";
 import { pName } from "../lib/product";
 import { flyToCart, CART_HIT_EVENT } from "../lib/cartFx";
+import { track } from "../lib/pixel";
 
 const CART_KEY = "kof_cart_v1";
 const CartContext = createContext(null);
@@ -45,6 +46,7 @@ export function CartProvider({ children }) {
         return [...prev, { id, qty }];
       });
       showToast(`✅ ${pName(p, lang)}`);
+      track("AddToCart", { content_ids: [String(p.id)], content_type: "product", content_name: p.name, value: p.price * qty, currency: "DZD" });
       if (fromEl) flyToCart(fromEl, p.image, p.emoji);
       else window.dispatchEvent(new Event(CART_HIT_EVENT));
     },

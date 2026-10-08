@@ -1418,3 +1418,52 @@ select.select:focus-visible {
 .filter-label { flex: 0 0 auto; font-size: .8rem; font-weight: 800; color: var(--muted); margin-inline-end: 4px; }
 .filter-clear { flex: 0 0 auto; border: 0; background: none; color: var(--danger); font-weight: 800; font-size: .82rem; cursor: pointer; font-family: inherit; padding: 6px 8px; }
 .route-loading { min-height: 70vh; }
+
+/* ============================================================
+   المرحلة الثانية: العمر، التوصيل المجاني
+   ============================================================ */
+.age-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+@media (max-width: 760px) { .age-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.age-card {
+  display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 20px 12px; border-radius: 20px;
+  border: 1.5px solid var(--line); background: #fff; text-align: center;
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+.age-card:hover { transform: translateY(-4px); border-color: var(--primary); box-shadow: 0 12px 26px rgba(216,121,67,.16); }
+.age-card .age-emoji { font-size: 2.4rem; line-height: 1; }
+.age-card .age-range { font-weight: 900; font-size: 1.1rem; color: var(--ink); }
+.age-card .age-count { font-size: .8rem; color: var(--muted); font-weight: 700; }
+.age-card.a1 { background: linear-gradient(160deg, #fff6ee, #fff); }
+.age-card.a2 { background: linear-gradient(160deg, #eef6f6, #fff); }
+.age-card.a3 { background: linear-gradient(160deg, #fdf0f5, #fff); }
+.age-card.a4 { background: linear-gradient(160deg, #fff8e6, #fff); }
+
+.free-bar { margin: 12px 0 4px; }
+.free-bar-text { font-size: .82rem; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
+.free-bar-text strong { color: var(--primary); }
+.free-bar-track { height: 8px; border-radius: 999px; background: var(--line); overflow: hidden; }
+.free-bar-fill { height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--primary), var(--yellow)); transition: width .5s cubic-bezier(.2,.8,.2,1); }
+.free-bar.done .free-bar-text { color: var(--ok); }
+.free-bar.done .free-bar-fill { background: var(--ok); }
+
+/* صفحة نجاح الطلب + فخ الروبوتات */
+.order-summary { max-width: 440px; margin: 18px auto 6px; text-align: start; background: var(--bg); border: 1px solid var(--line); border-radius: 16px; padding: 14px 16px; }
+.order-summary h4 { margin-bottom: 8px; font-size: .95rem; }
+.order-summary ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.order-summary li { display: flex; justify-content: space-between; gap: 12px; font-size: .88rem; color: var(--muted); }
+.order-summary li.total { border-top: 1.5px dashed var(--line); padding-top: 8px; margin-top: 2px; color: var(--ink); font-weight: 900; }
+.order-success-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 16px; }
+.hp-field { position: absolute !important; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+/* إمكانية الوصول */
+.sr-only { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.skip-link {
+  position: fixed; top: 8px; inset-inline-start: 8px; z-index: 400; transform: translateY(-160%);
+  background: var(--ink); color: #fff; padding: 10px 16px; border-radius: 10px; font-weight: 800; transition: transform .15s ease;
+}
+.skip-link:focus { transform: translateY(0); }
+main:focus { outline: none; }
+.not-found .em { font-size: 4rem; }
+.not-found h1 { font-size: 1.8rem; margin: 8px 0; }
+.order-summary li span:last-child { white-space: nowrap; font-weight: 700; color: var(--ink); }
+.skip-link:not(:focus) { clip-path: inset(50%); }

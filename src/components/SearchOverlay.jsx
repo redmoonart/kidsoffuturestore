@@ -7,6 +7,7 @@ import { STORE_CONFIG } from "../data/config";
 import { pName } from "../lib/product";
 import { fmt } from "../lib/format";
 import ProductImage from "./ProductImage";
+import { searchProducts } from "../lib/search";
 
 export default function SearchOverlay({ open, onClose }) {
   const { t, lang } = useI18n();
@@ -36,11 +37,8 @@ export default function SearchOverlay({ open, onClose }) {
   }, [onClose]);
 
   const results = useMemo(() => {
-    const qq = q.trim().toLowerCase();
-    if (!qq) return [];
-    return products.filter((p) =>
-      [p.name, p.nameFr, p.nameEn, p.desc, p.descFr, p.descEn].some((s) => (s || "").toLowerCase().includes(qq))
-    ).slice(0, 8);
+    if (!q.trim()) return [];
+    return searchProducts(products, q).slice(0, 8);
   }, [products, q]);
 
   function goToProduct(id) {
@@ -79,7 +77,7 @@ export default function SearchOverlay({ open, onClose }) {
                 onChange={(e) => setQ(e.target.value)}
                 placeholder={t("shop.search_ph")}
               />
-              <button className="search-overlay-close" onClick={onClose} aria-label="✕">✕</button>
+              <button className="search-overlay-close" onClick={onClose} aria-label={t("aria.close")}>✕</button>
             </div>
 
             {q.trim() && (

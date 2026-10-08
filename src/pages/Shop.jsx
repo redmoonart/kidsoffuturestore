@@ -9,23 +9,15 @@ import Reveal from "../components/Reveal";
 import StaggerGrid from "../components/StaggerGrid";
 import SEO from "../components/SEO";
 import { pName } from "../lib/product";
+import { searchProducts } from "../lib/search";
+import { AGE_BANDS, minAge, inBand } from "../lib/ages";
 
-const AGE_BANDS = [
-  { id: "0-2", min: 0, max: 2 },
-  { id: "3-5", min: 3, max: 5 },
-  { id: "6-8", min: 6, max: 8 },
-  { id: "9+", min: 9, max: 99 },
-];
 const PRICE_BANDS = [
   { id: "lt1000", min: 0, max: 999 },
   { id: "1000-2500", min: 1000, max: 2500 },
   { id: "2500-5000", min: 2501, max: 5000 },
   { id: "gt5000", min: 5001, max: Infinity },
 ];
-const minAge = (p) => {
-  const m = /(\d+)/.exec(p.ageGroup || "");
-  return m ? Number(m[1]) : null;
-};
 
 export default function Shop() {
   const { t, lang } = useI18n();
@@ -100,7 +92,7 @@ export default function Shop() {
     if (subcat) l = l.filter((p) => p.subCategory === subcat);
     if (age) {
       const b = AGE_BANDS.find((x) => x.id === age);
-      if (b) l = l.filter((p) => { const a = minAge(p); return a != null && a >= b.min && a <= b.max; });
+      if (b) l = l.filter((p) => inBand(p, b));
     }
     if (price) {
       const b = PRICE_BANDS.find((x) => x.id === price);
@@ -108,12 +100,7 @@ export default function Shop() {
     }
     if (onlySale) l = l.filter((p) => p.oldPrice && p.oldPrice > p.price);
     if (onlyStock) l = l.filter((p) => p.stock !== false);
-    if (q) {
-      const qq = q.trim().toLowerCase();
-      l = l.filter((p) =>
-        [p.name, p.nameFr, p.nameEn, p.desc, p.descFr, p.descEn].some((s) => (s || "").toLowerCase().includes(qq))
-      );
-    }
+    if (q.trim()) l = searchProducts(l, q);
     if (sort === "price-asc") l.sort((a, b) => a.price - b.price);
     else if (sort === "price-desc") l.sort((a, b) => b.price - a.price);
     else if (sort === "name") l.sort((a, b) => pName(a, lang).localeCompare(pName(b, lang), lang));

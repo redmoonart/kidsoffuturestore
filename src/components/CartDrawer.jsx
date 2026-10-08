@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useI18n } from "../i18n/I18nContext";
@@ -7,6 +7,7 @@ import { STORE_CONFIG } from "../data/config";
 import { pName } from "../lib/product";
 import { money } from "../lib/format";
 import ProductImage from "./ProductImage";
+import FreeShippingBar from "./FreeShippingBar";
 
 export default function CartDrawer() {
   const { t, lang, meta } = useI18n();
@@ -16,6 +17,18 @@ export default function CartDrawer() {
     document.body.style.overflow = drawerOpen ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";
+    };
+  }, [drawerOpen]);
+
+  // نقل التركيز إلى السلة عند فتحها وإرجاعه لمكانه عند الإغلاق (لوحة المفاتيح وقارئ الشاشة)
+  const closeBtnRef = useRef(null);
+  useEffect(() => {
+    if (!drawerOpen) return;
+    const prev = document.activeElement;
+    const id = setTimeout(() => closeBtnRef.current?.focus(), 60);
+    return () => {
+      clearTimeout(id);
+      if (prev && typeof prev.focus === "function") prev.focus();
     };
   }, [drawerOpen]);
 
@@ -53,7 +66,7 @@ export default function CartDrawer() {
           >
             <div className="cart-drawer-head">
               <h3>{t("aria.cart")}</h3>
-              <button className="cart-drawer-close" onClick={closeDrawer} aria-label="✕">✕</button>
+              <button ref={closeBtnRef} className="cart-drawer-close" onClick={closeDrawer} aria-label={t("aria.close")}>✕</button>
             </div>
 
             {cart.length ? (
@@ -82,6 +95,7 @@ export default function CartDrawer() {
                   })}
                 </div>
                 <div className="cart-drawer-foot">
+                  <FreeShippingBar subtotal={subtotal} />
                   <div className="line">
                     <span>{t("cart.subtotal")}</span>
                     <span>{money(subtotal, STORE_CONFIG.currency)}</span>

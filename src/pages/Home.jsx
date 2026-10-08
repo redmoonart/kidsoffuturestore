@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useScroll, useInView } from "framer-motion";
 import { useI18n } from "../i18n/I18nContext";
@@ -11,6 +11,8 @@ import ScrollReveal from "../components/ScrollReveal";
 import StaggerGrid from "../components/StaggerGrid";
 import FloatIcon from "../components/FloatIcon";
 import Hero3D from "../components/Hero3D";
+import { AGE_BANDS, inBand } from "../lib/ages";
+import { getRecent } from "../lib/recent";
 
 const FEATURES = [
   ["🚚", "feat.delivery_t", "feat.delivery_d"],
@@ -33,6 +35,10 @@ export default function Home() {
   const featured = picks.length ? picks : products.slice(0, 8);
   const schoolSupplies = products.filter((p) => p.category === "school").slice(0, 4);
   const bestSellers = products.filter((p) => p.badge === "الأكثر مبيعاً").slice(0, 4);
+
+  const ageBands = AGE_BANDS.map((b) => ({ ...b, count: products.filter((p) => inBand(p, b)).length })).filter((b) => b.count > 0);
+  const [recentIds] = useState(getRecent);
+  const recent = recentIds.map((id) => products.find((p) => p.id === id)).filter(Boolean).slice(0, 4);
 
   const catsRef = useRef(null);
   const { scrollYProgress: catsScroll } = useScroll({ target: catsRef, offset: ["start 85%", "end 30%"] });
@@ -102,6 +108,27 @@ export default function Home() {
         </div>
       </section>
 
+      {/* تسوّق حسب العمر */}
+      {ageBands.length > 1 && (
+        <section className="section-sm">
+          <div className="wrap">
+            <ScrollReveal className="section-head">
+              <span className="kicker">{t("age.kicker")}</span>
+              <h2>{t("age.title")}</h2>
+            </ScrollReveal>
+            <div className="age-grid">
+              {ageBands.map((b, i) => (
+                <RevealLink key={b.id} to={`/shop?age=${encodeURIComponent(b.id)}`} className={`age-card a${i + 1}`} delay={i * 0.06} y={16}>
+                  <span className="age-emoji" aria-hidden="true">{b.emoji}</span>
+                  <span className="age-range">{t("shop.age_band", { v: b.id })}</span>
+                  <span className="age-count">{b.count} {t("shop.count_unit")}</span>
+                </RevealLink>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* منتجات مختارة */}
       <section className="section" style={{ background: "#fff" }}>
         <div className="wrap">
@@ -169,6 +196,21 @@ export default function Home() {
       )}
 
       {/* CTA نهائي — محطة الوصول: صاروخ، نجمة، هدية، ثم الدعوة الكبيرة */}
+      {recent.length >= 2 && (
+        <section className="section-sm">
+          <div className="wrap">
+            <ScrollReveal className="section-head section-head-start">
+              <h2 style={{ fontSize: "1.4rem" }}>👀 {t("recent.title")}</h2>
+            </ScrollReveal>
+            <StaggerGrid className="products-grid">
+              {recent.map((p) => (
+                <ProductCard key={p.id} product={p} />
+              ))}
+            </StaggerGrid>
+          </div>
+        </section>
+      )}
+
       <section className="section-sm icon-stage" ref={ctaRef}>
         <FloatIcon emoji="⭐" scrollYProgress={ctaScroll} range={[20, -30]} depth="bg"
           top="0%" left="8%" size="1.8rem" delay={0.1} className="decor-icon-extra" />

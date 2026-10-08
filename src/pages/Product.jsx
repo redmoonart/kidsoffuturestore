@@ -13,6 +13,8 @@ import SEO from "../components/SEO";
 import DeliveryEstimate from "../components/DeliveryEstimate";
 import StickyBuyBar from "../components/StickyBuyBar";
 import ShareButtons from "../components/ShareButtons";
+import { pushRecent } from "../lib/recent";
+import { track } from "../lib/pixel";
 import { pName, pDesc } from "../lib/product";
 import { money } from "../lib/format";
 import ProductImage from "../components/ProductImage";
@@ -33,6 +35,12 @@ export default function Product() {
     setQty(1);
     setActiveImg(null);
   }, [id]);
+
+  useEffect(() => {
+    if (!p) return;
+    pushRecent(p.id);
+    track("ViewContent", { content_ids: [String(p.id)], content_type: "product", content_name: p.name, value: p.price, currency: "DZD" });
+  }, [p?.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!p) {
     if (loading) return null;

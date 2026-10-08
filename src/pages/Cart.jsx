@@ -12,7 +12,10 @@ import { money } from "../lib/format";
 import { saveOrder, makeOrderRef } from "../lib/orders";
 import { burstConfetti } from "../lib/cartFx";
 import { getSavedWilaya, saveWilaya } from "../lib/wilayaPref";
+import { track } from "../lib/pixel";
+import { storeWaLink } from "../lib/whatsapp";
 import ProductImage from "../components/ProductImage";
+import FreeShippingBar from "../components/FreeShippingBar";
 
 export default function Cart() {
   const { t, lang } = useI18n();
@@ -47,12 +50,21 @@ export default function Cart() {
   const finalDelivery = isFree ? 0 : deliveryPrice;
 
   const total = subtotal + (wilaya ? finalDelivery : 0);
-  const remain = STORE_CONFIG.freeShippingThreshold ? STORE_CONFIG.freeShippingThreshold - subtotal : 0;
 
   const [sending, setSending] = useState(false);
   const [saveError, setSaveError] = useState(false);
   const [placedRef, setPlacedRef] = useState(null);
+  const [placed, setPlaced] = useState(null);
+  const [honey, setHoney] = useState("");
+  const submittingRef = useRef(false);
   const successEmojiRef = useRef(null);
+  const checkoutTracked = useRef(false);
+
+  useEffect(() => {
+    if (checkoutTracked.current || !cart.length || !subtotal) return;
+    checkoutTracked.current = true;
+    track("InitiateCheckout", { value: subtotal, currency: "DZD", num_items: cart.reduce((n, i) => n + i.qty, 0) });
+  }, [cart, subtotal]);
 
   useEffect(() => {
     if (!placedRef) return;
@@ -70,7 +82,8 @@ export default function Cart() {
     const wilayaOk = !!wilaya && wilaya.available !== false;
     const communeOk = !wilayaOk || !wilayaCommunes.length || !!commune;
     setErrors({ name: !nameOk, phone: !phoneOk, wilaya: !wilayaOk, commune: !communeOk });
-    if (!nameOk || !phoneOk || !wilayaOk || !communeOk || sending) return;
+    if (!nameOk || !phoneOk || !wilayaOk || !communeOk || submittingRef.current) return;
+    submittingRef.current = true;
 
     const price = effectiveType === "office" ? wilaya.office : wilaya.home;
     const delFinal = isFree ? 0 : price;
@@ -86,7 +99,8 @@ export default function Cart() {
     // الطلب يُحفظ في Supabase ويظهر مباشرة في تطبيق "إدارة متجري"
     setSending(true);
     setSaveError(false);
-    const ok = await saveOrder({
+    // حقل الفخ مخفي عن البشر: إن عُبّئ فالمُرسِل روبوت، نُظهر نجاحاً شكلياً بدون حفظ الطلب
+    const ok = honey ? true : await saveOrder({
       ref,
       customer_name: name.trim(),
       phone: phone.replace(/\s/g, ""),
@@ -99,11 +113,21 @@ export default function Cart() {
       notes: notes.trim() || null,
     });
     setSending(false);
+    submittingRef.current = false;
 
     if (!ok) {
       setSaveError(true);
       return;
     }
+    setPlaced({
+      ref,
+      total: grandTotal,
+      delivery: delFinal,
+      wilaya: `${wilaya.code} - ${wName(wilaya, lang)}`,
+      commune,
+      lines: cart.map((i) => { const p = byId(i.id); return p ? { id: p.id, name: pName(p, lang), qty: i.qty, price: p.price } : null; }).filter(Boolean),
+    });
+    if (!honey) track("Purchase", { value: grandTotal, currency: "DZD", content_ids: items.map((i) => String(i.id)), content_type: "product", num_items: items.reduce((n, i) => n + i.qty, 0) }, ref);
     setPlacedRef(ref);
     clearCart();
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -120,7 +144,26 @@ export default function Cart() {
               <h3>{t("cart.ok_t")}</h3>
               <p>{t("cart.ok_p")}</p>
               <p className="order-ref">{t("cart.ok_ref")}: <strong dir="ltr">{placedRef}</strong></p>
-              <Link className="btn btn-primary btn-lg" to="/shop">{t("cart.ok_btn")}</Link>
+              {placed && (
+                <div className="order-summary">
+                  <h4>{t("cart.ok_summary")}</h4>
+                  <ul>
+                    {placed.lines.map((l) => (
+                      <li key={l.id}><span>{l.name} × {l.qty}</span><span>{money(l.price * l.qty, STORE_CONFIG.currency)}</span></li>
+                    ))}
+                    <li><span>{t("cart.delivery")} ({placed.wilaya}{placed.commune ? ` — ${placed.commune}` : ""})</span><span>{placed.delivery ? money(placed.delivery, STORE_CONFIG.currency) : t("cart.free")}</span></li>
+                    <li className="total"><span>{t("cart.total")}</span><span>{money(placed.total, STORE_CONFIG.currency)}</span></li>
+                  </ul>
+                </div>
+              )}
+              <div className="order-success-actions">
+                {placed && storeWaLink("x") && (
+                  <a className="btn btn-wa btn-lg" href={storeWaLink(t("cart.ok_wa_msg", { ref: placed.ref, store: STORE_CONFIG.name, total: money(placed.total, STORE_CONFIG.currency) }))} target="_blank" rel="noopener noreferrer">
+                    {t("cart.ok_wa")}
+                  </a>
+                )}
+                <Link className="btn btn-primary btn-lg" to="/shop">{t("cart.ok_btn")}</Link>
+              </div>
             </Reveal>
           </div>
         </section>
@@ -197,12 +240,7 @@ export default function Cart() {
                 <span>{t("cart.total")}</span>
                 <span className="amount-flash">{money(total, STORE_CONFIG.currency)}</span>
               </div>
-              {STORE_CONFIG.freeShippingThreshold && !isFree && remain > 0 ? (
-                <div className="free-note">
-                  {t("cart.free_add_pre")}{money(remain, STORE_CONFIG.currency)}{t("cart.free_add_post")}
-                </div>
-              ) : null}
-              {isFree ? <div className="free-note">{t("cart.free_congrats")}</div> : null}
+              <FreeShippingBar subtotal={subtotal} />
 
               <div style={{ marginTop: 20 }}>
                 <h3 style={{ fontSize: "1.1rem" }}>{t("cart.info_title")}</h3>
@@ -261,6 +299,9 @@ export default function Cart() {
                   <div className="form-row">
                     <label>{t("cart.f_notes")}</label>
                     <textarea rows={2} placeholder={t("cart.ph_notes")} value={notes} onChange={(e) => setNotes(e.target.value)} />
+                  </div>
+                  <div className="hp-field" aria-hidden="true">
+                    <label>Website<input type="text" tabIndex={-1} autoComplete="off" value={honey} onChange={(e) => setHoney(e.target.value)} /></label>
                   </div>
                   {saveError && <p className="field-error show" role="alert" style={{ marginBottom: 10 }}>{t("cart.save_err")}</p>}
                   <button type="submit" className="btn btn-primary btn-block btn-lg" disabled={sending}>{sending ? t("cart.sending") : t("cart.submit")}</button>
