@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { useI18n } from "../i18n/I18nContext";
 import { useCart } from "../cart/CartContext";
@@ -10,6 +10,7 @@ import StaggerGrid from "../components/StaggerGrid";
 import { pName, wName } from "../lib/product";
 import { money } from "../lib/format";
 import { saveOrder, makeOrderRef } from "../lib/orders";
+import { burstConfetti } from "../lib/cartFx";
 
 export default function Cart() {
   const { t, lang } = useI18n();
@@ -36,6 +37,16 @@ export default function Cart() {
   const [sending, setSending] = useState(false);
   const [saveError, setSaveError] = useState(false);
   const [placedRef, setPlacedRef] = useState(null);
+  const successEmojiRef = useRef(null);
+
+  useEffect(() => {
+    if (!placedRef) return;
+    const t = setTimeout(() => {
+      const r = successEmojiRef.current?.getBoundingClientRect();
+      if (r) burstConfetti(r.left + r.width / 2, r.top + r.height / 2);
+    }, 450);
+    return () => clearTimeout(t);
+  }, [placedRef]);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -89,7 +100,7 @@ export default function Cart() {
         <section className="section">
           <div className="wrap">
             <Reveal className="empty-state order-success" y={28}>
-              <div className="em">✅</div>
+              <div className="em" ref={successEmojiRef}>✅</div>
               <h3>{t("cart.ok_t")}</h3>
               <p>{t("cart.ok_p")}</p>
               <p className="order-ref">{t("cart.ok_ref")}: <strong dir="ltr">{placedRef}</strong></p>

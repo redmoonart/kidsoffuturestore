@@ -3,6 +3,7 @@ import { useProducts } from "../data/ProductsContext";
 import { useI18n } from "../i18n/I18nContext";
 import { useToast } from "../toast/ToastContext";
 import { pName } from "../lib/product";
+import { flyToCart, CART_HIT_EVENT } from "../lib/cartFx";
 
 const CART_KEY = "kof_cart_v1";
 const CartContext = createContext(null);
@@ -33,8 +34,9 @@ export function CartProvider({ children }) {
     }
   }, [cart]);
 
+  // fromEl: العنصر الذي ضُغط (زر الإضافة) لتطير منه صورة المنتج نحو أيقونة السلة
   const addToCart = useCallback(
-    (id, qty = 1) => {
+    (id, qty = 1, fromEl) => {
       const p = byId(id);
       if (!p || p.stock === false) return;
       setCart((prev) => {
@@ -43,6 +45,8 @@ export function CartProvider({ children }) {
         return [...prev, { id, qty }];
       });
       showToast(`✅ ${pName(p, lang)}`);
+      if (fromEl) flyToCart(fromEl, p.image, p.emoji);
+      else window.dispatchEvent(new Event(CART_HIT_EVENT));
     },
     [byId, lang, showToast]
   );

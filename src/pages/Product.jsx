@@ -68,8 +68,8 @@ export default function Product() {
     },
   };
 
-  function handleAdd() {
-    addToCart(p.id, qty);
+  function handleAdd(e) {
+    addToCart(p.id, qty, e.currentTarget.closest(".pdp")?.querySelector(".gallery") || e.currentTarget);
   }
   function handleBuy() {
     addToCart(p.id, qty);

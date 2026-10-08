@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useI18n } from "../i18n/I18nContext";
 import { useCart } from "../cart/CartContext";
+import { CART_HIT_EVENT } from "../lib/cartFx";
 import SearchOverlay from "./SearchOverlay";
 
 const LANGS = [
@@ -18,6 +19,34 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const cartIcRef = useRef(null);
+  const badgeRef = useRef(null);
+
+  // ارتداد أيقونة السلة لحظة وصول المنتج الطائر إليها
+  useEffect(() => {
+    function onHit() {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      cartIcRef.current?.animate(
+        [
+          { transform: "translateY(0) rotate(0) scale(1)" },
+          { transform: "translateY(3px) rotate(0) scale(1.15, .8)", offset: 0.15 },
+          { transform: "translateY(-7px) rotate(-14deg) scale(.95, 1.1)", offset: 0.4 },
+          { transform: "translateY(0) rotate(10deg) scale(1)", offset: 0.62 },
+          { transform: "rotate(-5deg)", offset: 0.8 },
+          { transform: "translateY(0) rotate(0) scale(1)" },
+        ],
+        { duration: 620, easing: "ease-out" }
+      );
+      const badge = badgeRef.current;
+      if (badge) {
+        badge.classList.remove("bump");
+        void badge.offsetWidth;
+        badge.classList.add("bump");
+      }
+    }
+    window.addEventListener(CART_HIT_EVENT, onHit);
+    return () => window.removeEventListener(CART_HIT_EVENT, onHit);
+  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -142,7 +171,8 @@ export default function Header() {
               openDrawer();
             }}
           >
-            🛒<span className="count cart-count" style={{ display: count > 0 ? "grid" : "none" }}>{count}</span>
+            <span className="cart-ic" ref={cartIcRef}>🛒</span>
+            <span ref={badgeRef} className="count cart-count" style={{ display: count > 0 ? "grid" : "none" }}>{count}</span>
           </button>
           <button className="menu-toggle" aria-label={t("aria.menu")} onClick={() => setMenuOpen((o) => !o)}>
             {menuOpen ? "✕" : "☰"}

@@ -16,8 +16,8 @@ export default function ProductCard({ product }) {
   const lowStock = !out && typeof product.stockQty === "number" && product.stockQty > 0 && product.stockQty <= 5;
   const catLabel = t(product.category === "toys" ? "card.toys" : "card.school");
 
-  function handleAdd() {
-    addToCart(product.id);
+  function handleAdd(e) {
+    addToCart(product.id, 1, e.currentTarget.closest(".pcard")?.querySelector(".thumb") || e.currentTarget);
     setPulse(true);
     setTimeout(() => setPulse(false), 500);
   }

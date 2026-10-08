@@ -497,6 +497,67 @@ ul { list-style: none; }
 .cat-chip:nth-child(9n+8) .ic { background: rgba(216,121,67,.14); }
 .cat-chip:nth-child(9n+9) .ic { background: rgba(242,167,27,.16); }
 
+/* أيقونات الفئات المتحركة: قفزة بضغط وتمدد + تحوّل الخلفية لشكل فقاعي.
+   تُلعب مرة واحدة كموجة عند ظهور الشريط، ثم عند المرور/اللمس */
+.cat-chip .ic-emoji { display: inline-block; transform-origin: 50% 90%; }
+.cat-strip.wave .cat-chip .ic-emoji { animation: iconHop .65s cubic-bezier(.3,.7,.4,1) both; }
+.cat-strip.wave .cat-chip .ic { animation: blobMorph .75s ease-in-out both; }
+.cat-strip.wave .cat-chip:nth-child(1) :is(.ic, .ic-emoji) { animation-delay: .35s; }
+.cat-strip.wave .cat-chip:nth-child(2) :is(.ic, .ic-emoji) { animation-delay: .42s; }
+.cat-strip.wave .cat-chip:nth-child(3) :is(.ic, .ic-emoji) { animation-delay: .49s; }
+.cat-strip.wave .cat-chip:nth-child(4) :is(.ic, .ic-emoji) { animation-delay: .56s; }
+.cat-strip.wave .cat-chip:nth-child(5) :is(.ic, .ic-emoji) { animation-delay: .63s; }
+.cat-strip.wave .cat-chip:nth-child(6) :is(.ic, .ic-emoji) { animation-delay: .70s; }
+.cat-strip.wave .cat-chip:nth-child(7) :is(.ic, .ic-emoji) { animation-delay: .77s; }
+.cat-strip.wave .cat-chip:nth-child(8) :is(.ic, .ic-emoji) { animation-delay: .84s; }
+.cat-strip.wave .cat-chip:nth-child(n+9) :is(.ic, .ic-emoji) { animation-delay: .91s; }
+.cat-strip .cat-chip:is(:hover, :focus-visible, :active) .ic-emoji { animation: iconHop2 .65s cubic-bezier(.3,.7,.4,1) both; animation-delay: 0s; }
+.cat-strip .cat-chip:is(:hover, :focus-visible, :active) .ic { animation: blobMorph2 .75s ease-in-out both; animation-delay: 0s; }
+@keyframes iconHop {
+  0% { transform: translateY(0) scale(1) rotate(0); }
+  15% { transform: translateY(2px) scale(1.18, .82) rotate(0); }
+  45% { transform: translateY(-13px) scale(.9, 1.12) rotate(-9deg); }
+  70% { transform: translateY(0) scale(1.1, .9) rotate(5deg); }
+  85% { transform: translateY(0) scale(.97, 1.03) rotate(-2deg); }
+  100% { transform: translateY(0) scale(1) rotate(0); }
+}
+@keyframes iconHop2 {
+  0% { transform: translateY(0) scale(1) rotate(0); }
+  15% { transform: translateY(2px) scale(1.18, .82) rotate(0); }
+  45% { transform: translateY(-13px) scale(.9, 1.12) rotate(-9deg); }
+  70% { transform: translateY(0) scale(1.1, .9) rotate(5deg); }
+  85% { transform: translateY(0) scale(.97, 1.03) rotate(-2deg); }
+  100% { transform: translateY(0) scale(1) rotate(0); }
+}
+@keyframes blobMorph {
+  0%, 100% { border-radius: 16px; transform: scale(1); }
+  40% { border-radius: 44% 56% 58% 42% / 52% 40% 60% 48%; transform: scale(1.1); }
+  70% { border-radius: 56% 44% 40% 60% / 44% 58% 42% 56%; transform: scale(.97); }
+}
+@keyframes blobMorph2 {
+  0%, 100% { border-radius: 16px; transform: scale(1); }
+  40% { border-radius: 44% 56% 58% 42% / 52% 40% 60% 48%; transform: scale(1.1); }
+  70% { border-radius: 56% 44% 40% 60% / 44% 58% 42% 56%; transform: scale(.97); }
+}
+
+/* المنتج الطائر نحو السلة */
+.fly-to-cart { position: fixed; z-index: 300; width: 64px; height: 64px; pointer-events: none; will-change: transform; }
+.fly-to-cart-item {
+  width: 100%; height: 100%; border-radius: 50%; overflow: hidden; display: grid; place-items: center;
+  background: #fff; border: 2.5px solid var(--primary); box-shadow: 0 12px 26px rgba(17,24,39,.25);
+  font-size: 2rem; will-change: transform;
+}
+.fly-to-cart-item img { width: 100%; height: 100%; object-fit: cover; }
+.cart-btn .cart-ic { display: inline-block; transform-origin: 50% 85%; }
+
+/* قصاصات الاحتفال بنجاح الطلب */
+.confetti-layer { position: fixed; inset: 0; z-index: 300; pointer-events: none; overflow: hidden; }
+.confetti-piece { position: absolute; width: 9px; height: 13px; margin: -6px 0 0 -4px; border-radius: 2px; will-change: transform, opacity; }
+
+@media (prefers-reduced-motion: reduce) {
+  .cat-strip .cat-chip .ic, .cat-strip .cat-chip .ic-emoji { animation: none !important; }
+}
+
 /* ---------- شبكة المنتجات ---------- */
 .products-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
 
@@ -510,7 +571,7 @@ ul { list-style: none; }
 .pcard .badge { position: absolute; top: 10px; inset-inline-start: 10px; background: var(--accent); color: #fff;
   font-size: .72rem; font-weight: 700; padding: 4px 10px; border-radius: 999px; }
 .pcard .badge.out { background: var(--muted); }
-.pcard .badge.low-stock { background: var(--danger); }
+.pcard .badge.low-stock { background: var(--danger); top: auto; bottom: 10px; }
 .disc { position: absolute; top: 10px; inset-inline-end: 10px; background: var(--danger); color:#fff;
   font-size: .72rem; font-weight: 700; padding: 4px 8px; border-radius: 999px; z-index: 3; }
 .pcard .body { padding: 14px; display: flex; flex-direction: column; gap: 8px; flex: 1; }

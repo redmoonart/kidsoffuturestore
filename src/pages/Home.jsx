@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { Link } from "react-router-dom";
-import { useScroll } from "framer-motion";
+import { useScroll, useInView } from "framer-motion";
 import { useI18n } from "../i18n/I18nContext";
 import { useProducts } from "../data/ProductsContext";
 import { useSubcategories, subcatLabel } from "../data/SubcategoriesContext";
@@ -27,6 +27,8 @@ export default function Home() {
     { emoji: "🧸", label: t("catstrip.toys"), to: "/shop?cat=toys" },
     ...subcategories.map((s) => ({ emoji: s.emoji || "🎁", label: subcatLabel(s, lang), to: `/shop?subcat=${s.slug}` })),
   ];
+  const stripRef = useRef(null);
+  const stripSeen = useInView(stripRef, { once: true, amount: 0.6 });
   const picks = products.filter((p) => p.badge || p.oldPrice).slice(0, 8);
   const featured = picks.length ? picks : products.slice(0, 8);
   const schoolSupplies = products.filter((p) => p.category === "school").slice(0, 4);
@@ -88,10 +90,10 @@ export default function Home() {
             <h2>{t("cats.title")}</h2>
             <p>{t("cats.sub")}</p>
           </ScrollReveal>
-          <div className="cat-strip">
+          <div className={`cat-strip${stripSeen ? " wave" : ""}`} ref={stripRef}>
             {catStrip.map((c, i) => (
               <RevealLink key={c.to} to={c.to} className="cat-chip" delay={i * 0.05} y={16}>
-                <span className="ic">{c.emoji}</span>
+                <span className="ic"><span className="ic-emoji">{c.emoji}</span></span>
                 <h3>{c.label}</h3>
                 <span className="go">{meta.dir === "rtl" ? "←" : "→"}</span>
               </RevealLink>
