@@ -152,7 +152,7 @@ create table if not exists public.orders (
   items jsonb not null check (jsonb_typeof(items) = 'array' and jsonb_array_length(items) between 1 and 50),
   total integer not null check (total >= 0),
   notes text check (char_length(notes) <= 500),
-  status text not null default 'new' check (status in ('new','confirmed','shipped','delivered','cancelled')),
+  status text not null default 'new' check (status in ('new','confirmed','shipped','delivered','refused','cancelled')),
   created_at timestamptz not null default now()
 );
 
@@ -181,3 +181,27 @@ create policy "Admins can delete orders" on public.orders
   for delete to authenticated using ((auth.jwt() ->> 'email') = 'aimen.bouss96@gmail.com');
 
 create index if not exists orders_created_at_idx on public.orders (created_at desc);
+
+-- ------------------------------------------------------------
+-- الأرقام المحظورة (حماية الدفع عند الاستلام) — المدير وحده
+-- ------------------------------------------------------------
+create table if not exists public.blocked_phones (
+  phone text primary key check (phone ~ '^[0-9]{8,15}$'),
+  reason text check (char_length(reason) <= 200),
+  created_at timestamptz not null default now()
+);
+
+alter table public.blocked_phones enable row level security;
+
+drop policy if exists "Admins can read blocked phones" on public.blocked_phones;
+create policy "Admins can read blocked phones" on public.blocked_phones
+  for select to authenticated using ((auth.jwt() ->> 'email') = 'aimen.bouss96@gmail.com');
+
+drop policy if exists "Admins can block phones" on public.blocked_phones;
+create policy "Admins can block phones" on public.blocked_phones
+  for insert to authenticated with check ((auth.jwt() ->> 'email') = 'aimen.bouss96@gmail.com');
+
+drop policy if exists "Admins can unblock phones" on public.blocked_phones;
+create policy "Admins can unblock phones" on public.blocked_phones
+  for delete to authenticated using ((auth.jwt() ->> 'email') = 'aimen.bouss96@gmail.com');
+

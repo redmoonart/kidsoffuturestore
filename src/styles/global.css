@@ -1598,3 +1598,28 @@ main:focus { outline: none; }
   50% { transform: scale(1.012, 1.026); }
 }
 @media (prefers-reduced-motion: reduce) { .hero-dani-img.breathe { animation: none; } }
+
+/* ---- Admin: حماية الطلبيات ---- */
+.admin-cbadges { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+.admin-cbadge { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: .72rem; font-weight: 700;
+  background: #eef0f3; color: #4b5563; white-space: nowrap; }
+.admin-cbadge.bad { background: #fde8e8; color: #b42318; }
+.admin-cbadge.good { background: #e6f6ec; color: #13703a; }
+.admin-order-row.risky { box-shadow: inset 4px 0 0 #e5484d; }
+[dir="rtl"] .admin-order-row.risky { box-shadow: inset -4px 0 0 #e5484d; }
+.admin-order-row.status-refused td { color: #b42318; }
+.admin-chip-risk { border-color: #f5b3b3; color: #b42318; font-weight: 700; }
+.admin-chip-risk.active { background: #d92d20; border-color: #d92d20; color: #fff; }
+.admin-note { background: #fff8e1; border: 1px solid #f3d27a; border-radius: 10px; padding: 10px 12px; font-size: .88rem; margin: 0 0 12px; }
+.admin-note code { direction: ltr; unicode-bidi: embed; font-size: .82rem; }
+.admin-stats { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; margin-bottom: 14px; }
+.admin-stats-head { margin: 0 0 10px; }
+.admin-rate { display: inline-block; min-width: 46px; text-align: center; padding: 1px 8px; border-radius: 999px; font-weight: 800; font-size: .8rem; }
+.admin-rate.good { background: #e6f6ec; color: #13703a; }
+.admin-rate.mid { background: #fff4d6; color: #8a5a00; }
+.admin-rate.bad { background: #fde8e8; color: #b42318; }
+.btn.active { border-color: var(--primary); color: var(--primary-text); }
+/* خلية أزرار الصف تبقى خلية جدول (flex كان يكسر ارتفاع الصف ولونه) */
+td.admin-row-actions { display: table-cell; white-space: nowrap; }
+td.admin-row-actions > * + * { margin-inline-start: 6px; }
+.admin-row-actions { flex-wrap: wrap; }

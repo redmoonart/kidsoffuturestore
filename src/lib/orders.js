@@ -23,5 +23,15 @@ export const ORDER_STATUSES = [
   { value: "confirmed", label: "✅ مؤكد" },
   { value: "shipped", label: "🚚 مشحون" },
   { value: "delivered", label: "📦 تم التسليم" },
+  { value: "refused", label: "↩️ رُفض عند الاستلام" },
   { value: "cancelled", label: "❌ ملغى" },
 ];
+
+// توحيد رقم الهاتف لمقارنة الزبائن: 0555 12 34 56 و +213555123456 و 213555123456 → 0555123456
+export function normPhone(p) {
+  let d = String(p || "").replace(/\D/g, "");
+  if (d.startsWith("00213")) d = d.slice(5);
+  else if (d.startsWith("213") && d.length >= 12) d = d.slice(3);
+  if (d.length === 9) d = "0" + d;
+  return d;
+}
