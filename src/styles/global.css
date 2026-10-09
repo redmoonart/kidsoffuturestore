@@ -1584,3 +1584,17 @@ main:focus { outline: none; }
 /* فاصل الآلاف (1 800) ضيّق جداً في خط Outfit — نوسّعه في الأسعار فقط */
 .price, .unit, .line, .line-total, .total, .summary, .order-summary, .sticky-buybar-price, .amount-flash,
 .delivery-est-rows strong, .free-bar-text strong { word-spacing: .18em; font-variant-numeric: tabular-nums; }
+
+/* ============================================================
+   الهيرو ثلاثي الأبعاد: ألعاب WebGL + داني بعمق
+   ============================================================ */
+.hero-toys { position: absolute; inset: 0; z-index: 1; pointer-events: none; opacity: 0; transition: opacity .6s ease; }
+.hero-toys.on { opacity: 1; }
+.hero-toys-canvas { width: 100%; height: 100%; display: block; }
+.hero-dani-tilt { transform-style: preserve-3d; will-change: transform; }
+.hero-dani-img.breathe { transform-origin: 50% 100%; animation: daniBreath 3.8s ease-in-out infinite; }
+@keyframes daniBreath {
+  0%, 100% { transform: scale(1, 1); }
+  50% { transform: scale(1.012, 1.026); }
+}
+@media (prefers-reduced-motion: reduce) { .hero-dani-img.breathe { animation: none; } }

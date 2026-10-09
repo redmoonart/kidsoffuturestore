@@ -1,8 +1,9 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
+import { motion, useScroll, useTransform, useReducedMotion, useMotionValue, useSpring } from "framer-motion";
 import { useI18n, Trans } from "../i18n/I18nContext";
-import { isNarrowViewport } from "../lib/deviceCapability";
+import { isNarrowViewport, hasFinePointer } from "../lib/deviceCapability";
+import HeroToys from "./HeroToys";
 import heroBgScene from "../assets/hero-bg-scene.webp";
 import heroDani from "../assets/hero-dani.webp";
 import heroDani420 from "../assets/hero-dani-420.webp";
@@ -39,6 +40,35 @@ export default function Hero3D() {
   // طبقة أمامية زخرفية (عشب) — حركة معاكسة خفيفة لإحساس أعمق بالعمق
   const foreY = useTransform(heroScroll, [0, 1], [0, 10 * amp]);
 
+  // اتجاه النظر: الفأرة على الكمبيوتر، وميلان الهاتف على الموبايل (-1..1)
+  const pointerX = useMotionValue(0);
+  const pointerY = useMotionValue(0);
+  useEffect(() => {
+    if (reduceMotion) return undefined;
+    if (hasFinePointer()) {
+      const onMove = (e) => {
+        pointerX.set((e.clientX / window.innerWidth) * 2 - 1);
+        pointerY.set((e.clientY / window.innerHeight) * 2 - 1);
+      };
+      window.addEventListener("pointermove", onMove, { passive: true });
+      return () => window.removeEventListener("pointermove", onMove);
+    }
+    const onTilt = (e) => {
+      if (e.gamma == null || e.beta == null) return;
+      pointerX.set(Math.max(-1, Math.min(1, e.gamma / 30)));
+      pointerY.set(Math.max(-1, Math.min(1, (e.beta - 45) / 30)));
+    };
+    window.addEventListener("deviceorientation", onTilt, { passive: true });
+    return () => window.removeEventListener("deviceorientation", onTilt);
+  }, [reduceMotion, pointerX, pointerY]);
+
+  // داني بعمق: يميل نحو المؤشر كأنه مجسّم، وظله يتحرك عكسه
+  const spring = { stiffness: 110, damping: 18, mass: 0.6 };
+  const tiltY = useSpring(useTransform(pointerX, [-1, 1], [-10, 10]), spring);
+  const tiltX = useSpring(useTransform(pointerY, [-1, 1], [5, -5]), spring);
+  const daniShiftX = useSpring(useTransform(pointerX, [-1, 1], [-10, 10]), spring);
+  const shadowX = useSpring(useTransform(pointerX, [-1, 1], [12, -12]), spring);
+
   return (
     <section className="hero-scene-full" ref={sectionRef}>
       <motion.div className="hero-bg-layer" style={{ y: bgY }} aria-hidden="true">
@@ -72,6 +102,8 @@ export default function Hero3D() {
         </motion.div>
       </div>
 
+      <HeroToys sectionRef={sectionRef} pointerX={pointerX} pointerY={pointerY} scroll={heroScroll} />
+
       <motion.div
         className="hero-dani-wrap"
         initial={{ opacity: 0, y: 40, scale: 0.9 }}
@@ -79,9 +111,10 @@ export default function Hero3D() {
         transition={{ type: "spring", stiffness: 200, damping: 22, delay: reduceMotion ? 0.1 : 0.3 }}
         style={{ y: daniY, scale: daniScale, rotate: daniRotate, opacity: daniOpacity }}
       >
-        <motion.div className="hero-dani-shadow" style={{ scale: shadowScale }} aria-hidden="true" />
+        <motion.div className="hero-dani-shadow" style={{ scale: shadowScale, x: shadowX }} aria-hidden="true" />
+        <motion.div className="hero-dani-tilt" style={{ rotateX: tiltX, rotateY: tiltY, x: daniShiftX, transformPerspective: 900 }}>
         <img
-          className="hero-dani-img"
+          className={`hero-dani-img${reduceMotion ? "" : " breathe"}`}
           src={heroDani}
           srcSet={`${heroDani420} 420w, ${heroDani} 755w`}
           sizes="(max-width: 1024px) 40vw, 26vw"
@@ -90,6 +123,7 @@ export default function Hero3D() {
           width="755"
           height="1165"
         />
+        </motion.div>
         <motion.div
           className="hero-dani-bubble"
           initial={{ opacity: 0, scale: 0.4, y: 10 }}
