@@ -11,7 +11,7 @@ import ScrollReveal from "../components/ScrollReveal";
 import StaggerGrid from "../components/StaggerGrid";
 import DaniOrbitHero from "../components/cine/DaniOrbitHero";
 import GiftScene from "../components/cine/GiftScene";
-import DeliveryScene from "../components/cine/DeliveryScene";
+import DriveScene from "../components/cine/DriveScene";
 import FinaleScene from "../components/cine/FinaleScene";
 import { AGE_BANDS, inBand } from "../lib/ages";
 import { getRecent } from "../lib/recent";
@@ -110,7 +110,7 @@ export default function Home() {
         </div>
       </section>
 
-      <DeliveryScene />
+      <DriveScene />
 
       {/* منتجات الأطفال */}
       {kidsProducts.length > 0 && (
