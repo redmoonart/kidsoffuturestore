@@ -1848,10 +1848,10 @@ td.admin-row-actions > * + * { margin-inline-start: 6px; }
 .seq-ticker { position: absolute; inset-inline: 0; top: calc(var(--header-h) + 18px); overflow: hidden; pointer-events: none; }
 .seq-ticker-row { display: flex; gap: 14px; width: max-content; padding: 0 4vw; }
 .seq-sign { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; padding: 8px 14px; border-radius: 12px;
-  background: rgba(18,110,72,.86); border: 2px solid rgba(255,255,255,.85); box-shadow: 0 10px 24px rgba(0,0,0,.25);
+  background: linear-gradient(135deg, rgba(232,128,68,.94), rgba(196,92,40,.94)); border: 2px solid rgba(255,255,255,.9); box-shadow: 0 10px 24px rgba(60,25,5,.3);
   font-weight: 800; font-size: .92rem; color: #fff; backdrop-filter: blur(4px); }
 .seq-sign b { opacity: .7; }
-.seq-sign em { font-style: normal; color: #fff1c2; word-spacing: .18em; }
+.seq-sign em { font-style: normal; color: #fff; background: rgba(0,0,0,.18); padding: 2px 8px; border-radius: 8px; word-spacing: .18em; }
 .seq-sign small { font-weight: 600; opacity: .85; }
 @media (max-width: 760px) {
   .seq-drive .seq-scrim { background: linear-gradient(to top, rgba(20,12,4,.9) 0%, rgba(20,12,4,.65) 30%, rgba(20,12,4,0) 55%),
