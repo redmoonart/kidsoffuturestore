@@ -19,6 +19,7 @@ import { pName, pDesc } from "../lib/product";
 import { money } from "../lib/format";
 import ProductImage from "../components/ProductImage";
 import Icon from "../components/Icon";
+import Icon3D from "../components/Icon3D";
 
 export default function Product() {
   const { id } = useParams();
@@ -49,7 +50,7 @@ export default function Product() {
       <section className="section">
         <div className="wrap">
           <div className="empty-state">
-            <div className="em em-ic"><Icon name="frown" size={40} stroke={1.5} /></div>
+            <div className="em em-3d"><Icon3D name="boxsad" size={110} /></div>
             <h3>{t("pdp.notfound_t")}</h3>
             <p>{t("pdp.notfound_p")}</p>
             <Link className="btn btn-primary" to="/shop">{t("pdp.notfound_btn")}</Link>

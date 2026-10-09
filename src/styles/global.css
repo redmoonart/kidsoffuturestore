@@ -1453,7 +1453,7 @@ select.select:focus-visible {
 .order-summary li { display: flex; justify-content: space-between; gap: 12px; font-size: .88rem; color: var(--muted); }
 .order-summary li.total { border-top: 1.5px dashed var(--line); padding-top: 8px; margin-top: 2px; color: var(--ink); font-weight: 900; }
 .order-success-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 16px; }
-.hp-field { position: absolute !important; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.hp-field { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; border: 0; opacity: 0; pointer-events: none; }
 
 /* إمكانية الوصول */
 .sr-only { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
@@ -1860,3 +1860,31 @@ td.admin-row-actions > * + * { margin-inline-start: 6px; }
   .seq-ticker { top: calc(var(--header-h) + 10px); }
   .seq-sign { font-size: .8rem; padding: 6px 10px; }
 }
+
+/* أيقونات الطين ثلاثية الأبعاد */
+.ic3d-box { display: inline-grid; place-items: center; flex-shrink: 0; }
+.ic3d { display: block; max-width: 100%; max-height: 100%; width: auto; height: auto; filter: drop-shadow(0 8px 14px rgba(120,70,30,.16)); user-select: none; -webkit-user-drag: none; }
+.em.em-3d { font-size: 0; display: flex; justify-content: center; margin: 0 auto 12px; }
+.em.em-3d .ic3d { animation: ic3dIn .6s cubic-bezier(.2,.8,.2,1.2) both; }
+@keyframes ic3dIn { from { opacity: 0; transform: translateY(10px) scale(.86); } to { opacity: 1; transform: none; } }
+.radio-card .ic3d { filter: drop-shadow(0 4px 8px rgba(120,70,30,.14)); transition: transform .2s ease; }
+.radio-card.active .ic3d { transform: scale(1.08) rotate(-4deg); }
+@media (prefers-reduced-motion: reduce) { .em.em-3d .ic3d { animation: none; } }
+/* الفئات والأعمار والبطاقات بأيقونات الطين */
+.cat-chip .cat-ic3d { transition: transform .25s cubic-bezier(.2,.8,.2,1.3); }
+.cat-chip:hover .cat-ic3d { transform: translateY(-4px) rotate(-5deg) scale(1.06); }
+.cat-strip.wave .cat-chip .cat-ic3d { animation: iconHop .65s cubic-bezier(.3,.7,.4,1) both; }
+.cat-strip.wave .cat-chip:nth-child(1) .cat-ic3d { animation-delay: .35s; } .cat-strip.wave .cat-chip:nth-child(2) .cat-ic3d { animation-delay: .42s; }
+.cat-strip.wave .cat-chip:nth-child(3) .cat-ic3d { animation-delay: .49s; } .cat-strip.wave .cat-chip:nth-child(4) .cat-ic3d { animation-delay: .56s; }
+.cat-strip.wave .cat-chip:nth-child(5) .cat-ic3d { animation-delay: .63s; } .cat-strip.wave .cat-chip:nth-child(6) .cat-ic3d { animation-delay: .7s; }
+.cat-strip.wave .cat-chip:nth-child(7) .cat-ic3d { animation-delay: .77s; } .cat-strip.wave .cat-chip:nth-child(8) .cat-ic3d { animation-delay: .84s; }
+.cat-strip.wave .cat-chip:nth-child(9) .cat-ic3d { animation-delay: .91s; } .cat-strip.wave .cat-chip:nth-child(10) .cat-ic3d { animation-delay: .98s; }
+.age-card .age-ic3d { margin-bottom: 4px; transition: transform .25s cubic-bezier(.2,.8,.2,1.3); }
+.age-card:hover .age-ic3d { transform: translateY(-4px) rotate(4deg) scale(1.06); }
+.info-card .card-ic3d { margin-bottom: 10px; }
+.ic-head .ic3d-box { margin-inline-end: 4px; }
+@media (max-width: 640px) {
+  .cat-chip .cat-ic3d { width: 54px !important; height: 54px !important; }
+  .age-card .age-ic3d { width: 56px !important; height: 56px !important; }
+}
+@media (prefers-reduced-motion: reduce) { .cat-strip.wave .cat-chip .cat-ic3d { animation: none; } }

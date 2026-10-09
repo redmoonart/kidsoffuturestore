@@ -17,6 +17,7 @@ import { storeWaLink } from "../lib/whatsapp";
 import ProductImage from "../components/ProductImage";
 import FreeShippingBar from "../components/FreeShippingBar";
 import Icon from "../components/Icon";
+import Icon3D from "../components/Icon3D";
 
 export default function Cart() {
   const { t, lang } = useI18n();
@@ -141,7 +142,7 @@ export default function Cart() {
         <section className="section">
           <div className="wrap">
             <Reveal className="empty-state order-success" y={28}>
-              <div className="em em-ic em-ok" ref={successEmojiRef}><Icon name="checkCircle" size={44} stroke={1.6} /></div>
+              <div className="em em-3d" ref={successEmojiRef}><Icon3D name="boxok" size={120} /></div>
               <h3>{t("cart.ok_t")}</h3>
               <p>{t("cart.ok_p")}</p>
               <p className="order-ref">{t("cart.ok_ref")}: <strong dir="ltr">{placedRef}</strong></p>
@@ -180,7 +181,7 @@ export default function Cart() {
         <section className="section">
           <div className="wrap">
             <Reveal className="empty-state" y={28}>
-              <div className="em em-ic"><Icon name="bag" size={40} stroke={1.5} /></div>
+              <div className="em em-3d"><Icon3D name="cartempty" size={110} /></div>
               <h3>{t("cart.empty_t")}</h3>
               <p>{t("cart.empty_p")}</p>
               <Link className="btn btn-primary btn-lg" to="/shop">{t("cart.empty_btn")}</Link>
@@ -289,12 +290,12 @@ export default function Cart() {
                     <label>{t("cart.dtype")}</label>
                     <div className="radio-cards">
                       <div className={`radio-card${effectiveType === "home" ? " active" : ""}`} onClick={() => setDeliveryType("home")}>
-                        <Icon name="home" size={18} />
+                        <Icon3D name="home" size={40} />
                         {t("cart.dtype_home")}
                       </div>
                       {officeAvailable && (
                         <div className={`radio-card${effectiveType === "office" ? " active" : ""}`} onClick={() => setDeliveryType("office")}>
-                          <Icon name="store" size={18} />
+                          <Icon3D name="route" size={40} />
                           {t("cart.dtype_office")}
                         </div>
                       )}

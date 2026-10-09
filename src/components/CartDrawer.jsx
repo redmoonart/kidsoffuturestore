@@ -9,6 +9,7 @@ import { money } from "../lib/format";
 import ProductImage from "./ProductImage";
 import FreeShippingBar from "./FreeShippingBar";
 import Icon from "./Icon";
+import Icon3D from "./Icon3D";
 
 export default function CartDrawer() {
   const { t, lang, meta } = useI18n();
@@ -109,7 +110,7 @@ export default function CartDrawer() {
               </>
             ) : (
               <div className="cart-drawer-empty">
-                <div className="em em-ic"><Icon name="bag" size={36} stroke={1.5} /></div>
+                <div className="em em-3d"><Icon3D name="cartempty" size={92} /></div>
                 <p>{t("cart.empty_t")}</p>
                 <Link to="/shop" className="btn btn-primary" onClick={closeDrawer}>{t("cart.empty_btn")}</Link>
               </div>

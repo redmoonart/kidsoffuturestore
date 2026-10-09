@@ -9,6 +9,7 @@ import { fmt } from "../lib/format";
 import ProductImage from "./ProductImage";
 import { searchProducts } from "../lib/search";
 import Icon from "./Icon";
+import Icon3D from "./Icon3D";
 
 export default function SearchOverlay({ open, onClose }) {
   const { t, lang } = useI18n();
@@ -97,7 +98,7 @@ export default function SearchOverlay({ open, onClose }) {
                   ))
                 ) : (
                   <div className="search-overlay-empty">
-                    <div className="em em-ic"><Icon name="search" size={34} stroke={1.5} /></div>
+                    <div className="em em-3d"><Icon3D name="searchq" size={84} /></div>
                     <p>{t("shop.no_results_t")}</p>
                   </div>
                 )}

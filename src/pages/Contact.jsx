@@ -5,6 +5,7 @@ import Reveal from "../components/Reveal";
 import FAQItem from "../components/FAQItem";
 import SEO from "../components/SEO";
 import Icon from "../components/Icon";
+import Icon3D from "../components/Icon3D";
 
 export default function Contact() {
   const { t } = useI18n();
@@ -18,19 +19,19 @@ export default function Contact() {
         <div className="wrap">
           <div className="info-grid">
             <Reveal className="info-card">
-              <div className="ic"><Icon name="mail" size={26} /></div>
+              <Icon3D name="mail" size={76} className="card-ic3d" />
               <h3>{t("contact.email_t")}</h3>
               <p style={{ color: "var(--muted)", margin: "6px 0 14px" }}>{t("contact.email_d")}</p>
               <a className="btn btn-ghost" href={`mailto:${STORE_CONFIG.email}`}>{t("contact.email_btn")}</a>
             </Reveal>
             <Reveal className="info-card" delay={0.12}>
-              <div className="ic"><Icon name="phone" size={26} /></div>
+              <Icon3D name="phone" size={76} className="card-ic3d" />
               <h3>{t("contact.phone_t")}</h3>
               <p style={{ color: "var(--muted)", margin: "6px 0 14px" }}>{t("contact.phone_d")}</p>
               <a href={`tel:${tel}`} dir="ltr" style={{ fontWeight: 800, fontSize: "1.2rem", color: "var(--primary)" }}>{STORE_CONFIG.phoneDisplay}</a>
             </Reveal>
             <Reveal className="info-card" delay={0.18}>
-              <div className="ic"><Icon name="pin" size={26} /></div>
+              <Icon3D name="mappin" size={76} className="card-ic3d" />
               <h3>{t("contact.addr_t")}</h3>
               <p style={{ color: "var(--muted)", margin: "6px 0 14px" }}>{t("contact.addr_d")}</p>
               <p style={{ fontWeight: 700 }}>{t("contact.addr_v")}</p>

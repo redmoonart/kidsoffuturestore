@@ -16,15 +16,22 @@ import FinaleScene from "../components/cine/FinaleScene";
 import { AGE_BANDS, inBand } from "../lib/ages";
 import { getRecent } from "../lib/recent";
 import Icon from "../components/Icon";
+import Icon3D, { has3D } from "../components/Icon3D";
+
+// أيقونة لكل صنف معروف؛ الأصناف الجديدة من لوحة الإدارة تبقى بالإيموجي الذي اختاره المدير
+const SUBCAT_ICONS = {
+  educational: "puzzle", vehicles: "car", art: "crayons", "misc-toys": "ballblocks",
+  "baby-care": "duck", feeding: "bowl", "kids-clothes": "tshirt", "kids-accessories": "bow",
+};
 
 export default function Home() {
   const { t, lang, meta } = useI18n();
   const { products } = useProducts();
   const { subcategories } = useSubcategories();
   const catStrip = [
-    { emoji: "🧸", label: t("catstrip.toys"), to: "/shop?cat=toys" },
-    { emoji: "👶", label: t("nav.kids"), to: "/shop?cat=kids" },
-    ...subcategories.map((s) => ({ emoji: s.emoji || "🎁", label: subcatLabel(s, lang), to: `/shop?subcat=${s.slug}` })),
+    { emoji: "🧸", icon: "teddy", label: t("catstrip.toys"), to: "/shop?cat=toys" },
+    { emoji: "👶", icon: "bottle", label: t("nav.kids"), to: "/shop?cat=kids" },
+    ...subcategories.map((s) => ({ emoji: s.emoji || "🎁", icon: SUBCAT_ICONS[s.slug], label: subcatLabel(s, lang), to: `/shop?subcat=${s.slug}` })),
   ];
   const stripRef = useRef(null);
   const stripSeen = useInView(stripRef, { once: true, amount: 0.6 });
@@ -59,7 +66,7 @@ export default function Home() {
           <div className={`cat-strip${stripSeen ? " wave" : ""}`} ref={stripRef} style={{ "--n": Math.min(catStrip.length, 10) }}>
             {catStrip.map((c, i) => (
               <RevealLink key={c.to} to={c.to} className="cat-chip" delay={i * 0.05} y={16}>
-                <span className="ic"><span className="ic-emoji">{c.emoji}</span></span>
+                {has3D(c.icon) ? <Icon3D name={c.icon} size={64} className="cat-ic3d" /> : <span className="ic"><span className="ic-emoji">{c.emoji}</span></span>}
                 <h3>{c.label}</h3>
                 <span className="go">{meta.dir === "rtl" ? "←" : "→"}</span>
               </RevealLink>
@@ -79,7 +86,7 @@ export default function Home() {
             <div className="age-grid">
               {ageBands.map((b, i) => (
                 <RevealLink key={b.id} to={`/shop?age=${encodeURIComponent(b.id)}`} className={`age-card a${i + 1}`} delay={i * 0.06} y={16}>
-                  <span className="age-emoji" aria-hidden="true">{b.emoji}</span>
+                  <Icon3D name={b.icon} size={68} className="age-ic3d" />
                   <span className="age-range">{t("shop.age_band", { v: b.id })}</span>
                   <span className="age-count">{b.count} {t("shop.count_unit")}</span>
                 </RevealLink>

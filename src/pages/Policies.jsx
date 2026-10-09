@@ -7,8 +7,10 @@ import PageHead from "../components/PageHead";
 import Reveal from "../components/Reveal";
 import SEO from "../components/SEO";
 import Icon from "../components/Icon";
+import Icon3D from "../components/Icon3D";
 
 const ICONS = { terms: "file", delivery: "truck", returns: "exchange", privacy: "lock" };
+const ICONS3D = { terms: "doc", delivery: "van", returns: "exchange", privacy: "lock" };
 
 export default function Policies() {
   const { lang } = useI18n();
@@ -47,7 +49,7 @@ export default function Policies() {
 
           {POLICY_SECTIONS.map((k) => (
             <Reveal key={k} as="article" className="prose policy-block" y={18}>
-              <h2 id={k} className="ic-head"><Icon name={ICONS[k]} size={22} />{P[k].t}</h2>
+              <h2 id={k} className="ic-head"><Icon3D name={ICONS3D[k]} size={52} />{P[k].t}</h2>
               <ul className="dots">
                 {P[k].p.map((line, i) => <li key={i}>{fill(line)}</li>)}
               </ul>

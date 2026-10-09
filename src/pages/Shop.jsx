@@ -13,6 +13,7 @@ import { searchProducts } from "../lib/search";
 import { isStoreCategory } from "../data/categories";
 import Icon from "../components/Icon";
 import { AGE_BANDS, minAge, inBand } from "../lib/ages";
+import Icon3D from "../components/Icon3D";
 
 const PRICE_BANDS = [
   { id: "lt1000", min: 0, max: 999 },
@@ -200,7 +201,7 @@ export default function Shop() {
             </StaggerGrid>
           ) : (
             <div className="empty-state" style={{ gridColumn: "1/-1" }}>
-              <div className="em em-ic"><Icon name="search" size={36} stroke={1.5} /></div>
+              <div className="em em-3d"><Icon3D name="searchq" size={104} /></div>
               <h3>{t("shop.no_results_t")}</h3>
               <p>{t("shop.no_results_p")}</p>
               {hasFilters && <button className="btn btn-ghost" style={{ marginTop: 12 }} onClick={clearFilters}><Icon name="x" size={16} />{t("shop.f_clear")}</button>}

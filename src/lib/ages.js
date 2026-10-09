@@ -1,9 +1,9 @@
 // فئات الأعمار المشتركة بين صفحة المتجر والصفحة الرئيسية
 export const AGE_BANDS = [
-  { id: "0-2", min: 0, max: 2, emoji: "👶" },
-  { id: "3-5", min: 3, max: 5, emoji: "🧒" },
-  { id: "6-8", min: 6, max: 8, emoji: "👧" },
-  { id: "9+", min: 9, max: 99, emoji: "🧑" },
+  { id: "0-2", min: 0, max: 2, emoji: "👶", icon: "rattle" },
+  { id: "3-5", min: 3, max: 5, emoji: "🧒", icon: "abc" },
+  { id: "6-8", min: 6, max: 8, emoji: "👧", icon: "bike" },
+  { id: "9+", min: 9, max: 99, emoji: "🧑", icon: "book" },
 ];
 
 export function minAge(p) {

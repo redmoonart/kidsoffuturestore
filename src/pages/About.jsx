@@ -4,12 +4,13 @@ import PageHead from "../components/PageHead";
 import Reveal from "../components/Reveal";
 import SEO from "../components/SEO";
 import Icon from "../components/Icon";
+import Icon3D from "../components/Icon3D";
 
 const CARDS = [
-  ["truck", "about.c1_t", "about.c1_d"],
-  ["cash", "about.c2_t", "about.c2_d"],
+  ["van", "about.c1_t", "about.c1_d"],
+  ["cod", "about.c2_t", "about.c2_d"],
   ["shield", "about.c3_t", "about.c3_d"],
-  ["phone", "about.c4_t", "about.c4_d"],
+  ["chat", "about.c4_t", "about.c4_d"],
 ];
 
 export default function About() {
@@ -40,7 +41,7 @@ export default function About() {
           <div className="info-grid">
             {CARDS.map(([ic, tt, dd], i) => (
               <Reveal key={tt} className="info-card" delay={i * 0.06}>
-                <div className="ic"><Icon name={ic} size={26} /></div>
+                <Icon3D name={ic} size={76} className="card-ic3d" />
                 <h3>{t(tt)}</h3>
                 <p style={{ color: "var(--muted)" }}>{t(dd)}</p>
               </Reveal>
