@@ -377,3 +377,6 @@ export function mountToyScene(host) {
     },
   };
 }
+
+// يُعاد استعمالها في سكربت تصيير إطارات مشهد التمرير (scripts/render-sequence)
+export { BUILDERS, C as TOY_COLORS, plastic, shadowTexture };
