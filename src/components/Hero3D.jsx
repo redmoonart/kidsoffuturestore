@@ -116,11 +116,11 @@ export default function Hero3D() {
         <img
           className={`hero-dani-img${reduceMotion ? "" : " breathe"}`}
           src={heroDani}
-          srcSet={`${heroDani420} 420w, ${heroDani} 755w`}
+          srcSet={`${heroDani420} 420w, ${heroDani} 765w`}
           sizes="(max-width: 1024px) 40vw, 26vw"
           alt="Dani"
           fetchPriority="high"
-          width="755"
+          width="765"
           height="1165"
         />
         </motion.div>

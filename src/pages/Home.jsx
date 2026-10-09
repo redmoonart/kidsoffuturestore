@@ -10,6 +10,10 @@ import RevealLink from "../components/RevealLink";
 import ScrollReveal from "../components/ScrollReveal";
 import StaggerGrid from "../components/StaggerGrid";
 import Hero3D from "../components/Hero3D";
+import CinematicIntro from "../components/cine/CinematicIntro";
+import StoryScene from "../components/cine/StoryScene";
+import DeliveryScene from "../components/cine/DeliveryScene";
+import FinaleScene from "../components/cine/FinaleScene";
 import { AGE_BANDS, inBand } from "../lib/ages";
 import { getRecent } from "../lib/recent";
 import Icon from "../components/Icon";
@@ -42,26 +46,10 @@ export default function Home() {
 
   return (
     <>
+      <CinematicIntro />
       <Hero3D />
 
-      <section className="section-sm">
-        <div className="wrap">
-          <Reveal className="stat-strip">
-            <div className="stat-card c1">
-              <span className="num">58</span>
-              <span className="lbl">{t("feat.delivery_d")}</span>
-            </div>
-            <div className="stat-card c2">
-              <span className="num">48h</span>
-              <span className="lbl">{t("feat.exchange_d")}</span>
-            </div>
-            <div className="stat-card c3">
-              <span className="num">100%</span>
-              <span className="lbl">{t("feat.cod_d")}</span>
-            </div>
-          </Reveal>
-        </div>
-      </section>
+      <StoryScene />
 
       {/* الفئات — أول محطة سردية بعد الهيرو: العالم يستمر بالتحرك */}
       <section className="section">
@@ -123,6 +111,8 @@ export default function Home() {
         </div>
       </section>
 
+      <DeliveryScene />
+
       {/* منتجات الأطفال */}
       {kidsProducts.length > 0 && (
         <section className="section">
@@ -177,21 +167,7 @@ export default function Home() {
         </section>
       )}
 
-      {/* CTA نهائي */}
-      <section className="section-sm">
-        <div className="wrap">
-          <Reveal className="cod-banner" delay={0.4}>
-            <span className="em em-ic"><Icon name="cash" size={34} stroke={1.6} /></span>
-            <div style={{ flex: 1, minWidth: 220 }}>
-              <h3>{t("cod.title")}</h3>
-              <p>{t("cod.text")}</p>
-            </div>
-            <Link to="/shop" className="btn" style={{ background: "#fff", color: "var(--teal)" }}>
-              {t("cod.btn")}
-            </Link>
-          </Reveal>
-        </div>
-      </section>
+      <FinaleScene />
     </>
   );
 }
