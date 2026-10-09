@@ -113,7 +113,7 @@ export default function FrameScroller({ name, n, heightVh = 300, eager = false, 
   }
 
   return (
-    <section className={`seq ${className}`} ref={ref} style={{ "--seq-h": heightVh }}>
+    <section className={`seq ${className}`} ref={ref} style={{ height: `${heightVh}vh` }}>
       <div className="seq-sticky">
         <canvas ref={canvasRef} className="seq-canvas" aria-hidden="true" />
         <div className="seq-scrim" />

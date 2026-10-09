@@ -1888,5 +1888,3 @@ td.admin-row-actions > * + * { margin-inline-start: 6px; }
   .age-card .age-ic3d { width: 56px !important; height: 56px !important; }
 }
 @media (prefers-reduced-motion: reduce) { .cat-strip.wave .cat-chip .cat-ic3d { animation: none; } }
-/* طول المشهد = مسافة التمرير (الطول ناقص شاشة واحدة) */
-.seq:not(.seq-static) { height: calc(var(--seq-h, 200) * 1vh); }

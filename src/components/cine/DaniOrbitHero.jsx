@@ -18,7 +18,7 @@ export default function DaniOrbitHero() {
     </>
   );
   return (
-    <FrameScroller name="orbit" n={96} heightVh={200} eager className="seq-hero" renderStatic={() => <div className="seq-cap">{intro}</div>}>
+    <FrameScroller name="orbit" n={96} heightVh={280} eager className="seq-hero" renderStatic={() => <div className="seq-cap">{intro}</div>}>
       {(p) => (
         <>
           <Caption progress={p} range={[0, 0.3]}>{intro}</Caption>
