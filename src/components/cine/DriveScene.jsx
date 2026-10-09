@@ -59,7 +59,7 @@ export default function DriveScene() {
     </>
   );
   return (
-    <FrameScroller name="drive" n={96} heightVh={280} staticFrame={40} className="seq-drive"
+    <FrameScroller name="drive" n={96} heightVh={200} staticFrame={40} className="seq-drive"
       renderStatic={() => <div className="seq-cap">{copy}</div>}>
       {(p) => (
         <>

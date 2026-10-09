@@ -14,7 +14,7 @@ export default function GiftScene() {
     </>
   );
   return (
-    <FrameScroller name="gift" n={96} heightVh={300} staticFrame={95} renderStatic={() => <div className="seq-cap">{last}</div>}>
+    <FrameScroller name="gift" n={96} heightVh={210} staticFrame={95} renderStatic={() => <div className="seq-cap">{last}</div>}>
       {(p) => (
         <>
           <Caption progress={p} range={[0.02, 0.3]}>
