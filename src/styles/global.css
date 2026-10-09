@@ -1789,3 +1789,53 @@ td.admin-row-actions > * + * { margin-inline-start: 6px; }
   .cine-day-sun { top: 30vh; width: 18vmin; height: 18vmin; }
 }
 .cine-intro:not(.ready) *, .cine-intro:not(.ready) *::after, .cine-intro:not(.ready) *::before { animation-play-state: paused !important; }
+
+/* ============================================================
+   مشاهد الفيديو مع التمرير (FrameScroller)
+   ============================================================ */
+.seq { position: relative; background: #08070d; color: #fff; }
+.seq-static { height: auto; }
+.seq-sticky { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; background: #08070d; }
+.seq-static .seq-sticky { position: relative; height: 92svh; }
+.seq-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.seq-scrim { position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(to left, rgba(8,7,13,.88) 0%, rgba(8,7,13,.55) 26%, rgba(8,7,13,0) 46%),
+              linear-gradient(to top, rgba(8,7,13,.55) 0%, rgba(8,7,13,0) 22%); }
+[dir="ltr"] .seq-scrim { background: linear-gradient(to right, rgba(8,7,13,.88) 0%, rgba(8,7,13,.55) 26%, rgba(8,7,13,0) 46%),
+              linear-gradient(to top, rgba(8,7,13,.55) 0%, rgba(8,7,13,0) 22%); }
+.seq-caps { position: absolute; inset: 0; display: grid; align-items: center; justify-items: start; padding: 0 6vw; padding-top: var(--header-h); }
+.seq-cap { grid-area: 1 / 1; max-width: min(34vw, 520px); will-change: transform, opacity; }
+.seq-cap h1, .seq-cap h2 { margin: 0; font-weight: 900; line-height: 1.12; letter-spacing: -.01em; text-wrap: balance;
+  font-size: clamp(2rem, 3.6vw, 3.4rem); text-shadow: 0 8px 40px rgba(0,0,0,.45); }
+.seq-cap h1 .hl { color: #ffb27a; }
+.seq-cap p { margin: 16px 0 0; font-size: 1.05rem; line-height: 1.75; color: rgba(255,255,255,.82); max-width: 32em; }
+.seq-kicker { display: inline-block; margin-bottom: 12px; font-size: .8rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: #f5c27a; }
+.seq-ctas { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 26px; }
+.btn-glass { background: rgba(255,255,255,.1); color: #fff; border: 1px solid rgba(255,255,255,.28); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+.btn-glass:hover { background: rgba(255,255,255,.18); color: #fff; }
+.seq-chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+.seq-chips span { display: inline-flex; align-items: center; gap: 7px; padding: 8px 14px; border-radius: 999px; font-weight: 800; font-size: .88rem;
+  background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2); }
+.seq-chips .icon { color: #f5c27a; }
+.seq-hint { position: absolute; bottom: 26px; left: 50%; margin-left: -13px; pointer-events: none; }
+.seq-mouse { display: block; width: 26px; height: 40px; border: 2px solid rgba(255,255,255,.55); border-radius: 14px; position: relative; }
+.seq-mouse::after { content: ""; position: absolute; left: 50%; top: 8px; width: 4px; height: 8px; margin-left: -2px; border-radius: 2px; background: #fff;
+  animation: seqWheel 1.6s ease-in-out infinite; }
+@keyframes seqWheel { 0% { opacity: 0; transform: translateY(-2px); } 40% { opacity: 1; } 100% { opacity: 0; transform: translateY(10px); } }
+.seq-progress { position: absolute; inset-inline: 0; bottom: 0; height: 3px; background: rgba(255,255,255,.08); }
+.seq-progress span { display: block; height: 100%; background: linear-gradient(90deg, #f5c27a, #e0743c); }
+[dir="rtl"] .seq-progress span { margin-inline-start: 0; }
+
+@media (max-width: 760px) {
+  .seq-scrim, [dir="ltr"] .seq-scrim { background: linear-gradient(to top, rgba(8,7,13,.92) 0%, rgba(8,7,13,.7) 32%, rgba(8,7,13,0) 58%),
+                linear-gradient(to bottom, rgba(8,7,13,.5) 0%, rgba(8,7,13,0) 18%); }
+  .seq-caps { align-items: end; justify-items: center; padding: 0 20px 9vh; text-align: center; }
+  .seq-cap { max-width: 100%; }
+  .seq-cap h1, .seq-cap h2 { font-size: clamp(1.6rem, 7.4vw, 2.2rem); }
+  .seq-cap p { font-size: .95rem; margin-top: 10px; }
+  .seq-ctas, .seq-chips { justify-content: center; }
+  .seq-ctas { margin-top: 18px; gap: 10px; }
+  .seq-ctas .btn { flex: 1 1 140px; padding: 12px 14px; font-size: .95rem; }
+  .seq-hint { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { .seq-mouse::after { animation: none; } }

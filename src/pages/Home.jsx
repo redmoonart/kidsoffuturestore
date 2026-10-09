@@ -9,9 +9,8 @@ import Reveal from "../components/Reveal";
 import RevealLink from "../components/RevealLink";
 import ScrollReveal from "../components/ScrollReveal";
 import StaggerGrid from "../components/StaggerGrid";
-import Hero3D from "../components/Hero3D";
-import CinematicIntro from "../components/cine/CinematicIntro";
-import StoryScene from "../components/cine/StoryScene";
+import DaniOrbitHero from "../components/cine/DaniOrbitHero";
+import GiftScene from "../components/cine/GiftScene";
 import DeliveryScene from "../components/cine/DeliveryScene";
 import FinaleScene from "../components/cine/FinaleScene";
 import { AGE_BANDS, inBand } from "../lib/ages";
@@ -46,10 +45,8 @@ export default function Home() {
 
   return (
     <>
-      <CinematicIntro />
-      <Hero3D />
+      <DaniOrbitHero />
 
-      <StoryScene />
 
       {/* الفئات — أول محطة سردية بعد الهيرو: العالم يستمر بالتحرك */}
       <section className="section">
@@ -91,6 +88,8 @@ export default function Home() {
           </div>
         </section>
       )}
+
+      <GiftScene />
 
       {/* منتجات مختارة */}
       <section className="section" style={{ background: "#fff" }}>
