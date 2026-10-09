@@ -10,7 +10,7 @@ import { useNewOrdersAlert } from "../admin/useNewOrdersAlert";
 import { onInstallAvailable, promptInstall, isStandalone } from "../admin/pwa";
 
 export default function AdminDashboard() {
-  const { products, loading, refresh } = useProducts();
+  const { allProducts: products, loading, refresh } = useProducts();
   const { subcategories } = useSubcategories();
   const { signOut } = useAdminAuth();
   const [tab, setTab] = useState("orders"); // "orders" | "products" | "categories"
@@ -148,7 +148,7 @@ export default function AdminDashboard() {
                       </td>
                       <td>{p.name}</td>
                       <td>
-                        {p.category === "toys" ? "ألعاب" : "مدرسي"}
+                        {p.category === "toys" ? "ألعاب" : p.category === "kids" ? "أطفال" : "مدرسي (قديم)"}
                         {p.subCategory ? ` — ${subcatLabelBySlug[p.subCategory] || p.subCategory}` : ""}
                       </td>
                       <td>

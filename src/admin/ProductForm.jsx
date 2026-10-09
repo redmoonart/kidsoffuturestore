@@ -143,7 +143,7 @@ export default function ProductForm({ initial, nextId, onCancel, onSaved }) {
             }}
           >
             <option value="toys">ألعاب</option>
-            <option value="school">أدوات مدرسية</option>
+            <option value="kids">منتجات الأطفال</option>
           </select>
         </label>
         <label>

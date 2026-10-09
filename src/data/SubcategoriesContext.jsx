@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect, useCallback, useMemo } from "react";
 import { restSelect } from "../lib/rest";
+import { isStoreCategory } from "./categories";
 
 const SubcategoriesContext = createContext(null);
 
@@ -37,7 +38,7 @@ export function SubcategoriesProvider({ children }) {
   }, [refresh]);
 
   const value = useMemo(
-    () => ({ subcategories, loading, error, refresh }),
+    () => ({ subcategories: subcategories.filter((s) => isStoreCategory(s.category)), loading, error, refresh }),
     [subcategories, loading, error, refresh]
   );
 

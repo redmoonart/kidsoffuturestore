@@ -27,7 +27,7 @@ export default function Footer() {
             <h4>{t("footer.quicklinks")}</h4>
             <Link to="/shop">{t("nav.shop")}</Link>
             <Link to="/shop?cat=toys">{t("nav.toys")}</Link>
-            <Link to="/shop?cat=school">{t("nav.school")}</Link>
+            <Link to="/shop?cat=kids">{t("nav.kids")}</Link>
             <Link to="/cart">{t("footer.cart")}</Link>
           </div>
           <div>

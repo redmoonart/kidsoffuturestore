@@ -14,7 +14,7 @@ async function fetchProductIds() {
     return [];
   }
   try {
-    const res = await fetch(`${url}/rest/v1/products?select=id`, {
+    const res = await fetch(`${url}/rest/v1/products?select=id&category=in.(toys,kids)`, {
       headers: { apikey: key, Authorization: `Bearer ${key}` },
     });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);

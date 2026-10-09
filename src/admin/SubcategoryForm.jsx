@@ -56,7 +56,7 @@ export default function SubcategoryForm({ initial, nextSortOrder, onCancel, onSa
           القسم
           <select value={f.category} onChange={set("category")}>
             <option value="toys">ألعاب</option>
-            <option value="school">أدوات مدرسية</option>
+            <option value="kids">منتجات الأطفال</option>
           </select>
         </label>
         <label>

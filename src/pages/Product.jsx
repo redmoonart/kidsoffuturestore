@@ -58,7 +58,7 @@ export default function Product() {
     );
   }
 
-  const catLabel = t(p.category === "toys" ? "card.toys" : "card.school");
+  const catLabel = t(p.category === "toys" ? "card.toys" : "card.kids");
   const disc = p.oldPrice ? Math.round((1 - p.price / p.oldPrice) * 100) : 0;
   const out = p.stock === false;
   const related = products.filter((x) => x.category === p.category && x.id !== p.id).slice(0, 4);

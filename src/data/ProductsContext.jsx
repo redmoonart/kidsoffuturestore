@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect, useCallback, useMemo } from "react";
 import { restSelect } from "../lib/rest";
+import { isStoreCategory } from "./categories";
 
 const ProductsContext = createContext(null);
 
@@ -47,8 +48,9 @@ export function ProductsProvider({ children }) {
     refresh();
   }, [refresh]);
 
+  // المتجر يرى فئاته الحالية فقط؛ لوحة الإدارة تستعمل allProducts لترى القديم وتحذفه
   const value = useMemo(
-    () => ({ products, loading, error, refresh }),
+    () => ({ products: products.filter((p) => isStoreCategory(p.category)), allProducts: products, loading, error, refresh }),
     [products, loading, error, refresh]
   );
 

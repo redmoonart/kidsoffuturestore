@@ -61,7 +61,7 @@ export default function Hero3D() {
           <motion.p className="lead" variants={fadeUp}>{t("hero.lead")}</motion.p>
           <motion.div className="hero-cta" variants={fadeUp}>
             <Link to="/shop" className="btn btn-primary btn-lg glow">{t("hero.cta_shop")}</Link>
-            <Link to="/shop?cat=school" className="btn btn-ghost btn-lg">{t("hero.cta_school")}</Link>
+            <Link to="/shop?cat=kids" className="btn btn-ghost btn-lg">{t("hero.cta_kids")}</Link>
           </motion.div>
           <motion.div className="hero-trust" variants={fadeUp}>
             <span>🚚 <span>{t("hero.badge_delivery")}</span></span>

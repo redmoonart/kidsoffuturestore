@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { useScroll, useInView } from "framer-motion";
+import { useInView } from "framer-motion";
 import { useI18n } from "../i18n/I18nContext";
 import { useProducts } from "../data/ProductsContext";
 import { useSubcategories, subcatLabel } from "../data/SubcategoriesContext";
@@ -9,7 +9,6 @@ import Reveal from "../components/Reveal";
 import RevealLink from "../components/RevealLink";
 import ScrollReveal from "../components/ScrollReveal";
 import StaggerGrid from "../components/StaggerGrid";
-import FloatIcon from "../components/FloatIcon";
 import Hero3D from "../components/Hero3D";
 import { AGE_BANDS, inBand } from "../lib/ages";
 import { getRecent } from "../lib/recent";
@@ -20,13 +19,14 @@ export default function Home() {
   const { subcategories } = useSubcategories();
   const catStrip = [
     { emoji: "🧸", label: t("catstrip.toys"), to: "/shop?cat=toys" },
+    { emoji: "👶", label: t("nav.kids"), to: "/shop?cat=kids" },
     ...subcategories.map((s) => ({ emoji: s.emoji || "🎁", label: subcatLabel(s, lang), to: `/shop?subcat=${s.slug}` })),
   ];
   const stripRef = useRef(null);
   const stripSeen = useInView(stripRef, { once: true, amount: 0.6 });
   const picks = products.filter((p) => p.badge || p.oldPrice).slice(0, 8);
   const featured = picks.length ? picks : products.slice(0, 8);
-  const schoolSupplies = products.filter((p) => p.category === "school").slice(0, 4);
+  const kidsProducts = products.filter((p) => p.category === "kids").slice(0, 4);
   const bestSellers = products.filter((p) => p.badge === "الأكثر مبيعاً").slice(0, 4);
 
   const ageBands = AGE_BANDS.map((b) => ({ ...b, count: products.filter((p) => inBand(p, b)).length })).filter((b) => b.count > 0);
@@ -34,8 +34,6 @@ export default function Home() {
   const recent = recentIds.map((id) => products.find((p) => p.id === id)).filter(Boolean).slice(0, 4);
 
 
-  const schoolRef = useRef(null);
-  const { scrollYProgress: schoolScroll } = useScroll({ target: schoolRef, offset: ["start 90%", "end 20%"] });
 
 
   return (
@@ -69,7 +67,7 @@ export default function Home() {
             <h2>{t("cats.title")}</h2>
             <p>{t("cats.sub")}</p>
           </ScrollReveal>
-          <div className={`cat-strip${stripSeen ? " wave" : ""}`} ref={stripRef}>
+          <div className={`cat-strip${stripSeen ? " wave" : ""}`} ref={stripRef} style={{ "--n": Math.min(catStrip.length, 10) }}>
             {catStrip.map((c, i) => (
               <RevealLink key={c.to} to={c.to} className="cat-chip" delay={i * 0.05} y={16}>
                 <span className="ic"><span className="ic-emoji">{c.emoji}</span></span>
@@ -121,30 +119,22 @@ export default function Home() {
         </div>
       </section>
 
-      {/* الأدوات المدرسية — عالم مختلف بصرياً: أدوات مدرسية طافية حول المنتجات */}
-      {schoolSupplies.length > 0 && (
-        <section className="section icon-stage" ref={schoolRef}>
-          <FloatIcon emoji="✏️" scrollYProgress={schoolScroll} range={[60, -60]} depth="fg"
-            top="4%" left="2%" size="2.2rem" />
-          <FloatIcon emoji="📚" scrollYProgress={schoolScroll} range={[40, -80]} depth="mid"
-            top="10%" right="3%" size="2.1rem" className="decor-icon-extra" />
-          <FloatIcon emoji="🎒" scrollYProgress={schoolScroll} range={[70, -40]} depth="bg"
-            bottom="6%" left="5%" size="1.9rem" className="decor-icon-extra" />
-          <FloatIcon emoji="🖍️" scrollYProgress={schoolScroll} range={[30, -70]} depth="mid"
-            bottom="8%" right="2%" size="2rem" />
+      {/* منتجات الأطفال */}
+      {kidsProducts.length > 0 && (
+        <section className="section">
           <div className="wrap">
             <ScrollReveal className="section-head">
-              <span className="kicker">{t("schoolsec.kicker")}</span>
-              <h2>{t("schoolsec.title")}</h2>
-              <p>{t("schoolsec.sub")}</p>
+              <span className="kicker">{t("kidssec.kicker")}</span>
+              <h2>{t("kidssec.title")}</h2>
+              <p>{t("kidssec.sub")}</p>
             </ScrollReveal>
             <StaggerGrid className="products-grid">
-              {schoolSupplies.map((p) => (
+              {kidsProducts.map((p) => (
                 <ProductCard key={p.id} product={p} />
               ))}
             </StaggerGrid>
             <div style={{ textAlign: "center", marginTop: 30 }}>
-              <Link to="/shop?cat=school" className="btn btn-ghost btn-lg">{t("schoolsec.viewall")}</Link>
+              <Link to="/shop?cat=kids" className="btn btn-ghost btn-lg">{t("kidssec.viewall")}</Link>
             </div>
           </div>
         </section>

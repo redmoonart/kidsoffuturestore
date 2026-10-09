@@ -10,6 +10,7 @@ import StaggerGrid from "../components/StaggerGrid";
 import SEO from "../components/SEO";
 import { pName } from "../lib/product";
 import { searchProducts } from "../lib/search";
+import { isStoreCategory } from "../data/categories";
 import { AGE_BANDS, minAge, inBand } from "../lib/ages";
 
 const PRICE_BANDS = [
@@ -19,12 +20,15 @@ const PRICE_BANDS = [
   { id: "gt5000", min: 5001, max: Infinity },
 ];
 
+
+// فئة غير معروفة (مثل رابط قديم ?cat=school) تُعرض كـ"الكل"
+const readCat = (sp) => (isStoreCategory(sp.get("cat")) ? sp.get("cat") : "all");
 export default function Shop() {
   const { t, lang } = useI18n();
   const { products } = useProducts();
   const { subcategories } = useSubcategories();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [cat, setCat] = useState(searchParams.get("cat") || "all");
+  const [cat, setCat] = useState(() => readCat(searchParams));
   const subcat = searchParams.get("subcat") || "";
   const age = searchParams.get("age") || "";
   const price = searchParams.get("price") || "";
@@ -48,7 +52,7 @@ export default function Shop() {
   const [sort, setSort] = useState("default");
 
   useEffect(() => {
-    setCat(searchParams.get("cat") || "all");
+    setCat(readCat(searchParams));
   }, [searchParams]);
 
   // تغيير الفئة/الصنف يحافظ على فلاتر العمر والسعر المختارة
@@ -112,7 +116,7 @@ export default function Shop() {
   return (
     <>
       <SEO title={`${t("shop.head_title")} — Kids of the Future`} description={t("shop.head_sub")} path="shop" />
-      <PageHead title={t("shop.head_title")} subtitle={t("shop.head_sub")} chips={["🧸", "🎒", "🚗", "✏️"]} />
+      <PageHead title={t("shop.head_title")} subtitle={t("shop.head_sub")} chips={["🧸", "🍼", "🚗", "👕"]} />
       <section className="section">
         <div className="wrap">
           <Reveal className="shop-toolbar">
@@ -123,8 +127,8 @@ export default function Shop() {
               <button className={`chip${cat === "toys" ? " active" : ""}`} onClick={() => handleCat("toys")}>
                 {t("shop.chip_toys")}
               </button>
-              <button className={`chip${cat === "school" ? " active" : ""}`} onClick={() => handleCat("school")}>
-                {t("shop.chip_school")}
+              <button className={`chip${cat === "kids" ? " active" : ""}`} onClick={() => handleCat("kids")}>
+                {t("shop.chip_kids")}
               </button>
             </div>
             {visibleSubs.length > 0 && (

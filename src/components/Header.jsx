@@ -88,7 +88,7 @@ export default function Header() {
     { to: "/", label: t("nav.home") },
     { to: "/shop", label: t("nav.shop") },
     { to: "/shop?cat=toys", label: t("nav.toys") },
-    { to: "/shop?cat=school", label: t("nav.school") },
+    { to: "/shop?cat=kids", label: t("nav.kids") },
     { to: "/about", label: t("nav.about") },
     { to: "/contact", label: t("nav.contact") },
   ];

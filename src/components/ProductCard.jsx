@@ -15,7 +15,7 @@ export default function ProductCard({ product }) {
   const disc = product.oldPrice ? Math.round((1 - product.price / product.oldPrice) * 100) : 0;
   const out = product.stock === false;
   const lowStock = !out && typeof product.stockQty === "number" && product.stockQty > 0 && product.stockQty <= 5;
-  const catLabel = t(product.category === "toys" ? "card.toys" : "card.school");
+  const catLabel = t(product.category === "toys" ? "card.toys" : "card.kids");
 
   function handleAdd(e) {
     addToCart(product.id, 1, e.currentTarget.closest(".pcard")?.querySelector(".thumb") || e.currentTarget);

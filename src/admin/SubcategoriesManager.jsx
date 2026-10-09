@@ -44,7 +44,7 @@ export default function SubcategoriesManager() {
   const [deleteError, setDeleteError] = useState("");
 
   const toys = useMemo(() => subcategories.filter((s) => s.category === "toys"), [subcategories]);
-  const school = useMemo(() => subcategories.filter((s) => s.category === "school"), [subcategories]);
+  const kids = useMemo(() => subcategories.filter((s) => s.category === "kids"), [subcategories]);
   const nextSortOrder = subcategories.length
     ? Math.max(...subcategories.map((s) => s.sortOrder)) + 1
     : 1;
@@ -93,9 +93,9 @@ export default function SubcategoriesManager() {
             deleteBusy={deleteBusy}
           />
           <Section
-            title="أصناف الأدوات المدرسية"
-            category="school"
-            items={school}
+            title="أصناف منتجات الأطفال"
+            category="kids"
+            items={kids}
             onEdit={setEditing}
             onDelete={handleDelete}
             onAdd={(cat) => setEditing(`new:${cat}`)}
