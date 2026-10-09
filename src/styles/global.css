@@ -1505,3 +1505,82 @@ main:focus { outline: none; }
 @media (min-width: 900px) {
   .cat-strip { grid-template-columns: repeat(var(--n, 9), minmax(0, 1fr)); }
 }
+
+/* ============================================================
+   أيقونات خطّية موحّدة بدل الإيموجي
+   ============================================================ */
+.icon { flex-shrink: 0; display: inline-block; vertical-align: middle; }
+.ic-link { display: inline-flex; align-items: center; gap: 8px; }
+.ic-link .icon { opacity: .85; }
+.ic-head { display: flex; align-items: center; gap: 10px; }
+.ic-head .icon { color: var(--primary); }
+.tag { display: inline-flex; align-items: center; gap: 6px; }
+.tag .icon { color: var(--teal); }
+.in-stock, .out-stock { display: inline-flex; align-items: center; gap: 6px; }
+.chip { display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+.filter-label { display: inline-flex; align-items: center; gap: 5px; }
+.filter-clear { display: inline-flex; align-items: center; gap: 4px; }
+.radio-card { display: flex; align-items: center; justify-content: center; gap: 8px; }
+.radio-card .icon { color: var(--muted); }
+.radio-card.active .icon { color: var(--primary); }
+.cart-row .remove { display: inline-flex; align-items: center; gap: 5px; }
+.hero-ribbon { display: flex; align-items: center; justify-content: center; gap: 8px; }
+.hero-copy .hero-trust .icon { color: var(--teal); }
+.hero-chip-ic { display: grid; place-items: center; color: var(--ok, #16a34a); }
+.lang-btn { gap: 6px; }
+.cart-ic, .search-bar-trigger .ic, .search-box .ic, .sort-ic, .search-overlay-bar .ic { display: inline-grid; place-items: center; }
+.footer .socials a { display: grid; place-items: center; }
+.info-card .ic { display: inline-grid; place-items: center; width: 58px; height: 58px; border-radius: 18px;
+  background: rgba(216,121,67,.12); color: var(--primary); font-size: 0; filter: none; }
+.free-bar-text { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.free-bar-text .icon { color: var(--teal); }
+.delivery-est-free .icon { color: var(--primary); }
+
+/* حالات فارغة/نجاح: أيقونة داخل دائرة هادئة */
+.em.em-ic { display: grid; place-items: center; width: 88px; height: 88px; margin: 0 auto 10px; border-radius: 50%;
+  background: rgba(216,121,67,.12); color: var(--primary); font-size: 0; }
+.em.em-ic.em-ok { background: rgba(22,163,74,.12); color: #16a34a; }
+.cod-banner .em.em-ic { width: 64px; height: 64px; margin: 0; background: rgba(255,255,255,.18); color: #fff; }
+.search-overlay-empty .em.em-ic, .cart-drawer-empty .em.em-ic { width: 72px; height: 72px; }
+.pchip { display: grid; place-items: center; color: var(--primary); }
+
+/* خلفية لطيفة حسب الفئة للمنتجات التي لا تملك صورة بعد */
+.pcard .thumb.no-img.t-toys { background: radial-gradient(circle at 50% 42%, #fff 0 22%, #fdeadf 60%, #f9dccb 100%); }
+.pcard .thumb.no-img.t-kids { background: radial-gradient(circle at 50% 42%, #fff 0 22%, #e4f2ef 60%, #cfe7e2 100%); }
+.pcard .thumb.no-img::after { display: none; }
+
+/* هيرو الموبايل: أقصر، والمنتجات تظهر أسرع، وداني لا يختفي خلف البطاقة */
+@media (max-width: 640px) {
+  .hero-scene-full { min-height: 0; }
+  .hero-scene-wrap { padding: 22px 0 168px; }
+  .hero-copy-glass { padding: 18px 16px; border-radius: 22px; }
+  .hero-copy h1 { font-size: 1.7rem; margin-bottom: 10px; }
+  .hero-copy .lead { font-size: .94rem; line-height: 1.6; margin-bottom: 16px; }
+  .hero-copy .hero-cta { margin-bottom: 0; gap: 10px; }
+  .hero-copy .hero-cta .btn { padding: 12px 14px; font-size: .95rem; }
+  .hero-copy .hero-trust, .hero-chip { display: none; }
+  .hero-dani-wrap { width: 150px; }
+  .hero-ribbon { font-size: .8rem; padding: 7px 10px; }
+}
+.menu-toggle { place-items: center; }
+@media (max-width: 640px) {
+  .hero-scene-wrap { padding-bottom: 214px; }
+  .hero-dani-wrap { width: 140px; z-index: 1; }
+  .hero-dani-bubble { top: 4%; }
+  /* الأرقام الثلاثة في سطر واحد مضغوط بدل ثلاث بطاقات طويلة */
+  .stat-strip { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .stat-card { padding: 14px 10px; border-radius: 16px; align-items: center; text-align: center; gap: 4px; }
+  .stat-card .num { font-size: 1.6rem; }
+  .stat-card .lbl { font-size: .7rem; line-height: 1.35; }
+}
+@media (max-width: 640px) {
+  .cat-strip { grid-auto-columns: 88px; gap: 10px; }
+  .cat-chip { padding: 12px 6px; gap: 6px; border-radius: 16px; }
+  .cat-chip .ic { width: 46px; height: 46px; font-size: 1.45rem; }
+  .cat-chip h3 { font-size: .74rem; }
+  .cat-chip .go { display: none; }
+}
+
+/* فاصل الآلاف (1 800) ضيّق جداً في خط Outfit — نوسّعه في الأسعار فقط */
+.price, .unit, .line, .line-total, .total, .summary, .order-summary, .sticky-buybar-price, .amount-flash,
+.delivery-est-rows strong, .free-bar-text strong { word-spacing: .18em; font-variant-numeric: tabular-nums; }

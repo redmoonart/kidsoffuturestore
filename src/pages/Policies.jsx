@@ -6,8 +6,9 @@ import { POLICIES, POLICY_SECTIONS, POLICIES_UPDATED } from "../data/policies";
 import PageHead from "../components/PageHead";
 import Reveal from "../components/Reveal";
 import SEO from "../components/SEO";
+import Icon from "../components/Icon";
 
-const ICONS = { terms: "📄", delivery: "🚚", returns: "🔄", privacy: "🔒" };
+const ICONS = { terms: "file", delivery: "truck", returns: "exchange", privacy: "lock" };
 
 export default function Policies() {
   const { lang } = useI18n();
@@ -39,14 +40,14 @@ export default function Policies() {
           <nav className="policy-tabs" aria-label={P.title}>
             {POLICY_SECTIONS.map((k) => (
               <a key={k} href={`#${k}`} onClick={(e) => { e.preventDefault(); document.getElementById(k)?.scrollIntoView({ behavior: "smooth", block: "start" }); history.replaceState(null, "", `#${k}`); }}>
-                <span aria-hidden="true">{ICONS[k]}</span> {P[k].t}
+                <Icon name={ICONS[k]} size={17} /> {P[k].t}
               </a>
             ))}
           </nav>
 
           {POLICY_SECTIONS.map((k) => (
             <Reveal key={k} as="article" className="prose policy-block" y={18}>
-              <h2 id={k}><span aria-hidden="true">{ICONS[k]}</span> {P[k].t}</h2>
+              <h2 id={k} className="ic-head"><Icon name={ICONS[k]} size={22} />{P[k].t}</h2>
               <ul className="dots">
                 {P[k].p.map((line, i) => <li key={i}>{fill(line)}</li>)}
               </ul>
@@ -54,7 +55,7 @@ export default function Policies() {
           ))}
 
           <Reveal className="prose policy-block" y={18}>
-            <h2 id="seller">🏪 {P.legal_t}</h2>
+            <h2 id="seller" className="ic-head"><Icon name="store" size={22} />{P.legal_t}</h2>
             <dl className="legal-dl">
               {legalRows.map(([k, v]) => (
                 <div key={k}><dt>{k}</dt><dd dir="auto">{v}</dd></div>

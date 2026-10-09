@@ -12,6 +12,7 @@ import StaggerGrid from "../components/StaggerGrid";
 import Hero3D from "../components/Hero3D";
 import { AGE_BANDS, inBand } from "../lib/ages";
 import { getRecent } from "../lib/recent";
+import Icon from "../components/Icon";
 
 export default function Home() {
   const { t, lang, meta } = useI18n();
@@ -24,10 +25,13 @@ export default function Home() {
   ];
   const stripRef = useRef(null);
   const stripSeen = useInView(stripRef, { once: true, amount: 0.6 });
-  const picks = products.filter((p) => p.badge || p.oldPrice).slice(0, 8);
-  const featured = picks.length ? picks : products.slice(0, 8);
-  const kidsProducts = products.filter((p) => p.category === "kids").slice(0, 4);
+  // كل منتج يظهر في قسم واحد فقط من الصفحة الرئيسية
   const bestSellers = products.filter((p) => p.badge === "الأكثر مبيعاً").slice(0, 4);
+  const kidsProducts = products.filter((p) => p.category === "kids" && !bestSellers.includes(p)).slice(0, 4);
+  const shown = new Set([...bestSellers, ...kidsProducts]);
+  const rest = products.filter((p) => !shown.has(p));
+  const picks = rest.filter((p) => p.badge || p.oldPrice);
+  const featured = [...picks, ...rest.filter((p) => !picks.includes(p))].slice(0, 8);
 
   const ageBands = AGE_BANDS.map((b) => ({ ...b, count: products.filter((p) => inBand(p, b)).length })).filter((b) => b.count > 0);
   const [recentIds] = useState(getRecent);
@@ -162,7 +166,7 @@ export default function Home() {
         <section className="section-sm">
           <div className="wrap">
             <ScrollReveal className="section-head section-head-start">
-              <h2 style={{ fontSize: "1.4rem" }}>👀 {t("recent.title")}</h2>
+              <h2 className="ic-head" style={{ fontSize: "1.4rem" }}><Icon name="eye" size={22} />{t("recent.title")}</h2>
             </ScrollReveal>
             <StaggerGrid className="products-grid">
               {recent.map((p) => (
@@ -177,7 +181,7 @@ export default function Home() {
       <section className="section-sm">
         <div className="wrap">
           <Reveal className="cod-banner" delay={0.4}>
-            <span className="em">💵</span>
+            <span className="em em-ic"><Icon name="cash" size={34} stroke={1.6} /></span>
             <div style={{ flex: 1, minWidth: 220 }}>
               <h3>{t("cod.title")}</h3>
               <p>{t("cod.text")}</p>

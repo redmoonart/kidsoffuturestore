@@ -4,6 +4,7 @@ import { useI18n } from "../i18n/I18nContext";
 import { useCart } from "../cart/CartContext";
 import { CART_HIT_EVENT } from "../lib/cartFx";
 import SearchOverlay from "./SearchOverlay";
+import Icon from "./Icon";
 
 const LANGS = [
   { code: "ar", label: "العربية" },
@@ -123,7 +124,7 @@ export default function Header() {
                 setLangOpen((o) => !o);
               }}
             >
-              🌐 <span>{meta.short}</span>
+              <Icon name="globe" size={17} /> <span>{meta.short}</span>
             </button>
             <div className="lang-menu">
               {LANGS.map((l) => (
@@ -149,7 +150,7 @@ export default function Header() {
             }}
           >
             <span className="ph">{t("shop.search_ph")}</span>
-            <span className="ic" aria-hidden="true">🔍</span>
+            <span className="ic" aria-hidden="true"><Icon name="search" size={18} /></span>
           </button>
           <button
             type="button"
@@ -160,7 +161,7 @@ export default function Header() {
               setSearchOpen(true);
             }}
           >
-            🔍
+            <Icon name="search" size={20} />
           </button>
           <button
             type="button"
@@ -171,11 +172,11 @@ export default function Header() {
               openDrawer();
             }}
           >
-            <span className="cart-ic" ref={cartIcRef}>🛒</span>
+            <span className="cart-ic" ref={cartIcRef}><Icon name="bag" size={21} /></span>
             <span ref={badgeRef} className="count cart-count" style={{ display: count > 0 ? "grid" : "none" }}>{count}</span>
           </button>
           <button className="menu-toggle" aria-label={t("aria.menu")} onClick={() => setMenuOpen((o) => !o)}>
-            {menuOpen ? "✕" : "☰"}
+            {menuOpen ? <Icon name="x" size={22} /> : <Icon name="menu" size={22} />}
           </button>
         </div>
       </div>

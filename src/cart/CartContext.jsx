@@ -45,7 +45,7 @@ export function CartProvider({ children }) {
         if (line) return prev.map((i) => (i.id === id ? { ...i, qty: i.qty + qty } : i));
         return [...prev, { id, qty }];
       });
-      showToast(`✅ ${pName(p, lang)}`);
+      showToast(`✓ ${pName(p, lang)}`);
       track("AddToCart", { content_ids: [String(p.id)], content_type: "product", content_name: p.name, value: p.price * qty, currency: "DZD" });
       if (fromEl) flyToCart(fromEl, p.image, p.emoji);
       else window.dispatchEvent(new Event(CART_HIT_EVENT));

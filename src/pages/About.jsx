@@ -3,12 +3,13 @@ import { useI18n, Trans } from "../i18n/I18nContext";
 import PageHead from "../components/PageHead";
 import Reveal from "../components/Reveal";
 import SEO from "../components/SEO";
+import Icon from "../components/Icon";
 
 const CARDS = [
-  ["🚚", "about.c1_t", "about.c1_d"],
-  ["💵", "about.c2_t", "about.c2_d"],
-  ["✅", "about.c3_t", "about.c3_d"],
-  ["📞", "about.c4_t", "about.c4_d"],
+  ["truck", "about.c1_t", "about.c1_d"],
+  ["cash", "about.c2_t", "about.c2_d"],
+  ["shield", "about.c3_t", "about.c3_d"],
+  ["phone", "about.c4_t", "about.c4_d"],
 ];
 
 export default function About() {
@@ -21,9 +22,9 @@ export default function About() {
         <div className="wrap">
           <Reveal className="prose" y={24}>
             <p><Trans k="about.p1" /></p>
-            <h2>{t("about.h_mission")}</h2>
+            <h2 className="ic-head"><Icon name="target" size={22} />{t("about.h_mission")}</h2>
             <p>{t("about.mission")}</p>
-            <h2>{t("about.h_why")}</h2>
+            <h2 className="ic-head"><Icon name="bulb" size={22} />{t("about.h_why")}</h2>
             <ul className="dots">
               <li>{t("about.why1")}</li>
               <li>{t("about.why2")}</li>
@@ -31,7 +32,7 @@ export default function About() {
               <li>{t("about.why4")}</li>
               <li>{t("about.why5")}</li>
             </ul>
-            <h2>{t("about.h_commit")}</h2>
+            <h2 className="ic-head"><Icon name="heart" size={22} />{t("about.h_commit")}</h2>
             <p>{t("about.commit")}</p>
           </Reveal>
 
@@ -39,7 +40,7 @@ export default function About() {
           <div className="info-grid">
             {CARDS.map(([ic, tt, dd], i) => (
               <Reveal key={tt} className="info-card" delay={i * 0.06}>
-                <div className="ic">{ic}</div>
+                <div className="ic"><Icon name={ic} size={26} /></div>
                 <h3>{t(tt)}</h3>
                 <p style={{ color: "var(--muted)" }}>{t(dd)}</p>
               </Reveal>
@@ -47,7 +48,7 @@ export default function About() {
           </div>
 
           <div style={{ textAlign: "center", marginTop: 34 }}>
-            <Link to="/shop" className="btn btn-primary btn-lg">{t("about.cta")}</Link>
+            <Link to="/shop" className="btn btn-primary btn-lg"><Icon name="bag" size={19} />{t("about.cta")}</Link>
           </div>
         </div>
       </section>

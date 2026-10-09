@@ -8,6 +8,7 @@ import { pName } from "../lib/product";
 import { money } from "../lib/format";
 import ProductImage from "./ProductImage";
 import FreeShippingBar from "./FreeShippingBar";
+import Icon from "./Icon";
 
 export default function CartDrawer() {
   const { t, lang, meta } = useI18n();
@@ -66,7 +67,7 @@ export default function CartDrawer() {
           >
             <div className="cart-drawer-head">
               <h3>{t("aria.cart")}</h3>
-              <button ref={closeBtnRef} className="cart-drawer-close" onClick={closeDrawer} aria-label={t("aria.close")}>✕</button>
+              <button ref={closeBtnRef} className="cart-drawer-close" onClick={closeDrawer} aria-label={t("aria.close")}><Icon name="x" size={20} /></button>
             </div>
 
             {cart.length ? (
@@ -89,7 +90,7 @@ export default function CartDrawer() {
                             <button type="button" onClick={() => setQty(p.id, i.qty + 1)}>+</button>
                           </div>
                         </div>
-                        <button className="remove" onClick={() => removeFromCart(p.id)}>🗑</button>
+                        <button className="remove" onClick={() => removeFromCart(p.id)} aria-label={t("cart.remove")}><Icon name="trash" size={17} /></button>
                       </div>
                     );
                   })}
@@ -108,7 +109,7 @@ export default function CartDrawer() {
               </>
             ) : (
               <div className="cart-drawer-empty">
-                <div className="em">🛒</div>
+                <div className="em em-ic"><Icon name="bag" size={36} stroke={1.5} /></div>
                 <p>{t("cart.empty_t")}</p>
                 <Link to="/shop" className="btn btn-primary" onClick={closeDrawer}>{t("cart.empty_btn")}</Link>
               </div>

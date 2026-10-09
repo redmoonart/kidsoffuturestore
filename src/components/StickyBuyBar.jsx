@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useI18n } from "../i18n/I18nContext";
 import { STORE_CONFIG } from "../data/config";
 import { money } from "../lib/format";
+import Icon from "./Icon";
 
 // شريط شراء ثابت أسفل الشاشة على الموبايل، يظهر فقط بعد تجاوز أزرار الشراء الأصلية
 export default function StickyBuyBar({ targetRef, price, onAdd, onBuy }) {
@@ -33,8 +34,8 @@ export default function StickyBuyBar({ targetRef, price, onAdd, onBuy }) {
           transition={{ type: "spring", stiffness: 380, damping: 34 }}
         >
           <span className="sticky-buybar-price">{money(price, STORE_CONFIG.currency)}</span>
-          <button type="button" className="btn btn-primary" onClick={onAdd}>{t("pdp.add")}</button>
-          <button type="button" className="btn btn-accent" onClick={onBuy}>{t("pdp.buy")}</button>
+          <button type="button" className="btn btn-primary" onClick={onAdd}><Icon name="bag" size={18} />{t("pdp.add")}</button>
+          <button type="button" className="btn btn-accent" onClick={onBuy}><Icon name="zap" size={18} />{t("pdp.buy")}</button>
         </motion.div>
       )}
     </AnimatePresence>

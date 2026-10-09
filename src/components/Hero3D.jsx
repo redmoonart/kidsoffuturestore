@@ -6,6 +6,7 @@ import { isNarrowViewport } from "../lib/deviceCapability";
 import heroBgScene from "../assets/hero-bg-scene.webp";
 import heroDani from "../assets/hero-dani.webp";
 import heroDani420 from "../assets/hero-dani-420.webp";
+import Icon from "./Icon";
 
 const container = {
   hidden: {},
@@ -51,7 +52,7 @@ export default function Hero3D() {
         />
       </motion.div>
 
-      <div className="hero-ribbon">{t("ribbon")}</div>
+      <div className="hero-ribbon"><Icon name="truck" size={16} /><span>{t("ribbon")}</span></div>
 
       <div className="wrap hero-scene-wrap">
         <motion.div className="hero-copy hero-copy-glass" variants={container} initial="hidden" animate="show">
@@ -60,13 +61,13 @@ export default function Hero3D() {
           </motion.h1>
           <motion.p className="lead" variants={fadeUp}>{t("hero.lead")}</motion.p>
           <motion.div className="hero-cta" variants={fadeUp}>
-            <Link to="/shop" className="btn btn-primary btn-lg glow">{t("hero.cta_shop")}</Link>
-            <Link to="/shop?cat=kids" className="btn btn-ghost btn-lg">{t("hero.cta_kids")}</Link>
+            <Link to="/shop" className="btn btn-primary btn-lg glow"><Icon name="bag" size={19} />{t("hero.cta_shop")}</Link>
+            <Link to="/shop?cat=kids" className="btn btn-ghost btn-lg"><Icon name="baby" size={19} />{t("hero.cta_kids")}</Link>
           </motion.div>
           <motion.div className="hero-trust" variants={fadeUp}>
-            <span>🚚 <span>{t("hero.badge_delivery")}</span></span>
-            <span>💵 <span>{t("hero.badge_cod")}</span></span>
-            <span>✅ <span>{t("hero.badge_guarantee")}</span></span>
+            <span><Icon name="truck" size={17} /> <span>{t("hero.badge_delivery")}</span></span>
+            <span><Icon name="cash" size={17} /> <span>{t("hero.badge_cod")}</span></span>
+            <span><Icon name="shield" size={17} /> <span>{t("hero.badge_guarantee")}</span></span>
           </motion.div>
         </motion.div>
       </div>
@@ -107,7 +108,7 @@ export default function Hero3D() {
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ type: "spring", stiffness: 260, damping: 18, delay: reduceMotion ? 0.3 : 1.05 }}
       >
-        <span className="hero-chip-ic">✅</span>
+        <span className="hero-chip-ic"><Icon name="shield" size={18} /></span>
         <span>{t("hero.badge_guarantee")}</span>
       </motion.div>
     </section>

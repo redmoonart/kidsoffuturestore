@@ -5,6 +5,7 @@ import { STORE_CONFIG } from "../data/config";
 import { wName } from "../lib/product";
 import { money } from "../lib/format";
 import { getSavedWilaya, saveWilaya, isFarWilaya } from "../lib/wilayaPref";
+import Icon from "./Icon";
 
 // تقدير سعر ومدة التوصيل حسب ولاية الزبون، مباشرة في صفحة المنتج
 export default function DeliveryEstimate() {
@@ -20,7 +21,7 @@ export default function DeliveryEstimate() {
   return (
     <div className="delivery-est">
       <label className="delivery-est-head">
-        <span>🚚 {t("pdp.deliver_to")}</span>
+        <span className="ic-link"><Icon name="truck" size={18} />{t("pdp.deliver_to")}</span>
         <select value={code} onChange={onChange}>
           <option value="">{t("pdp.choose_wilaya")}</option>
           {WILAYAS.map((x) => (
@@ -32,14 +33,14 @@ export default function DeliveryEstimate() {
       </label>
       {w && w.available !== false && (
         <ul className="delivery-est-rows">
-          <li><span>🏠 {t("pdp.home")}</span><strong>{money(w.home, STORE_CONFIG.currency)}</strong></li>
-          {w.office != null && <li><span>🏢 {t("pdp.office")}</span><strong>{money(w.office, STORE_CONFIG.currency)}</strong></li>}
-          <li><span>⏱️ {t("pdp.eta_label")}</span><strong>{t(isFarWilaya(w) ? "pdp.eta_far" : "pdp.eta_normal")}</strong></li>
+          <li><span className="ic-link"><Icon name="home" size={16} />{t("pdp.home")}</span><strong>{money(w.home, STORE_CONFIG.currency)}</strong></li>
+          {w.office != null && <li><span className="ic-link"><Icon name="store" size={16} />{t("pdp.office")}</span><strong>{money(w.office, STORE_CONFIG.currency)}</strong></li>}
+          <li><span className="ic-link"><Icon name="clock" size={16} />{t("pdp.eta_label")}</span><strong>{t(isFarWilaya(w) ? "pdp.eta_far" : "pdp.eta_normal")}</strong></li>
         </ul>
       )}
       {w && w.available === false && <p className="delivery-est-na">{t("cart.wilaya_unavailable_note")}</p>}
       {STORE_CONFIG.freeShippingThreshold > 0 && (
-        <p className="delivery-est-free">🎁 {t("pdp.free_over", { v: STORE_CONFIG.freeShippingThreshold.toLocaleString("fr-DZ") })}</p>
+        <p className="delivery-est-free ic-link"><Icon name="gift" size={16} />{t("pdp.free_over", { v: STORE_CONFIG.freeShippingThreshold.toLocaleString("fr-DZ") })}</p>
       )}
     </div>
   );

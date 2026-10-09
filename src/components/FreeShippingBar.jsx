@@ -1,6 +1,7 @@
 import { useI18n } from "../i18n/I18nContext";
 import { STORE_CONFIG } from "../data/config";
 import { money } from "../lib/format";
+import Icon from "./Icon";
 
 // شريط تقدّم نحو التوصيل المجاني
 export default function FreeShippingBar({ subtotal }) {
@@ -12,6 +13,7 @@ export default function FreeShippingBar({ subtotal }) {
   return (
     <div className={`free-bar${done ? " done" : ""}`}>
       <p className="free-bar-text" aria-live="polite">
+        <Icon name="truck" size={17} />
         {done ? t("cart.free_congrats") : <>{t("cart.free_add_pre")}<strong>{money(goal - subtotal, STORE_CONFIG.currency)}</strong>{t("cart.free_add_post")}</>}
       </p>
       <div className="free-bar-track" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={pct}>

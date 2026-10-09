@@ -11,6 +11,7 @@ import SEO from "../components/SEO";
 import { pName } from "../lib/product";
 import { searchProducts } from "../lib/search";
 import { isStoreCategory } from "../data/categories";
+import Icon from "../components/Icon";
 import { AGE_BANDS, minAge, inBand } from "../lib/ages";
 
 const PRICE_BANDS = [
@@ -150,7 +151,7 @@ export default function Shop() {
             <div className="filter-rows">
               {hasAges && (
                 <div className="filter-row" role="group" aria-label={t("shop.f_age")}>
-                  <span className="filter-label">👶 {t("shop.f_age")}</span>
+                  <span className="filter-label"><Icon name="baby" size={16} />{t("shop.f_age")}</span>
                   {AGE_BANDS.map((b) => (
                     <button key={b.id} className={`chip chip-sm${age === b.id ? " active" : ""}`} aria-pressed={age === b.id} onClick={() => setFilter("age", age === b.id ? "" : b.id)}>
                       {t("shop.age_band", { v: b.id })}
@@ -159,7 +160,7 @@ export default function Shop() {
                 </div>
               )}
               <div className="filter-row" role="group" aria-label={t("shop.f_price")}>
-                <span className="filter-label">💰 {t("shop.f_price")}</span>
+                <span className="filter-label"><Icon name="wallet" size={16} />{t("shop.f_price")}</span>
                 {PRICE_BANDS.map((b) => (
                   <button key={b.id} className={`chip chip-sm${price === b.id ? " active" : ""}`} aria-pressed={price === b.id} onClick={() => setFilter("price", price === b.id ? "" : b.id)}>
                     {t(`shop.price_${b.id}`)}
@@ -167,18 +168,18 @@ export default function Shop() {
                 ))}
               </div>
               <div className="filter-row">
-                <button className={`chip chip-sm${onlySale ? " active" : ""}`} aria-pressed={onlySale} onClick={() => setFilter("sale", onlySale ? "" : "1")}>🏷️ {t("shop.f_sale")}</button>
-                <button className={`chip chip-sm${onlyStock ? " active" : ""}`} aria-pressed={onlyStock} onClick={() => setFilter("instock", onlyStock ? "" : "1")}>✅ {t("shop.f_instock")}</button>
-                {hasFilters && <button className="filter-clear" onClick={clearFilters}>✕ {t("shop.f_clear")}</button>}
+                <button className={`chip chip-sm${onlySale ? " active" : ""}`} aria-pressed={onlySale} onClick={() => setFilter("sale", onlySale ? "" : "1")}><Icon name="tag" size={15} />{t("shop.f_sale")}</button>
+                <button className={`chip chip-sm${onlyStock ? " active" : ""}`} aria-pressed={onlyStock} onClick={() => setFilter("instock", onlyStock ? "" : "1")}><Icon name="check" size={15} stroke={2.4} />{t("shop.f_instock")}</button>
+                {hasFilters && <button className="filter-clear" onClick={clearFilters}><Icon name="x" size={14} />{t("shop.f_clear")}</button>}
               </div>
             </div>
             <div className="toolbar-tools">
               <div className="search-box">
                 <input type="search" placeholder={t("shop.search_ph")} value={q} onChange={(e) => setQ(e.target.value)} />
-                <span className="ic" aria-hidden="true">🔍</span>
+                <span className="ic" aria-hidden="true"><Icon name="search" size={18} /></span>
               </div>
               <div className="sort-control">
-                <span className="sort-ic" aria-hidden="true">⇅</span>
+                <span className="sort-ic" aria-hidden="true"><Icon name="sort" size={16} /></span>
                 <select className="select" aria-label="sort" value={sort} onChange={(e) => setSort(e.target.value)}>
                   <option value="default">{t("shop.sort_default")}</option>
                   <option value="price-asc">{t("shop.sort_price_asc")}</option>
@@ -199,10 +200,10 @@ export default function Shop() {
             </StaggerGrid>
           ) : (
             <div className="empty-state" style={{ gridColumn: "1/-1" }}>
-              <div className="em">🔍</div>
+              <div className="em em-ic"><Icon name="search" size={36} stroke={1.5} /></div>
               <h3>{t("shop.no_results_t")}</h3>
               <p>{t("shop.no_results_p")}</p>
-              {hasFilters && <button className="btn btn-ghost" style={{ marginTop: 12 }} onClick={clearFilters}>✕ {t("shop.f_clear")}</button>}
+              {hasFilters && <button className="btn btn-ghost" style={{ marginTop: 12 }} onClick={clearFilters}><Icon name="x" size={16} />{t("shop.f_clear")}</button>}
             </div>
           )}
         </div>

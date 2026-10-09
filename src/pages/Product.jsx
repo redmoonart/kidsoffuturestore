@@ -18,6 +18,7 @@ import { track } from "../lib/pixel";
 import { pName, pDesc } from "../lib/product";
 import { money } from "../lib/format";
 import ProductImage from "../components/ProductImage";
+import Icon from "../components/Icon";
 
 export default function Product() {
   const { id } = useParams();
@@ -48,7 +49,7 @@ export default function Product() {
       <section className="section">
         <div className="wrap">
           <div className="empty-state">
-            <div className="em">😕</div>
+            <div className="em em-ic"><Icon name="frown" size={40} stroke={1.5} /></div>
             <h3>{t("pdp.notfound_t")}</h3>
             <p>{t("pdp.notfound_p")}</p>
             <Link className="btn btn-primary" to="/shop">{t("pdp.notfound_btn")}</Link>
@@ -132,13 +133,13 @@ export default function Product() {
             </div>
             <p className="desc">{pDesc(p, lang)}</p>
             <div className="meta">
-              {p.ageGroup && <span className="tag">{t("pdp.age", { v: p.ageGroup })}</span>}
-              <span className="tag">{t("pdp.cod_tag")}</span>
-              <span className="tag">{t("pdp.delivery_tag")}</span>
-              <span className="tag">{t("pdp.exchange_tag")}</span>
+              {p.ageGroup && <span className="tag"><Icon name="baby" size={16} />{t("pdp.age", { v: p.ageGroup })}</span>}
+              <span className="tag"><Icon name="cash" size={16} />{t("pdp.cod_tag")}</span>
+              <span className="tag"><Icon name="truck" size={16} />{t("pdp.delivery_tag")}</span>
+              <span className="tag"><Icon name="exchange" size={16} />{t("pdp.exchange_tag")}</span>
             </div>
             <p>
-              {out ? <span className="out-stock">{t("pdp.out_stock")}</span> : <span className="in-stock">{t("pdp.in_stock")}</span>}
+              {out ? <span className="out-stock"><Icon name="x" size={16} />{t("pdp.out_stock")}</span> : <span className="in-stock"><Icon name="check" size={16} stroke={2.4} />{t("pdp.in_stock")}</span>}
               {lowStock && <span className="low-stock-badge">{t("pdp.low_stock", { v: p.stockQty })}</span>}
             </p>
             {!out && (
@@ -148,8 +149,8 @@ export default function Product() {
                   <input type="text" value={qty} inputMode="numeric" readOnly />
                   <button type="button" onClick={() => setQty((v) => v + 1)}>+</button>
                 </div>
-                <button className="btn btn-primary btn-lg" onClick={handleAdd}>{t("pdp.add")}</button>
-                <button className="btn btn-accent btn-lg" onClick={handleBuy} disabled={out}>{t("pdp.buy")}</button>
+                <button className="btn btn-primary btn-lg" onClick={handleAdd}><Icon name="bag" size={19} />{t("pdp.add")}</button>
+                <button className="btn btn-accent btn-lg" onClick={handleBuy} disabled={out}><Icon name="zap" size={19} />{t("pdp.buy")}</button>
               </div>
             )}
             {!out && <DeliveryEstimate />}

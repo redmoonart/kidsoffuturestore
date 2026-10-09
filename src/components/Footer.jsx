@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useI18n } from "../i18n/I18nContext";
 import { STORE_CONFIG } from "../data/config";
+import Icon from "./Icon";
 
 export default function Footer() {
   const { t } = useI18n();
@@ -19,8 +20,8 @@ export default function Footer() {
             <p style={{ marginTop: 12, fontSize: ".9rem" }}>{t("footer.about")}</p>
             <div className="socials">
               {STORE_CONFIG.facebook && <a href={STORE_CONFIG.facebook} aria-label="facebook">f</a>}
-              {STORE_CONFIG.instagram && <a href={STORE_CONFIG.instagram} aria-label="instagram">📷</a>}
-              {STORE_CONFIG.tiktok && <a href={STORE_CONFIG.tiktok} aria-label="tiktok">♪</a>}
+              {STORE_CONFIG.instagram && <a href={STORE_CONFIG.instagram} aria-label="instagram"><Icon name="instagram" size={18} /></a>}
+              {STORE_CONFIG.tiktok && <a href={STORE_CONFIG.tiktok} aria-label="tiktok"><Icon name="music" size={18} /></a>}
             </div>
           </div>
           <div>
@@ -42,9 +43,9 @@ export default function Footer() {
           </div>
           <div>
             <h4>{t("footer.contact_us")}</h4>
-            {tel && <a href={`tel:${tel}`}>{t("footer.wa")}</a>}
-            <a href={`mailto:${STORE_CONFIG.email}`}>{t("footer.email")}</a>
-            <p style={{ fontSize: ".85rem", marginTop: 8 }}>{t("footer.hours")}</p>
+            {tel && <a href={`tel:${tel}`} className="ic-link"><Icon name="phone" size={16} />{t("footer.wa")}</a>}
+            <a href={`mailto:${STORE_CONFIG.email}`} className="ic-link"><Icon name="mail" size={16} />{t("footer.email")}</a>
+            <p className="ic-link" style={{ fontSize: ".85rem", marginTop: 8 }}><Icon name="clock" size={16} />{t("footer.hours")}</p>
           </div>
         </div>
         <div className="footer-bottom">

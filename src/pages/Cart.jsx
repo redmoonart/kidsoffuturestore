@@ -16,6 +16,7 @@ import { track } from "../lib/pixel";
 import { storeWaLink } from "../lib/whatsapp";
 import ProductImage from "../components/ProductImage";
 import FreeShippingBar from "../components/FreeShippingBar";
+import Icon from "../components/Icon";
 
 export default function Cart() {
   const { t, lang } = useI18n();
@@ -136,11 +137,11 @@ export default function Cart() {
   if (placedRef) {
     return (
       <>
-        <PageHead title={t("cart.head_title")} subtitle={t("cart.head_sub")} chips={["💵", "🚚", "✅", "📦"]} />
+        <PageHead title={t("cart.head_title")} subtitle={t("cart.head_sub")} chips={[<Icon key="c" name="cash" size={24} />, <Icon key="t" name="truck" size={24} />, <Icon key="s" name="shield" size={24} />, <Icon key="p" name="package" size={24} />]} />
         <section className="section">
           <div className="wrap">
             <Reveal className="empty-state order-success" y={28}>
-              <div className="em" ref={successEmojiRef}>✅</div>
+              <div className="em em-ic em-ok" ref={successEmojiRef}><Icon name="checkCircle" size={44} stroke={1.6} /></div>
               <h3>{t("cart.ok_t")}</h3>
               <p>{t("cart.ok_p")}</p>
               <p className="order-ref">{t("cart.ok_ref")}: <strong dir="ltr">{placedRef}</strong></p>
@@ -159,6 +160,7 @@ export default function Cart() {
               <div className="order-success-actions">
                 {placed && storeWaLink("x") && (
                   <a className="btn btn-wa btn-lg" href={storeWaLink(t("cart.ok_wa_msg", { ref: placed.ref, store: STORE_CONFIG.name, total: money(placed.total, STORE_CONFIG.currency) }))} target="_blank" rel="noopener noreferrer">
+                    <Icon name="chat" size={19} />
                     {t("cart.ok_wa")}
                   </a>
                 )}
@@ -174,11 +176,11 @@ export default function Cart() {
   if (!cart.length) {
     return (
       <>
-        <PageHead title={t("cart.head_title")} subtitle={t("cart.head_sub")} chips={["💵", "🚚", "✅", "📦"]} />
+        <PageHead title={t("cart.head_title")} subtitle={t("cart.head_sub")} chips={[<Icon key="c" name="cash" size={24} />, <Icon key="t" name="truck" size={24} />, <Icon key="s" name="shield" size={24} />, <Icon key="p" name="package" size={24} />]} />
         <section className="section">
           <div className="wrap">
             <Reveal className="empty-state" y={28}>
-              <div className="em">🛒</div>
+              <div className="em em-ic"><Icon name="bag" size={40} stroke={1.5} /></div>
               <h3>{t("cart.empty_t")}</h3>
               <p>{t("cart.empty_p")}</p>
               <Link className="btn btn-primary btn-lg" to="/shop">{t("cart.empty_btn")}</Link>
@@ -191,7 +193,7 @@ export default function Cart() {
 
   return (
     <>
-      <PageHead title={t("cart.head_title")} subtitle={t("cart.head_sub")} chips={["💵", "🚚", "✅", "📦"]} />
+      <PageHead title={t("cart.head_title")} subtitle={t("cart.head_sub")} chips={[<Icon key="c" name="cash" size={24} />, <Icon key="t" name="truck" size={24} />, <Icon key="s" name="shield" size={24} />, <Icon key="p" name="package" size={24} />]} />
       <section className="section">
         <div className="wrap">
           <div className="cart-layout">
@@ -217,7 +219,7 @@ export default function Cart() {
                         </div>
                         <div className="right">
                           <span className="line-total">{money(p.price * i.qty, STORE_CONFIG.currency)}</span>
-                          <button className="remove" onClick={() => removeFromCart(p.id)}>{t("cart.remove")}</button>
+                          <button className="remove" onClick={() => removeFromCart(p.id)}><Icon name="trash" size={15} />{t("cart.remove")}</button>
                         </div>
                       </div>
                     );
@@ -287,10 +289,12 @@ export default function Cart() {
                     <label>{t("cart.dtype")}</label>
                     <div className="radio-cards">
                       <div className={`radio-card${effectiveType === "home" ? " active" : ""}`} onClick={() => setDeliveryType("home")}>
+                        <Icon name="home" size={18} />
                         {t("cart.dtype_home")}
                       </div>
                       {officeAvailable && (
                         <div className={`radio-card${effectiveType === "office" ? " active" : ""}`} onClick={() => setDeliveryType("office")}>
+                          <Icon name="store" size={18} />
                           {t("cart.dtype_office")}
                         </div>
                       )}
@@ -304,8 +308,8 @@ export default function Cart() {
                     <label>Website<input type="text" tabIndex={-1} autoComplete="off" value={honey} onChange={(e) => setHoney(e.target.value)} /></label>
                   </div>
                   {saveError && <p className="field-error show" role="alert" style={{ marginBottom: 10 }}>{t("cart.save_err")}</p>}
-                  <button type="submit" className="btn btn-primary btn-block btn-lg" disabled={sending}>{sending ? t("cart.sending") : t("cart.submit")}</button>
-                  <p style={{ textAlign: "center", color: "var(--muted)", fontSize: ".82rem", marginTop: 10 }}>{t("cart.cod_note")}</p>
+                  <button type="submit" className="btn btn-primary btn-block btn-lg" disabled={sending}>{sending ? t("cart.sending") : <><Icon name="checkCircle" size={19} />{t("cart.submit")}</>}</button>
+                  <p style={{ textAlign: "center", color: "var(--muted)", fontSize: ".82rem", marginTop: 10, display: "flex", alignItems: "center", justifyContent: "center", gap: 6 }}><Icon name="cash" size={16} />{t("cart.cod_note")}</p>
                   <p className="checkout-policies">
                     {t("cart.agree_pre")} <Link to="/policies#terms">{t("footer.terms")}</Link> · <Link to="/policies#returns">{t("footer.returns")}</Link>
                   </p>
