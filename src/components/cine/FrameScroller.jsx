@@ -88,7 +88,10 @@ export default function FrameScroller({ name, n, heightVh = 300, eager = false, 
     io.observe(ref.current);
     const onResize = () => { drawnKey.current = ""; draw(); };
     window.addEventListener("resize", onResize);
-    return () => { cancelled = true; io.disconnect(); window.removeEventListener("resize", onResize); };
+    // على الهاتف يتغير ارتفاع المشهد عند ظهور/اختفاء شريط العنوان — نعيد الرسم بالمقاس الجديد
+    const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(onResize) : null;
+    if (ro && canvasRef.current) ro.observe(canvasRef.current);
+    return () => { cancelled = true; io.disconnect(); ro?.disconnect(); window.removeEventListener("resize", onResize); };
   }, [dir, n, reduce, eager, staticFrame]);
 
   useMotionValueEvent(p, "change", (v) => {

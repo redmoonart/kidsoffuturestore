@@ -1687,7 +1687,7 @@ td.admin-row-actions > * + * { margin-inline-start: 6px; }
 
 /* ---------- المشهد السردي ---------- */
 .cine-story { position: relative; height: 300vh; background: #070a1c; }
-.cine-sticky { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
+.cine-sticky { position: sticky; top: 0; height: 100vh; height: 100dvh; overflow: hidden; }
 .cine-night { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 85%, #1d2a63 0%, #0a0e26 62%, #05060f 100%); }
 .cine-dawn { position: absolute; inset: 0; background: linear-gradient(to top, #ffb46a 0%, #f2876b 24%, #8a5fa6 56%, #1d2552 100%); }
 .cine-sun { position: absolute; left: 50%; bottom: -10vmin; width: 70vmin; height: 70vmin; margin-left: -35vmin; border-radius: 50%; z-index: 1;
@@ -1795,7 +1795,7 @@ td.admin-row-actions > * + * { margin-inline-start: 6px; }
    ============================================================ */
 .seq { position: relative; background: #08070d; color: #fff; }
 .seq-static { height: auto; }
-.seq-sticky { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; background: #08070d; }
+.seq-sticky { position: sticky; top: 0; height: 100vh; height: 100dvh; overflow: hidden; background: #08070d; }
 .seq-static .seq-sticky { position: relative; height: 92svh; }
 .seq-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .seq-scrim { position: absolute; inset: 0; pointer-events: none;
