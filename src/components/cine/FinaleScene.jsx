@@ -21,7 +21,7 @@ export default function FinaleScene() {
       <div className="cine-finale-blur" style={{ backgroundImage: `url(${scene})` }} aria-hidden="true" />
       <motion.picture className="cine-finale-bg" style={reduce ? undefined : { scale, y }} aria-hidden="true">
         <source media="(max-width: 760px)" srcSet={sceneMobile} />
-        <img src={scene} alt="" width="1112" height="960" loading="lazy" decoding="async" />
+        <img src={scene} alt="" width="2000" height="1726" loading="lazy" decoding="async" />
       </motion.picture>
       <div className="cine-finale-shade" />
       <div className="wrap cine-finale-inner">
